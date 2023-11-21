@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Irc_serv.cpp                                       :+:      :+:    :+:   */
+/*   Irc_serv.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/21 14:22:37 by idouni            #+#    #+#             */
-/*   Updated: 2023/11/21 14:22:38 by idouni           ###   ########.fr       */
+/*   Created: 2023/11/21 14:21:41 by idouni            #+#    #+#             */
+/*   Updated: 2023/11/21 14:24:12 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Irc_serv.hpp"
+#ifndef __IRC_SERVER__
+#define __IRC_SERVER__
 
-int main(){
-	std::cout << "Loading ..." << std::endl;
-	return (0);
-}
+#include <iostream>
+#include <libc.h>
+
+#endif
