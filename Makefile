@@ -6,7 +6,7 @@
 #    By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/19 11:19:01 by idouni            #+#    #+#              #
-#    Updated: 2023/11/21 18:22:38 by idouni           ###   ########.fr        #
+#    Updated: 2023/11/22 12:35:33 by idouni           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ all: $(EXEC)
 $(EXEC): $(OBJS) $(H_FILES)
 	@$(CC) $(FLAGS) $(OBJS) -o $(EXEC)
 	@clear && echo "==$(EXEC)_compiled==========="
+	./$(EXEC) "2414"
 
 
 %.o: %.cpp $(H_FILES)
