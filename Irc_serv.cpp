@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 14:22:37 by idouni            #+#    #+#             */
-/*   Updated: 2023/11/21 19:37:16 by idouni           ###   ########.fr       */
+/*   Updated: 2023/11/22 11:21:10 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,13 @@ void handel_client(int client){
 		bzero(recieved, sizeof(recieved));
 		readed = read(client, recieved, 1023);
 	}
+	close(client);
 }
+
 
 int main(int argc, char const *argv[]){
 	int client;
+	
 	try{
 		client = run_server(argc, argv);
 	}
@@ -84,7 +87,9 @@ int main(int argc, char const *argv[]){
 	}
 	catch(const std::exception& e){
 		std::cerr << e.what() << '\n';
+		exit(-1);
 	}
+	
 	
 	return (0);
 }
