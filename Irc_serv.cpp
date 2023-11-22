@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 14:22:37 by idouni            #+#    #+#             */
-/*   Updated: 2023/11/22 13:55:03 by idouni           ###   ########.fr       */
+/*   Updated: 2023/11/22 14:06:07 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,12 @@ int run_server(int argc, char const *argv[]){
 
 void handel_client(int client){
 	std::cout << "Client 1, CONNECTED SUCCESSFULLY" << std::endl << std::endl;
+	
+	// char buff[] = "CAP * LS :\0";
+	// send(client, buff ,sizeof(buff) , 0);
+	// while(true)
+	// 	continue;
+	
 	char recieved[1024];
 	bzero(recieved, sizeof(recieved));
 	int readed = recv(client, recieved, 1023, 0);
