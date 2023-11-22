@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 14:22:37 by idouni            #+#    #+#             */
-/*   Updated: 2023/11/22 11:21:10 by idouni           ###   ########.fr       */
+/*   Updated: 2023/11/22 11:50:51 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void handel_client(int client){
 	int readed = read(client, recieved, 1023);
 	while (true){
 		if (readed > 0){
-			recieved[strlen(recieved)] = '\0';
-			std::cout << "Client 1 sent : " << recieved << std::endl;
+			recieved[strlen(recieved) - 2] = '\0';
+			std::cout << "Client 1 sent : [" << recieved <<"] " << std::endl;
 			bzero(recieved, sizeof(recieved));
 			readed = 0;
 		}
