@@ -13,9 +13,9 @@
 EXEC    = ircserv
 CC      = c++
 RM      = rm -rf
-FLAGS   = -std=c++98 -Wall -Wextra -Werror #-fsanitize=address,undefined
-H_FILES = ${shell ls *.hpp}
-C_FILES = ${shell ls *.cpp}
+# FLAGS   = -std=c++98 -Wall -Wextra -Werror #-fsanitize=address,undefined
+H_FILES = ${shell ls */*.hpp}
+C_FILES = ${shell ls */*/*.cpp} ${shell ls */*.cpp} 
 OBJS    = $(C_FILES:.cpp=.o)
 
 all: $(EXEC)
@@ -23,7 +23,7 @@ all: $(EXEC)
 $(EXEC): $(OBJS) $(H_FILES)
 	@$(CC) $(FLAGS) $(OBJS) -o $(EXEC)
 	@clear && echo "==$(EXEC)_compiled==========="
-	./$(EXEC) "2414"
+	./ircserv 6667 passwd
 
 
 %.o: %.cpp $(H_FILES)

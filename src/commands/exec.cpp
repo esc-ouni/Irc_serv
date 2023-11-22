@@ -1,0 +1,65 @@
+#include "../../headers/Irc.hpp"
+#include "../../headers/Channel.hpp"
+#include "../../headers/commands.hpp"
+
+void excute_command(std::string password , std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients)
+{
+//     if (command.substr(0, 4) == "PASS")
+//         pass(password, command, client, channels, clients);
+//     else if (command.substr(0, 4) == "NICK")
+//         nick(command, client, channels, clients);
+//     else if (command.substr(0, 4) == "USER")
+//         user(command, client, channels, clients);
+
+
+//     else if (command.substr(0, 4) == "JOIN" && client.is_authenticated())
+//     {
+//         join(command, client, channels);
+//     }
+//     else if (command.substr(0, 4) == "KICK" && client.is_authenticated())
+//     {
+//         kick(command, client, channels);
+//     }
+//     // INVITE
+//     else if (command.substr(0, 6) == "INVITE" && client.is_authenticated())
+//     {
+//         invite(command, client, channels, clients);
+//     }
+//     else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
+//     {
+//         mode(command, client, channels);
+//     }
+//     else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
+//     {
+//         privmsg(command, client, clients, channels);
+//     }
+//     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())
+//     {
+//         Irc::handleLogTime(client);
+//     }
+//     else if (filteredString(command) == "QUOTES" && client.is_authenticated())
+//     {
+//         Irc::handleQuotes(client);
+//     }
+//     else if (filteredString(command) == "DOWNLOAD" && client.is_authenticated())
+//     {
+//         Irc::handleBot(client);
+//     }
+//     else if (command.substr(0, 5) == "TOPIC" && client.is_authenticated())
+//     {
+//         topic(command, client, channels, clients);
+//     }
+
+//     else if (filteredString(command.substr(0, 4))!= "QUIT")
+//     {
+        
+//         send(client.get_fd(), ERR_UNKNOWNCOMMAND(command.substr(0, command.find(" "))).c_str(), ERR_UNKNOWNCOMMAND(command.substr(0, command.find(" "))).length(), 0);
+//     }
+
+
+//     if (client.is_authenticated() && !client.get_buff_to_send().empty())
+//     {
+//         send(client.get_fd(), client.get_buff_to_send().c_str(), client.get_buff_to_send().length(), 0);
+//         client.set_buff_to_send("");
+//     }
+}
