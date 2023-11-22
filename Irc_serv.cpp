@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 14:22:37 by idouni            #+#    #+#             */
-/*   Updated: 2023/11/22 14:06:07 by idouni           ###   ########.fr       */
+/*   Updated: 2023/11/22 14:24:58 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,7 @@ void disconnect(int opened_socket){
 	close(opened_socket);
 };
 
-int run_server(int argc, char const *argv[]){
-	std::cout << "LOADING ..." << std::endl;
-
-	if (argc != 2)
-		throw (std::logic_error("Bad Aruments, try : ./ircserv <port> \n"));
-
-	int port = std::atoi(argv[1]);
-	if (port < 1024 || port >65535)
-		throw (std::logic_error("Not A Valid Port Number\n"));
-	
+int connect_client(int port){
 	int sock_id = socket(PF_INET, SOCK_STREAM, getprotobyname("tcp")->p_proto);
 	if (sock_id == -1)
 		throw (std::logic_error("Error Creating A Socket\n"));
@@ -53,10 +44,26 @@ int run_server(int argc, char const *argv[]){
 		throw (std::logic_error("Error Accepting Request\n"));
 	}
 	disconnect(sock_id);
-	return (client);
+	delete sockaddr_in;
+	return (client);	
+}
+
+
+int run_server(int argc, char const *argv[]){
+	std::cout << "LOADING ..." << std::endl;
+
+	if (argc != 2)
+		throw (std::logic_error("Bad Aruments, try : ./ircserv <port> \n"));
+
+	int port = std::atoi(argv[1]);
+	if (port < 1024 || port >65535)
+		throw (std::logic_error("Not A Valid Port Number\n"));
+	
+	return (connect_client(port));
+
 };
 
-void handel_client(int client){
+void handel_client(int client, int port){
 	std::cout << "Client 1, CONNECTED SUCCESSFULLY" << std::endl << std::endl;
 	
 	// char buff[] = "CAP * LS :\0";
@@ -85,7 +92,8 @@ void handel_client(int client){
 		else if (!readed){
 			disconnect(client);
 			std::cout << std::endl;
-			throw (std::logic_error("CLIENT DISCONNECTED, ..."));		
+			std::cout << "CLIENT DISCONNECTED, ..."<< std::endl;
+			client = connect_client(port += 1);
 		}
 		bzero(recieved, sizeof(recieved));
 		readed = recv(client, recieved, 1023, 0);
@@ -105,7 +113,7 @@ int main(int argc, char const *argv[]){
 		exit(-1);
 	}
 	try{
-		handel_client(client);
+		handel_client(client, std::atoi(argv[1]));
 	}
 	catch(const std::exception& e){
 		std::cerr << e.what() << '\n';
