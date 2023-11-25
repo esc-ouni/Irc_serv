@@ -11,13 +11,6 @@ Irc::Irc(int port, char *password)
     if (_port < 1024 || _port > 65535)
         printc("The port is out of rang", RED, 1);
 
-    std::cout << GREEN << "\n :::::    :::::    :::::::::    ::::   :::" << std::endl;
-    std::cout << " ::::::  ::::::    :::          :::::  :::" << std::endl;
-    std::cout << " ::: :::::: :::    :::::::::    ::: :: :::" << std::endl;
-    std::cout << " :::   ::   :::          :::    :::  :::::" << std::endl;
-    std::cout << " :::        :::    :::::::::    :::   ::::" << std::endl;
-    std::cout << RESET << std::endl;
-
     createSocket();
     settingsockopt();
     nonBlockFd();
@@ -128,8 +121,8 @@ void Irc::addClient()
     _clients.insert(std::pair<int, Client>(_newSocket, new_client));
     
     ////
-    send(new_client.get_fd(), "CAP * LS :\r\n", 13, 0);
-    send(new_client.get_fd(), "Welcome To A9WED Server\r\n", 26, 0);
+    // send(new_client.get_fd(), "CAP * LS :\r\n", 13, 0);
+    // send(new_client.get_fd(), "Welcome To A9WED Server\r\n", 26, 0);
 
     std::cout << GREEN << "[Server] Added client #" << _newSocket
               << " successfully" << RESET << std::endl;

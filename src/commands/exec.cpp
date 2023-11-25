@@ -29,10 +29,11 @@ void excute_command(std::string password , std::string command, Client &client, 
 //     {
 //         mode(command, client, channels);
 //     }
-//     else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
-//     {
-//         privmsg(command, client, clients, channels);
-//     }
+    // else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
+    // {
+    //     privmsg(command, client, clients, channels);
+    //     std::cout << "PRIVMSG" << std::endl;
+    // }
 //     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())
 //     {
 //         Irc::handleLogTime(client);
