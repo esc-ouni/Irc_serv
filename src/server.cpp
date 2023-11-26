@@ -80,8 +80,6 @@ Client::Client(int fd)
 {
     _fd = fd;
     _is_authenticated = false;
-    _is_registered = false;
-    _pwd = 0;
 
     _nickname = "";
     _username = "";

@@ -15,6 +15,8 @@
 #include <string>
 #include <fcntl.h>
 #include <pthread.h>
+#include <string.h>
+#include <strings.h>
 
 /* colors */
 #define RESET "\033[0m"

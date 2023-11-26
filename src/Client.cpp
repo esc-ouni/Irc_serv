@@ -22,19 +22,9 @@ void Client::set_nickname(std::string nickname)
     _nickname = nickname;
 }
 
-bool Client::is_registered()
-{
-    return _is_registered;
-}
-
 bool Client::is_authenticated()
 {
     return _is_authenticated;
-}
-
-void Client::set_registered(bool is_registered)
-{
-    _is_registered = is_registered;
 }
 
 void Client::set_authenticated(bool is_authenticated)
@@ -63,16 +53,6 @@ void Client::set_username(std::string username)
 //     return (0);
 // }
 
-void Client::set_realname(std::string realname)
-{
-    _realname = realname;
-}
-
-void Client::set_hostname(std::string hostname)
-{
-    _hostname = hostname;
-}
-
 void Client::set_servername(std::string servername)
 {
     _servername = servername;
@@ -96,16 +76,6 @@ std::string Client::get_old_nick()
 std::string Client::get_buff_to_send()
 {
     return _buff_to_send;
-}
-
-std::string Client::get_realname()
-{
-    return _realname;
-}
-
-std::string Client::get_hostname()
-{
-    return _hostname;
 }
 
 std::string Client::get_servername()
