@@ -13,9 +13,9 @@ private:
     std::string _nickname;
     std::string _password;
     std::string _servername;
-    std::string _buff_to_send;
-    std::string _old_nick;
     bool _is_authenticated;
+    bool _has_password;
+    bool _has_nickname;
     unsigned long _start;
 
 public:
@@ -25,7 +25,6 @@ public:
     std::string view_topic(Channel &);
     std::string get_socket_fd_str();
     std::string get_servername();
-    std::string get_old_nick();
     std::string get_buff_to_send();
     int set_topic(Channel &, std::string);
     bool is_operator(Channel &);
@@ -37,9 +36,7 @@ public:
     void set_username(std::string);
     void set_nickname(std::string nickname);
     void set_servername(std::string servername);
-    void add_buffer_to_send(std::string);
-    void set_old_nick(std::string);
-    void set_buff_to_send(std::string);
+
 
 
     std::string get_pass()
@@ -61,7 +58,7 @@ public:
         return _buffer;
     }
 
-    void addt_buffer(std::string tmp)
+    void add_buffer(std::string tmp)
     {
         _buffer += tmp;
     }
@@ -84,5 +81,24 @@ public:
     unsigned long getStart()
     {
         return _start;
+    }
+    // Getter for _has_password
+    bool hasPassword() const {
+        return _has_password;
+    }
+
+    // Setter for _has_password
+    void setHasPassword(bool hasPassword) {
+        _has_password = hasPassword;
+    }
+
+    // Getter for _has_nickname
+    bool hasNickname() const {
+        return _has_nickname;
+    }
+
+    // Setter for _has_nickname
+    void setHasNickname(bool hasNickname) {
+        _has_nickname = hasNickname;
     }
 };

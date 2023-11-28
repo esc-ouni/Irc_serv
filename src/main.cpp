@@ -1,8 +1,10 @@
 #include "../headers/Irc.hpp"
+#include <cstdlib>
 
 void signal_handler(int signal)
 {
     (void)signal;
+    system("clear"); //TODO: remove this
     std::cout << RED << "\nBYE BYE" << RESET << std::endl;
     exit(EXIT_SUCCESS);
 }
@@ -19,12 +21,12 @@ static int IsDigit(char *argv)
 
 int main(int ac, char *argv[])
 {
-    // if (ac != 3 || IsDigit(argv[1]) || argv[2] == NULL || !strlen(argv[2]))
-    // {
-    //     std::cerr << RED << "try ./ircserv [port] [password]" << RESET << std::endl;
-    //     exit(EXIT_FAILURE);
-    // }
-    // signal(SIGINT, signal_handler);
+    if (ac != 3 || IsDigit(argv[1]) || argv[2] == NULL || !strlen(argv[2]))
+    {
+        std::cerr << RED << "try ./ircserv [port] [password]" << RESET << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    signal(SIGINT, signal_handler);
 
     try
     {

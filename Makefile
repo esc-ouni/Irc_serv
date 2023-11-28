@@ -11,8 +11,8 @@ all: $(EXEC)
 
 $(EXEC): $(OBJS) $(H_FILES)
 	@$(CC) $(FLAGS) $(OBJS) -o $(EXEC)
-	@clear && echo "==$(EXEC)_compiled==========="
-	./ircserv 6667 passwd
+	@clear
+	./ircserv 6667 pass
 
 
 %.o: %.cpp $(H_FILES)

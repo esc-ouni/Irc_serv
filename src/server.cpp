@@ -114,6 +114,10 @@ void Irc::addClient()
         printc("Error accepting client connection", RED, 1);
 
     Client new_client(_newSocket);
+
+    new_client.set_pass(_passWord);
+    new_client.setHasPassword(false);
+    new_client.setHasNickname(false);
     pollfd client_pollfd = {_newSocket, POLLIN, 0};
     _pollfds.push_back(client_pollfd);
     _clients.insert(std::pair<int, Client>(_newSocket, new_client));
@@ -205,7 +209,7 @@ void Irc::Handle_activity()
 
 void Irc::recvClientsMsg(Client &client, std::string buffer)
 {
-    client.addt_buffer(buffer);
+    client.add_buffer(buffer);
 }
 
 void Irc::handleQuotes(Client &client)
