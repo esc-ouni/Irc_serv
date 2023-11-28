@@ -18,7 +18,7 @@ std::string filteredString(std::string str)
 }
 
 
-bool pass(std::string password, std::string command, Client &client)
+bool pass( std::string command, Client &client)
 {
     std::string pass = filteredString(command.substr(5, command.length() - 5));
 
@@ -30,5 +30,5 @@ bool pass(std::string password, std::string command, Client &client)
     {
         client.setHasPassword(true);
          return true;
-    }   
+    } 
 }

@@ -6,11 +6,11 @@
 
 
 
-void excute_command(std::string password , std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients)
+void excute_command(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients)
 {
     if (command.substr(0, 4) == "PASS")
     {
-        if (pass(password, command, client) == false)
+        if (pass(command, client) == false)
         {
             send(client.get_fd(), ERR(std::string(" wrong password")).c_str(), ERR(std::string(" wrong password")).length(), 0);
         }
