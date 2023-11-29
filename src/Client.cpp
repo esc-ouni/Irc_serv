@@ -2,6 +2,9 @@
 #include "../headers/Channel.hpp"
 #include "../headers/Client.hpp"
 
+Client::Client(void){
+};
+
 std::string Client::get_nickname()
 {
     return _nickname;

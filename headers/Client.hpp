@@ -19,6 +19,7 @@ private:
     unsigned long _start;
 
 public:
+    Client();
     Client(int);
     std::string get_nickname();
     std::string get_username();
