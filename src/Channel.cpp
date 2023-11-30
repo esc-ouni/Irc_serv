@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/11/30 18:24:32 by idouni           ###   ########.fr       */
+/*   Updated: 2023/11/30 19:20:36 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ void rtrim(std::string &s, const std::string& charsToTrim) {
     }
 }
 
+// void Create_channel_join(int clientSocket, const std::string& username, const std::string& channelName) {
+
+
+//     std::cout << "Debug::Working... !" << std::endl;
+// }
 std::string extractChannelName(const std::string& command) {
     return (command.substr(command.find('#'), (command.find(' ') - command.find('#'))));
 }
@@ -31,11 +36,17 @@ void sendMessage(int clientSocket, const std::string& message) {
         std::cerr << "Err: failling sending message th the client !" << std::endl;
 }
 
-// void Create_channel_join(int clientSocket, const std::string& username, const std::string& channelName) {
+std::string Get_Users_list(std::map<int, Client> &clients){
 
+    std::map<int, Client>::iterator it = clients.begin();
 
-//     std::cout << "Debug::Working... !" << std::endl;
-// }
+    while (it != clients.end()) {
+        std::cout << "Fd: " << it->first << ", CLient Name: " << it->second.get_nickname() << std::endl;
+        ++it;
+    }
+    return "";
+        
+};
 
 void handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel>& channels) {
     std::string channel_name = extractChannelName(command);
@@ -52,7 +63,9 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
     sendMessage(client.get_socket_fd(), topicMsg);
 
     // Send NAMES list
-    std::string namesReply = ":MyServer 353 " + client.get_nickname() + " = " + channel_name + " :Ibrahim @Alexandra Imad\r\n";
+
+    
+    std::string namesReply = ":MyServer 353 " + client.get_nickname() + " = " + channel_name + " :" + "@Ibrahim @ALEXANDRA @Imad" + "\r\n";
     sendMessage(client.get_socket_fd(), namesReply);
 
     // End of NAMES list

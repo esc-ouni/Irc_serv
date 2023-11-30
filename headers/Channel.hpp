@@ -28,3 +28,4 @@ public:
 };
 
 void handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel> &channels);
+std::string Get_Users_list(std::map<int, Client> &clients);
