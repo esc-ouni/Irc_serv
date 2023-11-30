@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/11/30 20:46:09 by idouni           ###   ########.fr       */
+/*   Updated: 2023/11/30 21:06:28 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ std::string Get_Users_list(std::map<int, Client> &clients){
     std::string ALL_USERS;
     
     while (it != clients.end()) {
-        ALL_USERS += it->second.get_nickname() + " " + "CHI_WA7ED" ;
+        ALL_USERS += it->second.get_nickname() + " ";
         ++it;
     }
     return ALL_USERS;
