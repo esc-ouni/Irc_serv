@@ -67,16 +67,38 @@ std::string receivername(std::string message)
     return (receiver);
 }
 
+std::string chanel_name(const std::string receiver)
+{
+    if (!receiver.empty() && receiver[0] == '#')
+    {
+        return receiver.substr(1);
+    } else {
+        return std::string();
+    }
+}
+
+void broadcast_to_channel(std::string msg_to_send, Client client, std::map<std::string, Channel> channels,std::string chanel)
+{
+    std::cout << "broadcast_to_channel" << std::endl;
+}
+
 void privmsg(std::string message, Client &client, std::map<int, Client> &clients, std::map<std::string, Channel> &channels)
 {
     std::string receiver = receivername(message);
     std::string msg_to_send = extract_msg_to_send(message);
+    std::string chanel = chanel_name(receiver);
+    std::cout << "chanel: " << chanel << std::endl;
+    
 
     if (receiver.empty())
         send(client.get_fd(), ERR_NORECIPIENT(client.get_nickname()).c_str(), ERR_NORECIPIENT(client.get_nickname()).length(), 0);
-    else if (!receiver.empty())
+    else if (!receiver.empty() && chanel.empty())
     {
         privmsg_user(msg_to_send, client, clients, receiver);
+    }
+    else if (!chanel.empty())
+    {
+        broadcast_to_channel(msg_to_send, client, channels, chanel);
     }
 }
 

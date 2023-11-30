@@ -21,4 +21,9 @@ private:
 
 public:
 
+    std::map<int, Client> &get_clients()
+    {
+        return _clients;
+    }
+
 };
