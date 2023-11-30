@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/11/30 21:06:28 by idouni           ###   ########.fr       */
+/*   Updated: 2023/11/30 21:14:24 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,16 @@ void Create_channel_join(Client &client, std::map<std::string, Channel>& channel
     sendMessage(client.get_socket_fd(), joinConfirm);
 
     // Assuming there's a topic; send a no-topic message if not
-    std::string topicMsg = ":MyServer 332 " + client.get_nickname() + " " + new_channel_name + " :Some interesting topic\r\n";
+    std::string topicMsg = ": 332 " + client.get_nickname() + " " + new_channel_name + " :Some interesting topic\r\n";
     sendMessage(client.get_socket_fd(), topicMsg);
 
     // Send NAMES list
 
-    std::string namesReply = ":MyServer 353 " + client.get_nickname() + " = " + new_channel_name + " :" + Get_Users_list(clients) + "\r\n";
+    std::string namesReply = ": 353 " + client.get_nickname() + " = " + new_channel_name + " :" + Get_Users_list(clients) + "\r\n";
     sendMessage(client.get_socket_fd(), namesReply);
 
     // End of NAMES list
-    std::string endofNames = ":MyServer 366 " + client.get_nickname() + " " + new_channel_name + " :End of /NAMES list\r\n";
+    std::string endofNames = ": 366 " + client.get_nickname() + " " + new_channel_name + " :End of /NAMES list\r\n";
     sendMessage(client.get_socket_fd(), endofNames);
     std::cout << "Debug::Working... !" << std::endl;
 }
@@ -74,5 +74,5 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
 
 
 
-    std::cout << "DEBUG::Channel " << channel_name << " created and " << client.get_username() << " joined." << std::endl;
+    std::cout << "DEBUG::Channel " << channel_name << " created and " << client.get_nickname() << " joined." << std::endl;
 }
