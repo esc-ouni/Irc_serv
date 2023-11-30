@@ -3,9 +3,6 @@
 #include "../../headers/commands.hpp"
 
 
-
-
-
 void excute_command(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients)
 {
     Get_Users_list(clients);
@@ -30,7 +27,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
         send(client.get_fd(), auth.c_str(), auth.length(), 0);
     }
     else if (command.substr(0, 4) == "JOIN"){
-        handleJoinCommand(command, client, channels);
+        handleJoinCommand(command, client, channels, clients);
     }
 };
 
