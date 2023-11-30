@@ -124,7 +124,6 @@ void Irc::addClient()
     
     ////
     // send(new_client.get_fd(), "CAP * LS :\r\n", 13, 0);
-    send(new_client.get_fd(), "001\r\n", 5, 0);
     // send(new_client.get_fd(), "Welcome To A9WED Server\r\n", 26, 0);
 
     std::cout << GREEN << "[Server] Added client #" << _newSocket

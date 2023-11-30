@@ -19,26 +19,7 @@ private:
     unsigned long _start;
 
 public:
-    Client();
     Client(int);
-    std::string get_nickname();
-    std::string get_username();
-    std::string view_topic(Channel &);
-    std::string get_socket_fd_str();
-    std::string get_servername();
-    std::string get_buff_to_send();
-    int set_topic(Channel &, std::string);
-    bool is_operator(Channel &);
-    int get_socket_fd();
-    int leave_channel(Channel &channel);
-    int kick_user(Client &, Channel &);
-    bool is_authenticated();
-    void set_authenticated(bool);
-    void set_username(std::string);
-    void set_nickname(std::string nickname);
-    void set_servername(std::string servername);
-
-
 
     std::string get_pass()
     {
@@ -83,23 +64,55 @@ public:
     {
         return _start;
     }
-    // Getter for _has_password
     bool hasPassword() const {
         return _has_password;
     }
 
-    // Setter for _has_password
     void setHasPassword(bool hasPassword) {
         _has_password = hasPassword;
     }
 
-    // Getter for _has_nickname
     bool hasNickname() const {
         return _has_nickname;
     }
 
-    // Setter for _has_nickname
     void setHasNickname(bool hasNickname) {
         _has_nickname = hasNickname;
     }
+
+    std::string get_nickname()
+    {
+        return _nickname;
+    }
+
+    std::string get_username()
+    {
+        return _username;
+    }
+
+    int get_socket_fd()
+    {
+        return _fd;
+    }
+
+    void set_nickname(std::string nickname)
+    {
+        _nickname = nickname;
+    }
+
+    bool is_authenticated()
+    {
+        return _is_authenticated;
+    }
+
+    void set_authenticated(bool is_authenticated)
+    {
+        _is_authenticated = is_authenticated;
+    }
+
+    void set_username(std::string username)
+    {
+        _username = username;
+    }
+
 };

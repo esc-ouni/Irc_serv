@@ -29,6 +29,7 @@
 #define ERR_BADCHANNELKEY(client, channel) (":localhost 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANNELISFULL(client, channel) (":localhost 471 " + client + " " + channel + " :Cannot join channel (+l)\r\n")
 #define ERR_INVITEONLYCHAN(client, channel) (":localhost 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
+
 // INVITE
 #define RPL_INVITING(client, nickname, channel) (":localhost 341 " + client + " " + nickname + " " + channel + "\r\n")
 // 301
@@ -36,7 +37,6 @@
 
 // end channels
 #define ERR_PASSWDMISMATCH(client) (":localhost 464 " + client + " :Password incorrect.\r\n")//
-// #define ERR_PASSWDMISMATCH(client) (":localhost 464 " client " :Password incorrect.\r\n")
 
 #define RPL_MYINFO(client, servername, version, user_modes, chan_modes, chan_param_modes) (":localhost 004 " + client + " " + servername + " " + version + " " + user_modes + " " + chan_modes + " " + chan_param_modes + "\r\n")
 #define ERR_NEEDMOREPARAMS(client, command) (":localhost 461 " + client + " " + command + " :Not enough parameters.\r\n")
@@ -45,7 +45,12 @@
 #define ERR_NORECIPIENT(client) ("411 " + client + " :No recipient given PRIVMSG\r\n")
 #define ERR_NOTEXTTOSEND(client) ("412 " + client + " :No text to send\r\n")
 #define ERR_CANNOTSENDTOCHAN(client, channel) ("404 " + client + " " + channel + " :Cannot send to channel\r\n")
+
 #define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + "  :" + message + "\r\n")
+
+// #define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + " " + message + "\r\n")
+
+
 // TOPIC
 #define RPL_TOPIC(client, channel, topic) (":localhost 332 " + client + " " + channel + " :" + topic + " \r\n")
 /**

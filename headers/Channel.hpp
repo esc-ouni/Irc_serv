@@ -7,7 +7,6 @@
 #include <map>
 
 class Client;
-
 class Channel
 {
 private:
@@ -19,12 +18,7 @@ private:
     std::vector<std::string> _invitees;
     std::string _key;
     int _limit;
-public:
-    void addUser(Client client) {
-        this->_clients[client.get_fd()] = client;
-    };
 
+public:
 
 };
-
-void handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel> &channels);
