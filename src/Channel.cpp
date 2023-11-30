@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/11/29 19:44:57 by idouni           ###   ########.fr       */
+/*   Updated: 2023/11/30 17:28:11 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,53 +15,78 @@
 #include "../headers/Client.hpp"
 #include "../headers/commands.hpp"
 
+void rtrim(std::string &s, const std::string& charsToTrim) {
+    size_t endpos = s.find_last_not_of(charsToTrim);
+    if (std::string::npos != endpos) {
+        s = s.substr(0, endpos + 1);
+    }
+}
+
 std::string extractChannelName(const std::string& command) {
-    return (command.substr(command.find('#') + 1, command.find(' ', command.find('#'))- (command.find('#') + 1)));
+    return (command.substr(command.find('#'), (command.find(' ') - command.find('#'))));
 }
 
-void handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel> &channels) {
-
-    std::string channel_name = extractChannelName(command);
-    channels[channel_name].addUser(client);
-
-
-    std::string RET    = ":" + RPL_JOIN(client.get_username(), client, channel_name) + "\r\n";
-    send(client.get_socket_fd(), RET.c_str(), RET.length(), 0);
-
-
-    std::string USERS = ": 354 hober 743 " + channel_name + " ~quassel" + " Christian_Qs H 0 0 :Christian" + "\r\n";
-    send(client.get_socket_fd(), USERS.c_str(), USERS.length(), 0);
-
-    std::string END =  ": 315 Me " + channel_name + " :End of /NAME list" + "\r\n";
-    send(client.get_socket_fd(), END.c_str(), END.length(), 0);
-
-    std::cout << "Channel " << channel_name << " created and " << client.get_nickname() << " joined." << std::endl;
-    
+void sendMessage(int clientSocket, const std::string& message) {
+    if (send(clientSocket, message.c_str(), message.length(), 0) == -1)
+        std::cerr << "Err: failling sending message th the client !" << std::endl;
 }
 
+void Create_channel_join(int clientSocket, const std::string& username, const std::string& channelName) {
+    // JOIN Confirmation
+    std::string joinConfirm = ":" + username + "!" + username + "@" + "adress" + " JOIN :" + channelName + "\r\n";
+    sendMessage(clientSocket, joinConfirm);
 
-// #include <iostream>
-// #include <string>
-// #include <map>
-// // ... include other necessary headers ...
+
+    // Channel Topic
+    std::string topicMsg = ":MyServer 332 " + username + " " + channelName + " :" + "INTERESTING_TOPIC" + "\r\n";
+    sendMessage(clientSocket, topicMsg);
+
+    // Names List
+    std::string userNames = "Ibraim Alexandra IMAD"; // This should return a space-separated list of nicknames
+    std::string namesReply = ":MyServer 353 " + username + " = " + channelName + " :" + userNames + "\r\n";
+    sendMessage(clientSocket, namesReply);
+
+    // End of Names List
+    std::string endOfNames = ":MyServer 366 " + username + " " + channelName + " :End of /NAMES list\r\n";
+    sendMessage(clientSocket, endOfNames);
+
+    std::cout << "Debug::Working... !" << std::endl;
+}
 
 // void handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel> &channels) {
+
 //     std::string channel_name = extractChannelName(command);
+//     rtrim(channel_name, "\r\n");
+
 //     channels[channel_name].addUser(client);
 
-//     std::string joinConfirm = ": " + client.get_username() + " JOIN " + channel_name + "\r\n";
-//     std::cout << "Sending JOIN confirmation: " << joinConfirm;
-//     send(client.get_socket_fd(), joinConfirm.c_str(), joinConfirm.length(), 0);
-
-//     std::string namesReply = ": 353 " + client.get_username() + " = " + channel_name + " #Ibrahim &Alexandra :Imad\r\n";
-//     std::cout << "Sending NAMES list: " << namesReply;
-//     send(client.get_socket_fd(), namesReply.c_str(), namesReply.length(), 0);
-
-//     std::string endOfNames = ": 366 " + client.get_username() + " " + channel_name + " :End of /NAMES list\r\n";
-//     std::cout << "Sending end of NAMES list: " << endOfNames;
-//     send(client.get_socket_fd(), endOfNames.c_str(), endOfNames.length(), 0);
+//     Create_channel_join(client.get_socket_fd(), client.get_nickname(), channel_name);
 
 //     std::cout << "Channel " << channel_name << " created and " << client.get_nickname() << " joined." << std::endl;
+    
 // }
 
+void handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel>& channels) {
+    std::string channel_name = extractChannelName(command);
+    rtrim(channel_name, "\r\n");
 
+    channels[channel_name].addUser(client);
+
+    // Corrected JOIN confirmation message
+    std::string joinConfirm = ":" + client.get_nickname() + "!~" + client.get_username() + "@" + "client.get_host()" + " JOIN :" + channel_name + "\r\n";
+    sendMessage(client.get_socket_fd(), joinConfirm);
+
+    // Assuming there's a topic; send a no-topic message if not
+    std::string topicMsg = ":MyServer 332 " + client.get_nickname() + " " + channel_name + " :Some interesting topic\r\n";
+    sendMessage(client.get_socket_fd(), topicMsg);
+
+    // Send NAMES list
+    std::string namesReply = ":MyServer 353 " + client.get_nickname() + " = " + channel_name + " :User1 User2 User3\r\n";
+    sendMessage(client.get_socket_fd(), namesReply);
+
+    // End of NAMES list
+    std::string endOfNames = ":MyServer 366 " + client.get_nickname() + " " + channel_name + " :End of /NAMES list\r\n";
+    sendMessage(client.get_socket_fd(), endOfNames);
+
+    std::cout << "Channel " << channel_name << " created and " << client.get_nickname() << " joined." << std::endl;
+}
