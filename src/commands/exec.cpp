@@ -28,6 +28,10 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 4) == "JOIN"){
         handleJoinCommand(command, client, channels, clients);
     }
+    else if (command.substr(0, 5) == "TOPIC" && client.is_authenticated())
+    {
+        set_topic(command, client, channels, clients);
+    }
 };
 
 //     else if (command.substr(0, 4) == "KICK" && client.is_authenticated())
@@ -59,10 +63,6 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
 //     else if (filteredString(command) == "DOWNLOAD" && client.is_authenticated())
 //     {
 //         Irc::handleBot(client);
-//     }
-//     else if (command.substr(0, 5) == "TOPIC" && client.is_authenticated())
-//     {
-//         topic(command, client, channels, clients);
 //     }
 
 //     else if (filteredString(command.substr(0, 4))!= "QUIT")

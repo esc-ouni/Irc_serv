@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/01 19:37:38 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/01 22:47:20 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,61 @@ bool Channel::is_operator(Client &client){
     return (false);
 };
 
-// void Channel::promote(Client &client){
-//     this->_operators[1].second = client;
-// };
+void Channel::promote(Client &client){
+    this->_operators[client.get_fd()] = client;
+};
+
+void Channel::unpromote(Client &client){
+    if (is_operator(client)){
+        this->_operators.erase(client.get_fd());
+    };
+};
+
+void  Channel::set_topic(Client &client, std::string &new_topic){
+    if (is_operator(client) && this->_topic.compare(new_topic) && is_valid_topic(new_topic)){
+        this->_topic = new_topic;
+    }
+};
+
+std::string Channel::get_topic() const{
+    return (this->_topic);
+};
 
 
 // Generally, channel names can include letters, digits, and some special characters.
 // Typically allowed characters are: a-z, A-Z, 0-9, as well as underscores _, hyphens -, and periods .
 
-// bool channel_name_is_valid(){
-    
-//     return(true);
-// }
 
+bool channel_name_is_valid(std::string &channel_name){
+    if (channel_name.empty() || (channel_name.length() > 50))
+        return(false);
+    if (channel_name.c_str()[0] != '#')
+        return(false);
+    for (int i = 0; i < channel_name.length(); i++){
+        if (!std::isalnum(channel_name.c_str()[i]) || !valid_sp_character(channel_name.c_str()[i]) || std::isspace(channel_name.c_str()[i]))
+            return(false);
+    }
+    return (true);
+}
+
+
+bool valid_sp_character(int c){
+    if (c == '_' || c == '-' || c == '.')
+        return (true);
+    return (false);
+} 
+
+bool is_valid_topic(std::string &new_topic){
+    if (new_topic.empty() || (new_topic.length() > 100))
+        return(false);
+    // if (new_topic.c_str()[0] != '#')
+    //     return(false);
+    // for (int i = 0; i < new_topic.length(); i++){
+    //     if (!std::isalnum(new_topic.c_str()[i]) || !valid_sp_character(new_topic.c_str()[i]) || std::isspace(new_topic.c_str()[i]))
+    //         return(false);
+    // }
+    return (false);
+}
 
 void sendMessage(int clientSocket, const std::string& message) {
     if (send(clientSocket, message.c_str(), message.length(), 0) == -1)
@@ -58,12 +100,14 @@ void rtrim(std::string &s, const std::string& charsToTrim) {
 }
 
 
-void notifyUsersOfNewJoin(const std::string& channelName, Client& joiningClient, std::map<std::string, Channel>& channels) {
+void notifyUsersOfNewJoin(const std::string& channelName, Client& joiningClient, std::map<std::string, Channel>& channels, std::map<int, Client> &clients) {
     Channel& channel = channels[channelName];
     std::string joinMessage = ":" + joiningClient.get_nickname() + "!~" + "joiningClient.get_username()" + "@" + "client.get_host()" + " JOIN :" + channelName + "\r\n";
 
 
     //LOOP_OVER_CLENTS_SEND_TEM_NOTIFICATION
+    //TBC
+    
     sendMessage(joiningClient.get_socket_fd(), joinMessage);
 }
 
@@ -71,7 +115,8 @@ void notifyUsersOfNewJoin(const std::string& channelName, Client& joiningClient,
 
 
 void Create_channel_join(Client &client, std::map<std::string, Channel>& channels, const std::string& new_channel_name, std::map<int, Client> &clients) {
-    // client.is_operator() = True;
+    // promotes the user to be an operator 
+    channels[new_channel_name].promote(client);
     
     
     // Corrected JOIN confirmation message
@@ -79,8 +124,11 @@ void Create_channel_join(Client &client, std::map<std::string, Channel>& channel
     sendMessage(client.get_socket_fd(), joinConfirm);
 
     // Assuming there's a topic; send a no-topic message if not
-    std::string topicMsg = ": 332 " + client.get_nickname() + " " + new_channel_name + " :Some interesting topic\r\n";
-    sendMessage(client.get_socket_fd(), topicMsg);
+    if (!channels[new_channel_name].get_topic().empty()){
+        std::string topicMsg = ": 332 " + client.get_nickname() + " " + new_channel_name + " :" + channels[new_channel_name].get_topic() + "\r\n";
+        sendMessage(client.get_socket_fd(), topicMsg);
+        
+    }
 
     // Send NAMES list
     std::string namesReply = ": 353 " + client.get_nickname() + " = " + new_channel_name + " :" + Get_Users_list(clients, channels[new_channel_name]) + "\r\n";
@@ -121,9 +169,30 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
     channels[channel_name].addUser(client);
 
     Create_channel_join(client, channels, channel_name, clients);
-    // notifyUsersOfNewJoin(channel_name, client, channels);
+    notifyUsersOfNewJoin(channel_name, client, channels, clients);
 
-
-
-    std::cout << "DEBUG::Channel " << channel_name << " created and " << client.get_nickname() << " joined." << std::endl;
+    // std::cout << "DEBUG::Channel " << channel_name << " created and " << client.get_nickname() << " joined." << std::endl;
 }
+
+std::string extracTopic(std::string& command) {
+    size_t ch = command.find('#');
+    if (ch != std::string::npos) {
+        return command.substr(ch + command.find(' '));
+    }
+    return "";
+}
+
+void set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
+    std::string topic;
+
+    try{
+        topic = extracTopic(command); 
+        rtrim(topic, "\r\n");
+    }
+    catch(...){
+        std::cout << "SHOW TOPIC" << '\n';
+        topic.clear();
+    }
+       
+    // std::cout << "DEBUG::SET_TOPIC :" << topic << ":" << std::endl;
+};

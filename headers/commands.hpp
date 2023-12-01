@@ -28,7 +28,7 @@
 #define RPL_ENDOFNAMES(client, channel) (":localhost 366 " + client + " " + channel + " :End of /NAMES list.\r\n")
 #define ERR_BADCHANNELKEY(client, channel) (":localhost 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANNELISFULL(client, channel) (":localhost 471 " + client + " " + channel + " :Cannot join channel (+l)\r\n")
-#define ERR_INVITEONLYCHAN(client, channel) (":localhost 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
+#define ERR_IN  VITEONLYCHAN(client, channel) (":localhost 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
 // INVITE
 #define RPL_INVITING(client, nickname, channel) (":localhost 341 " + client + " " + nickname + " " + channel + "\r\n")
 // 301
@@ -57,8 +57,8 @@
  */
 void excute_command(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
 void privmsg(std::string message, Client &client, std::map<int, Client> &clients, std::map<std::string, Channel> &channels);
-void broadcastTochannel(Client client, std::string message, std::string channel, std::map<std::string, Channel> &channels);
-void topic(std::string &command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
+// void broadcastTochannel(Client client, std::string message, std::string channel, std::map<std::string, Channel> &channels);
+// void set_topic(std::string &command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
 /**
  * @brief join a channel
  * @param client the client who wants to join the channel
