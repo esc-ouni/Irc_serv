@@ -37,6 +37,5 @@ int main(int ac, char *argv[])
     {
         std::cerr << e.what() << '\n';
     }
-
     return (EXIT_SUCCESS);
 }

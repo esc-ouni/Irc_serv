@@ -3,43 +3,43 @@
 #include "../../headers/commands.hpp"
 
 // splite username
-bool splitusername(const std::string& input)
-{
+bool splitusername(const std::string& input) {
     std::istringstream stream(input);
     std::string token;
 
     int count = 0;
     while (getline(stream, token, '0'))
     {
-      count++;
-      if (!token.empty())
-      {
-        if (count == 2)
+        count++;
+        if (!token.empty())
         {
-          count = 0;
-          std::istringstream stream1(token);
-          std::string token1;  
-          while (getline(stream1, token1, '*'))
-          {
-            count++;
             if (count == 2)
-              {
-              if (!token1.empty())
-              {
-                  return true;
-              }
-              else
-              {
-                  return false;
-              }
-              }
-          }
+            {
+                count = 0;
+                std::istringstream stream1(token);
+                std::string token1;
+
+                while (getline(stream1, token1, '*'))
+                {
+                    count++;
+                    if (count == 2)
+                      {
+                        if (!token1.empty())
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                      }
+                }
+            }
         }
-      }
-      else
-      {
-          return false;
-      }
+        else
+        {
+            return false;
+        }
     }
     return false;
 }
@@ -63,7 +63,7 @@ std::string getCurrentTime()
 
 void user(std::string command, Client &client)
 {
-    std::string username = filteredString(command.substr(5, command.length() - 5));
+    std::string username = command.substr(5, command.length() - 5);
 
     if (client.is_authenticated() == false)
     {
@@ -91,22 +91,23 @@ void user(std::string command, Client &client)
             
             result = "*************************************************************";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "";
+            result = "*                                                                                          *";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "                                 Welcome to the best Irc server                     ";
+            result = "*                       Welcome to the best Irc server                     *";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "";
+            result = "*                                                                                           *";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "              Connect with the world. Chat, share, and have a great    ";
+            result = "*    Connect with the world. Chat, share, and have a great    *";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "";
+            result = "*                                                                                          *";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "                       Enjoy your stay and happy chatting!                      ";
+            result = "*             Enjoy your stay and happy chatting!                      *";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "";
+            result = "*                                                                                          *";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             result = "*************************************************************";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+
         }
     }
 }
