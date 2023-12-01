@@ -5,7 +5,6 @@
 
 void excute_command(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients)
 {
-    Get_Users_list(clients);
     if (command.substr(0, 4) == "PASS")
     {
         if (pass(command, client) == false)

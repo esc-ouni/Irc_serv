@@ -109,6 +109,7 @@ void user(std::string command, Client &client)
             sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
             result = "*************************************************************";
             sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
+            send(client.get_fd(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).c_str(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).length(), 0);
 
 
         }

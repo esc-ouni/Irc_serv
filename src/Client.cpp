@@ -5,6 +5,10 @@
 Client::Client(void){
 };
 
+bool Client::is_operator(Channel &channel){
+    return (channel.is_operator((*this)));
+};
+
 std::string Client::get_nickname()
 {
     return _nickname;
