@@ -31,7 +31,7 @@ public:
     std::string get_buff_to_send();
 
     std::string get_topic(Channel &channel);
-    void        set_topic(Channel &channel, std::string &topic);
+    bool        set_topic(Channel &channel, std::string &topic);
 
     
     int get_socket_fd();

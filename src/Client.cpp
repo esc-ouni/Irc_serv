@@ -13,8 +13,8 @@ std::string Client::get_topic(Channel &channel){
     return (channel.get_topic());
 };
 
-void   Client::set_topic(Channel &channel, std::string &topic){
-    channel.set_topic((*this), topic);
+bool   Client::set_topic(Channel &channel, std::string &topic){
+    return (channel.set_topic((*this), topic));
 };
 
 

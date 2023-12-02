@@ -146,5 +146,7 @@ public:
     static void handleBot(Client &);
 };
 
-void *dccFileTransfer(void *arg);
+void        *dccFileTransfer(void *arg);
 std::string getCurrentTime();
+time_t      time_teller();
+void        sendMessage(int clientSocket, const std::string& message);
