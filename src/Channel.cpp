@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/02 21:39:24 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/02 22:40:49 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ bool Channel::is_operator(Client &client){
         if (it->first == client.get_fd()){
             return (true);
         }
+        it++;
     }
     return (false);
 };
@@ -167,12 +168,11 @@ bool channel_exist(std::map<std::string, Channel>& channels, std::string &needle
     while (it != channels.end()){
         if (!needle.compare(it->first))
             return (true);
-        ++it;
+        it++;
     }
     return (false);
     
 }
-    // std::cout << "DEBUG::PASS" << std::endl;
 
 void Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients) {
     channels[new_channel_name].addUser(client);
@@ -193,7 +193,7 @@ void Create_channel_join(Client &client, std::map<std::string, Channel>& channel
     // End of NAMES list
     Message = RPL_ENDOFNAMES(client.get_nickname(), new_channel_name);
     sendMessage(client.get_socket_fd(), Message);
-    
+
 };
 
 
@@ -208,7 +208,7 @@ std::string Get_Users_list(std::map<int, Client> &clients, Channel &channel){
             ALL_USERS += "@" + it->second.get_nickname() + " ";
         else
             ALL_USERS += it->second.get_nickname() + " ";
-        ++it;
+        it++;
     }
     return ALL_USERS;
         
@@ -230,6 +230,7 @@ void channel_join(Client &client, std::map<std::string, Channel>& channels, std:
     // End of NAMES list
     Message = RPL_ENDOFNAMES(client.get_nickname(), new_channel_name);
     sendMessage(client.get_socket_fd(), Message);
+    
 };
 
 
@@ -242,16 +243,16 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
     std::string         channel_name;
     std::string         Message;
 
-    std::cout << "INPUT : <" << input << "> " << std::endl;
+    // std::cout << "INPUT : <" << input << "> " << std::endl;
     while (std::getline(iss, channel_name, ',')) {
-        std::cout << "part : <" << channel_name << "> \t\t" << std::boolalpha << channel_name_is_valid(channel_name) << std::endl;
+        // std::cout << "part : <" << channel_name << "> \t\t" << std::boolalpha << channel_name_is_valid(channel_name) << std::endl;
         
         if (!channel_name.empty() && channel_name_is_valid(channel_name)){
             if (!channel_exist(channels, channel_name)){
                 Create_channel_join(client, channels, channel_name, clients);
             }
-            else if (channel_exist(channels, channel_name)){
-                // channel_join(client, channels, channel_name, clients);
+            else {
+                channel_join(client, channels, channel_name, clients);
             }
             // notifyUsersOfNewJoin
             Message = RPL_JOIN(client.get_nickname(), channel_name);
@@ -262,7 +263,6 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
                 // RPL_TOPICWHOTIME
                 sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), timeToString(time_teller())));
             }
-            channel_name.clear();
         }
     }
 };
