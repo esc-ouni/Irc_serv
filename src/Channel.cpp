@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/01 22:47:20 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/02 10:34:58 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,22 +97,24 @@ void rtrim(std::string &s, const std::string& charsToTrim) {
     if (std::string::npos != endpos) {
         s = s.substr(0, endpos + 1);
     }
-}
+};
 
 
 void notifyUsersOfNewJoin(const std::string& channelName, Client& joiningClient, std::map<std::string, Channel>& channels, std::map<int, Client> &clients) {
     Channel& channel = channels[channelName];
-    std::string joinMessage = ":" + joiningClient.get_nickname() + "!~" + "joiningClient.get_username()" + "@" + "client.get_host()" + " JOIN :" + channelName + "\r\n";
+    std::string joinMessage = ":" + joiningClient.get_nickname() + "!~" + joiningClient.get_nickname() + "@" + "client.get_host()" + " JOIN :" + channelName + "\r\n";
 
 
     //LOOP_OVER_CLENTS_SEND_TEM_NOTIFICATION
-    //TBC
-    
-    sendMessage(joiningClient.get_socket_fd(), joinMessage);
-}
+    std::map<int, Client>::iterator it = clients.begin();
 
-
-
+    while (it != clients.end()){
+        if (it->first != joiningClient.get_fd()){
+            sendMessage(it->second.get_fd(), joinMessage);
+        }
+        ++it;
+    }
+};
 
 void Create_channel_join(Client &client, std::map<std::string, Channel>& channels, const std::string& new_channel_name, std::map<int, Client> &clients) {
     // promotes the user to be an operator 
@@ -139,11 +141,11 @@ void Create_channel_join(Client &client, std::map<std::string, Channel>& channel
     sendMessage(client.get_socket_fd(), endofNames);
 
     // std::cout << "Debug::Working... !" << std::endl;
-}
+};
 
 std::string extractChannelName(const std::string& command) {
     return (command.substr(command.find('#'), (command.find(' ') - command.find('#'))));
-}
+};
 
 
 std::string Get_Users_list(std::map<int, Client> &clients, Channel &channel){
@@ -175,9 +177,15 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
 }
 
 std::string extracTopic(std::string& command) {
-    size_t ch = command.find('#');
-    if (ch != std::string::npos) {
-        return command.substr(ch + command.find(' '));
+    std::string topic;
+    size_t n = command.find('#');
+    if (n != std::string::npos) {
+        n += command.find(' ') + 2;
+        if (n != std::string::npos) {
+            topic = command.substr(n);
+            if (topic.comp)
+            return (command);
+        }
     }
     return "";
 }
@@ -193,6 +201,6 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
         std::cout << "SHOW TOPIC" << '\n';
         topic.clear();
     }
-       
-    // std::cout << "DEBUG::SET_TOPIC :" << topic << ":" << std::endl;
+
+    std::cout << "DEBUG::SET_TOPIC command <"<< command <<"> <" << topic << ">" << std::endl;
 };

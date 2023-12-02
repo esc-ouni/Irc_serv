@@ -2,7 +2,7 @@
 EXEC    = ircserv
 CC      = c++
 RM      = rm -rf
-# FLAGS   = -std=c++98 -Wall -Wextra -Werror #-fsanitize=address,undefined
+# FLAGS   = -fsanitize=address,undefined
 H_FILES = ${shell ls */*.hpp}
 C_FILES = ${shell ls */*/*.cpp} ${shell ls */*.cpp} 
 OBJS    = $(C_FILES:.cpp=.o)
