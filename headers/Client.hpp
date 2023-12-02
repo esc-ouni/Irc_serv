@@ -26,11 +26,12 @@ public:
     Client(int);
     std::string get_nickname();
     std::string get_username();
-    std::string view_topic(Channel &);
     std::string get_socket_fd_str();
     std::string get_servername();
     std::string get_buff_to_send();
-    int set_topic(Channel &, std::string);
+
+    std::string get_topic(Channel &channel);
+    void        set_topic(Channel &channel, std::string &topic);
 
     
     int get_socket_fd();

@@ -9,6 +9,19 @@ bool Client::is_operator(Channel &channel){
     return (channel.is_operator((*this)));
 };
 
+std::string Client::get_topic(Channel &channel){
+    return (channel.get_topic());
+};
+
+void   Client::set_topic(Channel &channel, std::string &topic){
+    channel.set_topic((*this), topic);
+};
+
+
+
+
+
+
 std::string Client::get_nickname()
 {
     return _nickname;

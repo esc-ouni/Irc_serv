@@ -24,10 +24,14 @@ class Channel
     public:
         void        addUser(Client &client);
         void        promote(Client &client);
-        void        unpromote(Client &client); // need to be added when clients leave
+        void        unpromote(Client &client); // need to be added when client leave
         bool        is_operator(Client &client);
         void        set_topic(Client &client, std::string &new_topic);
         std::string get_topic() const;
+
+        void        set_name(Client &client, std::string &new_name);
+        std::string get_name() const;
+        
 
 };
 

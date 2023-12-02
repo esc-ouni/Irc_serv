@@ -147,3 +147,4 @@ public:
 };
 
 void *dccFileTransfer(void *arg);
+std::string getCurrentTime();

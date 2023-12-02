@@ -48,7 +48,7 @@ bool splitusername(const std::string& input) {
 
 std::string getCurrentTime()
 {
-    std::time_t currentTime;
+    static std::time_t currentTime;
     std::time(&currentTime);
 
     struct tm* timeInfo = std::localtime(&currentTime);

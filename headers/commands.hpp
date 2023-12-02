@@ -48,6 +48,8 @@
 #define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + "  :" + message + "\r\n")
 // TOPIC
 #define RPL_TOPIC(client, channel, topic) (":localhost 332 " + client + " " + channel + " :" + topic + " \r\n")
+#define RPL_TOPICWHOTIME(client, channel, datetime) (":localhost 333 " + client + " " + channel  + "setter_here" + datetime + " \r\n")
+
 /**
  * @brief execute the command given by the client
  * @param command the command to execute
