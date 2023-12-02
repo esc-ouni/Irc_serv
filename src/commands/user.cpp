@@ -91,26 +91,23 @@ void user(std::string command, Client &client)
             
             result = "*************************************************************";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "*                                                                                          *";
+            result = "                                                                                                 ";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "*                       Welcome to the best Irc server                     *";
+            result = "                              Welcome to the best Irc server                     ";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "*                                                                                           *";
+            result = "                                                                                                  ";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "*    Connect with the world. Chat, share, and have a great    *";
+            result = "           Connect with the world. Chat, share, and have a great    ";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "*                                                                                          *";
+            result = "                                                                                                 ";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "*             Enjoy your stay and happy chatting!                      *";
+            result = "                    Enjoy your stay and happy chatting!                      ";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            result = "*                                                                                          *";
+            result = "                                                                                                 ";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             result = "*************************************************************";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-
+            send(client.get_fd(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).c_str(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).length(), 0);
         }
     }
 }
-
-
-

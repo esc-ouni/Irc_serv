@@ -28,9 +28,15 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
         std::string auth = ":localhost 001 " + client.get_nickname() + " :You are now " + (client.is_authenticated() ? "authenticated" : "not authenticated") + "\r\n";
         send(client.get_fd(), auth.c_str(), auth.length(), 0);
     }
-    else if (command.substr(0, 4) == "JOIN"){
+    else if (command.substr(0, 4) == "JOIN")
+    {
         handleJoinCommand(command, client, channels);
     }
+    else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
+    {
+        privmsg(command, client, clients, channels);
+    }
+
 };
 
 //     else if (command.substr(0, 4) == "KICK" && client.is_authenticated())
@@ -46,11 +52,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
 //     {
 //         mode(command, client, channels);
 //     }
-    // else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
-    // {
-    //     privmsg(command, client, clients, channels);
-    //     std::cout << "PRIVMSG" << std::endl;
-    // }
+
 //     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())
 //     {
 //         Irc::handleLogTime(client);
