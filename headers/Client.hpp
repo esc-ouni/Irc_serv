@@ -1,4 +1,5 @@
 #pragma once
+// #include "Channel.hpp"
 #include "Irc.hpp"
 
 class Channel;
@@ -6,29 +7,33 @@ class Channel;
 class Client
 {
 private:
-    int _fd;
+    int              _fd;
 
-    std::string _buffer;
-    std::string _username;
-    std::string _nickname;
-    std::string _password;
-    std::string _servername;
-    bool _is_authenticated;
-    bool _has_password;
-    bool _has_nickname;
-    unsigned long _start;
+    std::string      _buffer;
+    std::string      _username;
+    std::string      _nickname;
+    std::string      _password;
+    std::string      _servername;
+    bool             _is_authenticated;
+    bool             _has_password;
+    bool             _has_nickname;
+    unsigned long    _start;
 
 public:
     Client();
+    bool is_operator(Channel &channel);
+    
     Client(int);
     std::string get_nickname();
     std::string get_username();
-    std::string view_topic(Channel &);
     std::string get_socket_fd_str();
     std::string get_servername();
     std::string get_buff_to_send();
-    int set_topic(Channel &, std::string);
-    bool is_operator(Channel &);
+
+    std::string get_topic(Channel &channel);
+    bool        set_topic(Channel &channel, std::string &topic);
+
+    
     int get_socket_fd();
     int leave_channel(Channel &channel);
     int kick_user(Client &, Channel &);
@@ -37,8 +42,6 @@ public:
     void set_username(std::string);
     void set_nickname(std::string nickname);
     void set_servername(std::string servername);
-
-
 
     std::string get_pass()
     {
