@@ -2,6 +2,8 @@
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
+void sendMessage(int clientSocket, const std::string& message);
+
 // splite username
 bool splitusername(const std::string& input) {
     std::istringstream stream(input);
@@ -46,7 +48,7 @@ bool splitusername(const std::string& input) {
 
 std::string getCurrentTime()
 {
-    std::time_t currentTime;
+    static std::time_t currentTime;
     std::time(&currentTime);
 
     struct tm* timeInfo = std::localtime(&currentTime);
@@ -107,7 +109,7 @@ void user(std::string command, Client &client)
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             result = "*************************************************************";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            send(client.get_fd(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).c_str(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).length(), 0);
+            // send(client.get_fd(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).c_str(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).length(), 0);
         }
     }
 }
