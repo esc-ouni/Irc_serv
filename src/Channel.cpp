@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 22:19:32 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 22:27:07 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,10 +187,10 @@ void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::s
 
 void kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
     
-    std::cout << "KICK         : <" << trim(command, "\r\n") << "> " << std::endl;
-    std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
-    std::cout << "KICK target  : <" << extract_target(command) << "> " << std::endl;
-    std::cout << "KICK reason  : <" << extract_reason(command) << "> " << std::endl;
+    // std::cout << "KICK         : <" << trim(command, "\r\n") << "> " << std::endl;
+    // std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
+    // std::cout << "KICK target  : <" << extract_target(command) << "> " << std::endl;
+    // std::cout << "KICK reason  : <" << extract_reason(command) << "> " << std::endl;
 
 
     std::string target =       extract_target(command);
