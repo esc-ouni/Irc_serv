@@ -51,7 +51,6 @@ std::string extract_msg_to_send(std::string message)
     std::ostringstream remaining_string;
     remaining_string << stream.rdbuf();
     std::string result = remaining_string.str();
-    // std::cout << "result'" << result << "'\n" ;
 
     return (remove_two_pts(result));
 }
@@ -72,65 +71,59 @@ std::string chanel_name(const std::string receiver)
     if (!receiver.empty() && receiver[0] == '#')
     {
         return receiver.substr(1);
-    } else {
+    }
+    else
+    {
         return std::string();
     }
 }
 
 bool checkIfTheChennelExists(std::map<std::string, Channel> &channels,std::string channel)
 {
-    // std::map<std::string, Channel>::iterator it;
-
-    // std::cout << "channel : " << channel<< std::endl;
-
-    // for (it = channels.begin() ; it != channels.end(); ++it)
-    // {
-    //     it->second.setName(channel);// i shpuld remove this line
-    //     std::cout << "it->second.getName() : " << it->second.getName()<< std::endl;
-    //     if (it->second.getName() == channel)
-    //         return true;
-    // }
-    return false;
+    std::map<std::string, Channel>::iterator it;
+    for (it = channels.begin() ; it != channels.end(); ++it)
+    {
+        if (it->second.get_name() == channel)
+        {
+            return (true);
+        }    
+    }
+    return (false);
 }
 
-bool chechIfClientIsInChannel(std::map<std::string, Channel> &channels, Client &client)
+bool chechIfClientIsInChannel(std::map<std::string, Channel> &channels, Client &client, std::string channel)
 {
-    // std::map<std::string, Channel>::iterator it;
-
-    // std::cout << "client Nick name : " << client.get_nickname() << std::endl;
-
-    // for (it = channels.begin() ; it != channels.end(); ++it)
-    // {
-        // std::cout << "Channel client Nick name : " << it->second.get << std::endl;
-        // if (it->second.getName() == client.get_nickname())
-        //     return true;
-    // }
-    return false;
+    std::map<std::string, Channel>::iterator it;
+    for (it = channels.begin() ; it != channels.end(); ++it)
+    {
+        if (it->second.get_name() == channel)
+        {
+            if (it->second.is_member(client))
+            {
+                return (true);
+            }
+        }    
+    }
+    return (false);
 }
 
 void broadcast_to_channel(std::string msg_to_send, Client &client, std::map<std::string, Channel> &channels,std::string channel)
 {
-    // std::string pp = msg_to_send + "\r\n"; 
-    // channels[channel].broadcast_message(pp);
-    // std::cout << "msg_to_send: '"<< msg_to_send << "'"<<std::endl;
+    std::string cha = "#" + channel;
 
-    if (checkIfTheChennelExists(channels, channel))
+    if (!checkIfTheChennelExists(channels, cha))
     {
-        std::cout << "checkIfTheChennelExists" << std::endl;
-        // 
+        send(client.get_fd(), ERR_CANNOTSENDTOCHAN(client.get_nickname(), cha).c_str(), ERR_CANNOTSENDTOCHAN(client.get_nickname(), cha).length(), 0);
     }
-    if (chechIfClientIsInChannel(channels, client))
+    if (!chechIfClientIsInChannel(channels, client ,cha))
     {
-        // 
+        send(client.get_fd(), ERR_CANNOTSENDTOCHAN(client.get_nickname(), cha).c_str(), ERR_CANNOTSENDTOCHAN(client.get_nickname(), cha).length(), 0);
     }
     else
     {
         std::string sessage = ": " + msg_to_send + "\r\n";
-
-        std::string cha = "#" + channel;
         std::string Message = RPL_PRIVMSG(client.get_nickname(), client.get_nickname(), cha, remove_two_pts(sessage));
 
-        // std::cout << "Message: '"<< Message << "'"<<std::endl;
         channels[cha].broadcast_message_exp(client, Message);
     }
 

@@ -50,15 +50,6 @@ class Channel
         return _clients;
     }
 
-
-    std::string getName() const {
-        return _name;
-    }
-
-    void setName(const std::string& name) {
-        _name = name;
-    }
-
     const std::map<int, Client>& getClients() const {
         return _clients;
     }
