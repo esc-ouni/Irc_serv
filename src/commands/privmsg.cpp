@@ -79,38 +79,40 @@ std::string chanel_name(const std::string receiver)
 
 bool checkIfTheChennelExists(std::map<std::string, Channel> &channels,std::string channel)
 {
-    std::map<std::string, Channel>::iterator it;
+    // std::map<std::string, Channel>::iterator it;
 
-    std::cout << "channel : " << channel<< std::endl;
+    // std::cout << "channel : " << channel<< std::endl;
 
-    for (it = channels.begin() ; it != channels.end(); ++it)
-    {
-        it->second.setName(channel);// i shpuld remove this line
-        std::cout << "it->second.getName() : " << it->second.getName()<< std::endl;
-        if (it->second.getName() == channel)
-            return true;
-    }
+    // for (it = channels.begin() ; it != channels.end(); ++it)
+    // {
+    //     it->second.setName(channel);// i shpuld remove this line
+    //     std::cout << "it->second.getName() : " << it->second.getName()<< std::endl;
+    //     if (it->second.getName() == channel)
+    //         return true;
+    // }
     return false;
 }
 
 bool chechIfClientIsInChannel(std::map<std::string, Channel> &channels, Client &client)
 {
-    std::map<std::string, Channel>::iterator it;
+    // std::map<std::string, Channel>::iterator it;
 
-    std::cout << "client Nick name : " << client.get_nickname() << std::endl;
+    // std::cout << "client Nick name : " << client.get_nickname() << std::endl;
 
-    for (it = channels.begin() ; it != channels.end(); ++it)
-    {
+    // for (it = channels.begin() ; it != channels.end(); ++it)
+    // {
         // std::cout << "Channel client Nick name : " << it->second.get << std::endl;
         // if (it->second.getName() == client.get_nickname())
         //     return true;
-    }
+    // }
     return false;
 }
 
 void broadcast_to_channel(std::string msg_to_send, Client &client, std::map<std::string, Channel> &channels,std::string channel)
 {
-    std::cout << "broadcast_to_channel" << std::endl;
+    std::string pp = msg_to_send + "\r\n"; 
+    channels[channel].broadcast_message(pp);
+    std::cout << "msg_to_send: '"<< msg_to_send << "'"<<std::endl;
 
     if (checkIfTheChennelExists(channels, channel))
     {
@@ -133,7 +135,7 @@ void privmsg(std::string message, Client &client, std::map<int, Client> &clients
     std::string receiver = receivername(message);
     std::string msg_to_send = extract_msg_to_send(message);
     std::string chanel = chanel_name(receiver);
-    // std::cout << "chanel: " << chanel << std::endl;
+    std::cout << "chanel: '" << chanel  << "'" << std::endl;
     
 
     if (receiver.empty())
