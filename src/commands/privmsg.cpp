@@ -135,6 +135,11 @@ void privmsg(std::string message, Client &client, std::map<int, Client> &clients
     std::string chanel = chanel_name(receiver);
     // std::cout << "chanel: " << chanel << std::endl;
     
+    
+    // messages to channels
+    // std::string Message = RPL_CHANNMSG(client.get_nickname(), "host", extractChannelName(command), extracTopic(command));
+    // channels[extractChannelName(command)].broadcast_message_exp(client, Message);
+
 
     if (receiver.empty())
         send(client.get_fd(), ERR_NORECIPIENT(client.get_nickname()).c_str(), ERR_NORECIPIENT(client.get_nickname()).length(), 0);

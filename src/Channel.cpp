@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/02 22:40:49 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 21:06:28 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,20 @@ void Channel::broadcast_message(std::string &message){
     }
 };
 
+std::string Channel::get_all_users(){
+    std::string                     ALL_USERS = "";
+    std::map<int, Client>::iterator it = this->_clients.begin();
+    
+    while (it != this->_clients.end()) {
+        if (it->second.is_operator((*this)))
+            ALL_USERS += "@" + it->second.get_nickname() + " ";
+        else
+            ALL_USERS += it->second.get_nickname() + " ";
+        it++;
+    }
+    return ALL_USERS;
+}
+
 
 void Channel::broadcast_message_exp(Client &client, std::string &message){
     
@@ -42,6 +56,7 @@ void Channel::broadcast_message_exp(Client &client, std::string &message){
 std::string Channel::get_topic_setter() const{
     return (this->_topic_setter);
 };
+
 std::string Channel::get_topic_date() const{
     return (this->_topic_date);
 };
@@ -57,8 +72,15 @@ std::string timeToString(time_t timeVal) {
     return oss.str();
 }
 
+void Channel::remove_user(Client &client) {
+    if (this->is_member(client)){
+        if (client.is_operator((*this)))
+            this->unpromote(client);
+        this->_clients.erase(client.get_fd());  
+    }
+};
 
-void Channel::addUser(Client &client) {
+void Channel::add_user(Client &client) {
     this->_clients[client.get_fd()] = client;
 };
 
@@ -68,6 +90,18 @@ std::string Channel::get_name() const{
 
 void Channel::set_name(std::string &new_name){ // IMADD
     this->_name = new_name;
+};
+
+bool Channel::is_member(Client &client){
+    std::map<int, Client>::iterator it = _clients.begin();
+
+    while (it != _clients.end()){
+        if (it->first == client.get_fd()){
+            return (true);
+        }
+        it++;
+    }
+    return (false);
 };
 
 bool Channel::is_operator(Client &client){
@@ -106,8 +140,90 @@ std::string Channel::get_topic() const{
     return (this->_topic);
 };
 
-// Generally, channel names can include letters, digits, and some special characters.
-// Typically allowed characters are: a-z, A-Z, 0-9, as well as underscores _, hyphens -, and periods .
+
+
+
+void leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels){
+    std::string channel_name = extractChannelName(command);
+
+    if(!channel_exist(channels, channel_name)){
+        //NO_CHANNEL
+        return ; 
+    }
+    if (!channels[channel_name].is_member(client)){
+        //CLIENT_NOT_A_CHANNEL_MEMBER
+        // RR_NOTONCHANNEL (442)  :ServerName 442 ClientNick #channel :You're not on that channel
+        return ; 
+    }
+    // departure notify 
+    std::string Reply = RPL_NOTIFYPART(client.get_nickname(), channel_name);
+    channels[channel_name].broadcast_message(Reply);
+    
+    // remove client from channel
+    channels[channel_name].remove_user(client);
+    
+    
+};
+
+
+void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::string, Channel>& channels){
+    std::map<std::string, Channel>::iterator it = channels.begin();
+    std::string quit_message = RPL_NOTIFYQUIT(client.get_nickname(), "SEE YALL");
+
+    
+    
+    // quit notify 
+    while (it != channels.end()){
+        if (channels[it->first].is_member(client)){
+            channels[it->first].broadcast_message_exp(client, quit_message);
+            channels[it->first].remove_user(client);
+        }
+        it++;
+    }
+    // quit
+    // clients.erase(client.get_fd());
+};
+
+
+void kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
+    
+    // std::cout << "KICK         : <" << trim(command, "\r\n") << "> " << std::endl;
+    // std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
+    // std::cout << "KICK topic   : <" << extracTopic(command) << "> " << std::endl;
+
+    std::string channel_name = extractChannelName(command);
+
+    // get target client
+    // extract reason from command
+
+    
+    if(!channel_exist(channels, channel_name)){
+        //NO_CHANNEL
+        return ; 
+    }
+    if (!channels[channel_name].is_member(client)){
+        //CLIENT_NOT_A_CHANNEL_MEMBER
+        // RR_NOTONCHANNEL (442)  :ServerName 442 ClientNick #channel :You're not on that channel
+        return ; 
+    }
+    // if (!channels[channel_name].is_member(target)){
+    //     //TARGET_NOT_A_CHANNEL_MEMBER
+    //     // ERR_USERNOTINCHANNEL (441)
+    //     return ; 
+    // }
+    if (!channels[channel_name].is_operator(client)){
+        //CLIENT_HAS_NO_PRIVELLIGES
+        // ERR_CHANOPRIVSNEEDED (482)
+        return ; 
+    }
+    std::string kick_message = RPL_KICK(client.get_nickname(), channel_name, "test", "istighlal_solta");
+    
+    // kick the user
+    channels[channel_name].broadcast_message(kick_message);
+    
+    // channels[channel_name].remove_user(target)
+    
+};
 
 
 bool channel_name_is_valid(std::string &channel_name){
@@ -115,10 +231,10 @@ bool channel_name_is_valid(std::string &channel_name){
         return(false);
     if (channel_name.c_str()[0] != '#')
         return(false);
-    // for (int i = 0; i < channel_name.length(); i++){
-    //     if (!std::isalnum(channel_name.c_str()[i]) || !valid_sp_character(channel_name.c_str()[i]) || std::isspace(channel_name.c_str()[i]))
-    //         return(false);
-    // }
+    for (int i = 1; i < channel_name.length(); i++){
+        if ((!std::isalnum(channel_name.c_str()[i]) && !valid_sp_character(channel_name.c_str()[i])) || std::isspace(channel_name.c_str()[i]))
+            return(false);
+    }
     return (true);
 }
 
@@ -175,63 +291,26 @@ bool channel_exist(std::map<std::string, Channel>& channels, std::string &needle
 }
 
 void Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients) {
-    channels[new_channel_name].addUser(client);
     channels[new_channel_name].set_name(new_channel_name);
+    channels[new_channel_name].add_user(client);
     
     // promotes the user to be an operator 
     channels[new_channel_name].promote(client);
+};
 
-    
-    // Corrected JOIN confirmation message
-    std::string Message = RPL_JOIN(client.get_nickname(), new_channel_name);
-    sendMessage(client.get_socket_fd(), Message);
+void channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients){
+    channels[channel_name].add_user(client);
+};
 
+void send_names_list(Client &client, Channel &channel){
     // Send NAMES list
-    Message = RPL_NAMREPLY(client.get_nickname(), new_channel_name, Get_Users_list(clients, channels[new_channel_name]));
-    sendMessage(client.get_socket_fd(), Message);
+    std::string Message = RPL_NAMREPLY(client.get_nickname(), channel.get_name(), channel.get_all_users());
+    sendMessage(client.get_fd(), Message);
 
     // End of NAMES list
-    Message = RPL_ENDOFNAMES(client.get_nickname(), new_channel_name);
-    sendMessage(client.get_socket_fd(), Message);
-
-};
-
-
-
-std::string Get_Users_list(std::map<int, Client> &clients, Channel &channel){
-
-    std::map<int, Client>::iterator it = clients.begin();
-    std::string                     ALL_USERS = "";
-    
-    while (it != clients.end()) {
-        if (it->second.is_operator(channel))
-            ALL_USERS += "@" + it->second.get_nickname() + " ";
-        else
-            ALL_USERS += it->second.get_nickname() + " ";
-        it++;
-    }
-    return ALL_USERS;
-        
-};
-
-
-
-void channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients){
-    channels[new_channel_name].addUser(client);
-    
-    // Corrected JOIN confirmation message
-    std::string Message = RPL_JOIN(client.get_nickname(), new_channel_name);
-    sendMessage(client.get_socket_fd(), Message);
-
-    // Send NAMES list
-    Message = RPL_NAMREPLY(client.get_nickname(), new_channel_name, Get_Users_list(clients, channels[new_channel_name]));
-    sendMessage(client.get_socket_fd(), Message);
-
-    // End of NAMES list
-    Message = RPL_ENDOFNAMES(client.get_nickname(), new_channel_name);
-    sendMessage(client.get_socket_fd(), Message);
-    
-};
+    Message = RPL_ENDOFNAMES(client.get_nickname(), channel.get_name());
+    sendMessage(client.get_fd(), Message);
+}
 
 
 void handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients) {
@@ -251,18 +330,22 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
             if (!channel_exist(channels, channel_name)){
                 Create_channel_join(client, channels, channel_name, clients);
             }
-            else {
+            else if (channel_exist(channels, channel_name)){
                 channel_join(client, channels, channel_name, clients);
             }
             // notifyUsersOfNewJoin
-            Message = RPL_JOIN(client.get_nickname(), channel_name);
-            channels[channel_name].broadcast_message_exp(client, Message);   
+            Message = RPL_NOTIFYJOIN(client.get_nickname(), channel_name);
+            channels[channel_name].broadcast_message(Message);
+            
             if (!channels[channel_name].get_topic().empty()){
                 // RPL_TOPIC
                 sendMessage(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
                 // RPL_TOPICWHOTIME
                 sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), timeToString(time_teller())));
             }
+            send_names_list(client, channels[channel_name]);
+            
+            // std::cout << "Channel : <"<< channel_name <<">\t, List of users : <" << channels[channel_name].get_all_users() << ">"<< std::endl;
         }
     }
 };
