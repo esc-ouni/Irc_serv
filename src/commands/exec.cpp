@@ -43,20 +43,15 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
         // std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
         // std::cout << "KICK topic   : <" << extracTopic(command) << "> " << std::endl;
     }
-
-
-
-
-
     else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
     {
-
-        // privmsg(command, client, clients, channels);
-
-        std::string Message = RPL_CHANNMSG(client.get_nickname(), "host", extractChannelName(command), extracTopic(command));
-        channels[extractChannelName(command)].broadcast_message_exp(client, Message);
-        std::cout << "PRIVMSG : <" << extracTopic(command) << "> " << std::endl;
+        privmsg(command, client, clients, channels);
     }
+
+
+
+
+
     // else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
     // {
     //     // mode(command, client, channels);

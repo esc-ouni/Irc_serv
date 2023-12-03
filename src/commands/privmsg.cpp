@@ -65,6 +65,10 @@ void privmsg(std::string message, Client &client, std::map<int, Client> &clients
     std::string receiver = extractName(message.substr(8, message.length() - 8), &spaces);
     std::string to_send = message.substr(8 + receiver.length() + 1 + spaces, message.length());
 
+    // messages to channels
+    // std::string Message = RPL_CHANNMSG(client.get_nickname(), "host", extractChannelName(command), extracTopic(command));
+    // channels[extractChannelName(command)].broadcast_message_exp(client, Message);
+
 
     to_send = (is_multipe_words(to_send) ? to_send.substr(1, to_send.length() - 1) : to_send);
 

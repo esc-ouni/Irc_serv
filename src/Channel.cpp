@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 18:44:03 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 20:47:06 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::s
         it++;
     }
     // quit
-    clients.erase(client.get_fd());
+    // clients.erase(client.get_fd());
 };
 
 
