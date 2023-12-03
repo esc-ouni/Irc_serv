@@ -46,6 +46,16 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
         // leave_channel()
         std::cout << " <"<< trim(command, "\r\n") << "> "<< std::endl;
     }
+    // else if (command.substr(0, 4) == "QUIT" && client.is_authenticated())
+    // {
+    //     // quit()
+    //     std::cout << " <"<< trim(command, "\r\n") << "> "<< std::endl;
+    // }
+    // else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
+    // {
+    //     // mode(command, client, channels);
+    //     std::cout << " <"<< trim(command, "\r\n") << "> "<< std::endl;
+    // }
 };
 
 //     else if (command.substr(0, 4) == "KICK" && client.is_authenticated())
@@ -56,10 +66,6 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
 //     else if (command.substr(0, 6) == "INVITE" && client.is_authenticated())
 //     {
 //         invite(command, client, channels, clients);
-//     }
-//     else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
-//     {
-//         mode(command, client, channels);
 //     }
 //     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())
 //     {

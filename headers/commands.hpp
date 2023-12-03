@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 13:24:59 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 16:02:09 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,11 @@
 #define ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " " + channel + " :No such channel\r\n")
 
 ///IMPT
+// :Nickname!Username@Host JOIN #channel
+#define RPL_NOTIFYJOIN(client, channel) (":" + client + "!" + client + "@" + "client_host"+ " JOIN " + channel + "\r\n");
 
-#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client.get_host()"+ " JOIN :" + channel + "\r\n");
+//JOIN
+#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client_host"+ " JOIN :" + channel + "\r\n");
 
 // :ServerName 353 YourNickname = #ChannelName :User1 User2 User3...
 #define RPL_NAMREPLY(client, channel, all_users) (": 353 " + client + " = " + channel + " :" + all_users + "\r\n")

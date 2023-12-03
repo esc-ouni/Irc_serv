@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 13:34:25 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 16:11:23 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,10 @@ bool channel_name_is_valid(std::string &channel_name){
         return(false);
     if (channel_name.c_str()[0] != '#')
         return(false);
-    // for (int i = 0; i < channel_name.length(); i++){
-    //     if (!std::isalnum(channel_name.c_str()[i]) || !valid_sp_character(channel_name.c_str()[i]) || std::isspace(channel_name.c_str()[i]))
-    //         return(false);
-    // }
+    for (int i = 1; i < channel_name.length(); i++){
+        if ((!std::isalnum(channel_name.c_str()[i]) && !valid_sp_character(channel_name.c_str()[i])) || std::isspace(channel_name.c_str()[i]))
+            return(false);
+    }
     return (true);
 }
 
@@ -189,8 +189,8 @@ bool channel_exist(std::map<std::string, Channel>& channels, std::string &needle
 }
 
 void Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients) {
-    channels[new_channel_name].addUser(client);
     channels[new_channel_name].set_name(new_channel_name);
+    channels[new_channel_name].addUser(client);
     
     // promotes the user to be an operator 
     channels[new_channel_name].promote(client);
@@ -201,15 +201,13 @@ void channel_join(Client &client, std::map<std::string, Channel>& channels, std:
 };
 
 void send_names_list(Client &client, Channel &channel){
-        // Send NAMES list
+    // Send NAMES list
     std::string Message = RPL_NAMREPLY(client.get_nickname(), channel.get_name(), channel.get_all_users());
-    channel.broadcast_message(Message);
-    // sendMessage(client.get_fd(), Message);
+    sendMessage(client.get_fd(), Message);
 
     // End of NAMES list
     Message = RPL_ENDOFNAMES(client.get_nickname(), channel.get_name());
-    channel.broadcast_message(Message);
-    // sendMessage(client.get_fd(), Message);
+    sendMessage(client.get_fd(), Message);
 }
 
 
@@ -234,10 +232,8 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
                 channel_join(client, channels, channel_name, clients);
             }
             // notifyUsersOfNewJoin
-            Message = RPL_JOIN(client.get_nickname(), channel_name);
+            Message = RPL_NOTIFYJOIN(client.get_nickname(), channel_name);
             channels[channel_name].broadcast_message(Message);
-            
-            send_names_list(client, channels[channel_name]);
             
             if (!channels[channel_name].get_topic().empty()){
                 // RPL_TOPIC
@@ -245,7 +241,9 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
                 // RPL_TOPICWHOTIME
                 sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), timeToString(time_teller())));
             }
-            std::cout << "Channel : <"<< channel_name <<">\t, List of users : <" << channels[channel_name].get_all_users() << ">"<< std::endl;
+            send_names_list(client, channels[channel_name]);
+            
+            // std::cout << "Channel : <"<< channel_name <<">\t, List of users : <" << channels[channel_name].get_all_users() << ">"<< std::endl;
         }
     }
 };
