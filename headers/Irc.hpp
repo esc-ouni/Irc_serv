@@ -159,10 +159,12 @@ bool        channel_exist(std::map<std::string, Channel>& channels, std::string 
 void        Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
 void        set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
 void        handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
-std::string extracTopic(std::string& command);
+std::string extract_topic(std::string& command);
 void        channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
 void        sendMessage(int clientSocket, const std::string& message);
 void        send_names_list(Client &client, Channel &channel);
 void        leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels);
 void        quit_server(Client &client, std::map<int, Client> &clients, std::map<std::string, Channel>& channels);
 void        kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
+std::string extract_target(std::string& command);
+std::string extract_reason(std::string& command);

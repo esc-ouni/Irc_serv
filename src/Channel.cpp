@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 21:06:28 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 22:19:32 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,10 +187,14 @@ void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::s
 
 void kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
     
-    // std::cout << "KICK         : <" << trim(command, "\r\n") << "> " << std::endl;
-    // std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
-    // std::cout << "KICK topic   : <" << extracTopic(command) << "> " << std::endl;
+    std::cout << "KICK         : <" << trim(command, "\r\n") << "> " << std::endl;
+    std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
+    std::cout << "KICK target  : <" << extract_target(command) << "> " << std::endl;
+    std::cout << "KICK reason  : <" << extract_reason(command) << "> " << std::endl;
 
+
+    std::string target =       extract_target(command);
+    std::string reason =       extract_reason(command);
     std::string channel_name = extractChannelName(command);
 
     // get target client
@@ -345,13 +349,12 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
             }
             send_names_list(client, channels[channel_name]);
             
-            // std::cout << "Channel : <"<< channel_name <<">\t, List of users : <" << channels[channel_name].get_all_users() << ">"<< std::endl;
         }
     }
 };
 
 
-std::string extracTopic(std::string& command) {
+std::string extract_topic(std::string& command) {
     std::string topic = "";
     size_t n = command.find('#');    
     
@@ -367,10 +370,47 @@ std::string extracTopic(std::string& command) {
     return (trim(topic, "\r\n"));
 }
 
+std::string extract_target(std::string& command) {
+    std::string target = "";
+    size_t n2 = 0, n = command.find('#');    
+    
+    if (n != std::string::npos) {
+        n = command.find(' ', n);
+        if (n != std::string::npos) {
+            n2 = command.find(' ', n + 1);
+            if (n2 != std::string::npos) {
+                target = command.substr(n + 1, (n2 - n - 1));
+                if (!target.empty() && !target.compare(0, 1, ":")){
+                    target.erase(0, 1);
+                }
+            }
+        }
+    }
+    return (trim(target, "\r\n"));
+};
 
+std::string extract_reason(std::string& command) {
+    std::string reason = "";
+    size_t      n = command.find('#');    
+    
+    if (n != std::string::npos) {
+        
+        n = command.find(' ', n);
+        if (n != std::string::npos) {
+            n = command.find(' ', n + 1);
+            if (n != std::string::npos) {
+                reason = command.substr(n + 1);
+                if (!reason.empty() && !reason.compare(0, 1, ":")){
+                    reason.erase(0, 1);
+                }
+            }
+        }
+    }
+    return (trim(reason, "\r\n"));
+};
 
 void set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
-    std::string topic = extracTopic(command);
+    std::string topic = extract_topic(command);
     std::string channel_name = extractChannelName(command);
 
 //  Channel Existence Check
