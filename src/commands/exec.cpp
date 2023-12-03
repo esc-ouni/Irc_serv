@@ -28,30 +28,48 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 4) == "JOIN"){
         handleJoinCommand(command, client, channels, clients);
     }
-    else if (command.substr(0, 5) == "TOPIC" && client.is_authenticated())
-    {
+    else if (command.substr(0, 5) == "TOPIC" && client.is_authenticated()){
         set_topic(command, client, channels, clients);
     }
+    else if (command.substr(0, 4) == "PART" && client.is_authenticated()){
+        leave_channel(command, client, channels);
+    }
+    else if (command.substr(0, 4) == "QUIT" && client.is_authenticated()){
+        quit_server(client, clients, channels);
+    }
+    else if (command.substr(0, 4) == "KICK" && client.is_authenticated()){
+        kick_user(command, client, channels, clients);
+        // std::cout << "KICK         : <" << trim(command, "\r\n") << "> " << std::endl;
+        // std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
+        // std::cout << "KICK topic   : <" << extracTopic(command) << "> " << std::endl;
+    }
+
+
+
+
+
     else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
     {
+
         privmsg(command, client, clients, channels);
+
+
+        // std::string Message = RPL_CHANNMSG(client.get_nickname(), "host", extractChannelName(command), extracTopic(command));
+        // channels[extractChannelName(command)].broadcast_message_exp(client, Message);
+        // std::cout << "PRIVMSG : <" << extracTopic(command) << "> " << std::endl;
     }
+    // else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
+    // {
+    //     // mode(command, client, channels);
+    //     std::cout << " <"<< trim(command, "\r\n") << "> "<< std::endl;
+    // }
 };
 
-//     else if (command.substr(0, 4) == "KICK" && client.is_authenticated())
-//     {
-//         kick(command, client, channels);
-//     }
 //     // INVITE
 //     else if (command.substr(0, 6) == "INVITE" && client.is_authenticated())
 //     {
 //         invite(command, client, channels, clients);
 //     }
-//     else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
-//     {
-//         mode(command, client, channels);
-//     }
-
 //     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())
 //     {
 //         Irc::handleLogTime(client);

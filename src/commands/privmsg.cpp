@@ -27,7 +27,7 @@ void privmsg_user(std::string to_send, Client &client, std::map<int, Client> &cl
     }
 }
 
-std::string remove_two_pts(std::string &str)
+std::string remove_two_pts(std::string str)
 {
     std::string result = str;
 
@@ -110,9 +110,9 @@ bool chechIfClientIsInChannel(std::map<std::string, Channel> &channels, Client &
 
 void broadcast_to_channel(std::string msg_to_send, Client &client, std::map<std::string, Channel> &channels,std::string channel)
 {
-    std::string pp = msg_to_send + "\r\n"; 
-    channels[channel].broadcast_message(pp);
-    std::cout << "msg_to_send: '"<< msg_to_send << "'"<<std::endl;
+    // std::string pp = msg_to_send + "\r\n"; 
+    // channels[channel].broadcast_message(pp);
+    // std::cout << "msg_to_send: '"<< msg_to_send << "'"<<std::endl;
 
     if (checkIfTheChennelExists(channels, channel))
     {
@@ -125,7 +125,13 @@ void broadcast_to_channel(std::string msg_to_send, Client &client, std::map<std:
     }
     else
     {
-        // 
+        std::string sessage = ": " + msg_to_send + "\r\n";
+
+        std::string cha = "#" + channel;
+        std::string Message = RPL_PRIVMSG(client.get_nickname(), client.get_nickname(), cha, remove_two_pts(sessage));
+
+        // std::cout << "Message: '"<< Message << "'"<<std::endl;
+        channels[cha].broadcast_message_exp(client, Message);
     }
 
 }
@@ -135,7 +141,6 @@ void privmsg(std::string message, Client &client, std::map<int, Client> &clients
     std::string receiver = receivername(message);
     std::string msg_to_send = extract_msg_to_send(message);
     std::string chanel = chanel_name(receiver);
-    std::cout << "chanel: '" << chanel  << "'" << std::endl;
     
 
     if (receiver.empty())
@@ -149,6 +154,3 @@ void privmsg(std::string message, Client &client, std::map<int, Client> &clients
         broadcast_to_channel(msg_to_send, client, channels, chanel);
     }
 }
-
-
-// this is my new branch

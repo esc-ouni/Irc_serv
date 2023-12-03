@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/02 20:34:57 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 18:42:19 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 #define ERR_USERONCHANNEL(client, nick, channel) (":localhost 443 " + client + " " + nick + " " + channel + " is already on channel\r\n")
 #define ERR_NOTONCHANNEL(client, channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel.\r\n")
 #define ERR_CHANOPRIVSNEEDED(client, channel) (":localhost 482 " + client + " " + channel + " :You're not channel operator.\r\n")
-#define RPL_KICK(client, channel, kicked, reason) (":@" + client + " KICK " + channel + " " + kicked + " :" + reason + "\r\n")
+// #define RPL_KICK(client, channel, kicked, reason) (":@" + client + " KICK " + channel + " " + kicked + " :" + reason + "\r\n")
 #define ERR_NOSUCHNICK(client, nickname) (":localhost 401 " + client + " " + nickname + " :No such nick/channel\r\n")
 #define ERR_BADCHANNELKEY(client, channel) (":localhost 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANNELISFULL(client, channel) (":localhost 471 " + client + " " + channel + " :Cannot join channel (+l)\r\n")
@@ -56,14 +56,42 @@
 #define ERR_CANNOTSENDTOCHAN(client, channel) ("404 " + client + " " + channel + " :Cannot send to channel\r\n")
 #define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + "  :" + message + "\r\n")
 
+// #define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + " " + message + "\r\n")
 
-#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client.get_host()"+ " JOIN :" + channel + "\r\n");
-#define RPL_NAMREPLY(client, channel, all_users) (": 353 " + client + " = " + channel + " :" + all_users + "\r\n")
-#define RPL_ENDOFNAMES(client, channel) (": 366 " + client + " " + channel + " :End of /NAMES list\r\n")
+
+
 
 
 #define ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " " + channel + " :No such channel\r\n")
 
+///IMPT
+// KICK
+// :KickerNick!KickerUser@KickerHost KICK <channel> <user> :[reason]
+#define RPL_KICK(client, channel, kicked, reason) (":" + client + "!" + "Kicker@KickerHost KICK " + channel + " " + kicked + " :" + reason + "\r\n");
+
+// QUIT
+// :Nickname!Username@Host QUIT :Quit Message
+#define RPL_NOTIFYQUIT(client, message) (":" + client + "!" + "client_host"+ " QUIT :" + message + "\r\n");
+
+// PART
+// :ClientNick!ClientHost PART #channel
+#define RPL_NOTIFYPART(client, channel) (":" + client + "!" + "client_host"+ " PART " + channel + "\r\n");
+
+
+// :Nickname!Username@Host JOIN #channel
+#define RPL_NOTIFYJOIN(client, channel) (":" + client + "!" + client + "@" + "client_host"+ " JOIN " + channel + "\r\n");
+
+//JOIN
+#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client_host"+ " JOIN :" + channel + "\r\n");
+
+// :ServerName 353 YourNickname = #ChannelName :User1 User2 User3...
+#define RPL_NAMREPLY(client, channel, all_users) (": 353 " + client + " = " + channel + " :" + all_users + "\r\n")
+
+// :ServerName 366 YourNickname #ChannelName :End of /NAMES list
+#define RPL_ENDOFNAMES(client, channel) (": 366 " + client + " " + channel + " :End of /NAMES list\r\n")
+
+// msg channel
+#define RPL_CHANNMSG(client, host, channel, message) (":" + client + "!" + host + " PRIVMSG " + channel + "  :" + message + "\r\n")
 // TOPIC
 // :server 332 user #channel :topic
 #define RPL_TOPIC(client, channel, topic) (": 332 " + client + " " + channel + " :" + topic + " \r\n")
@@ -77,8 +105,6 @@
 #define RPL_NOTOPIC(client, channel, datetime) (": 333 " + client + " " + channel  + "setter_here" + datetime + " \r\n")
 
 // Broadcast Topic Change
-// std::string br = ":" + client.get_nickname() + "!"+ "UserHost" + " TOPIC " + channel_name + " :" +  channels[channel_name].get_topic() + "\r\n";
-
 #define RPL_TOPICCHANGE(client, channel, topic) (":" + client + "!"+ "UserHost" + " TOPIC " + channel_name + " :" +  topic + " \r\n")
 
 
