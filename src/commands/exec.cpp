@@ -28,9 +28,21 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 4) == "JOIN"){
         handleJoinCommand(command, client, channels, clients);
     }
-    else if (command.substr(0, 5) == "TOPIC" && client.is_authenticated())
-    {
+    else if (command.substr(0, 5) == "TOPIC" && client.is_authenticated()){
         set_topic(command, client, channels, clients);
+    }
+    else if (command.substr(0, 4) == "PART" && client.is_authenticated()){
+        leave_channel(command, client, channels);
+    }
+
+
+
+
+    
+    else if (command.substr(0, 4) == "QUIT" && client.is_authenticated())
+    {
+        // quit()
+        std::cout << " <"<< trim(command, "\r\n") << "> "<< std::endl;
     }
     else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
     {
@@ -41,16 +53,6 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
         channels[extractChannelName(command)].broadcast_message_exp(client, Message);
         std::cout << "PRIVMSG : <" << extracTopic(command) << "> " << std::endl;
     }
-    else if (command.substr(0, 4) == "PART" && client.is_authenticated())
-    {
-        // leave_channel()
-        std::cout << " <"<< trim(command, "\r\n") << "> "<< std::endl;
-    }
-    // else if (command.substr(0, 4) == "QUIT" && client.is_authenticated())
-    // {
-    //     // quit()
-    //     std::cout << " <"<< trim(command, "\r\n") << "> "<< std::endl;
-    // }
     // else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
     // {
     //     // mode(command, client, channels);

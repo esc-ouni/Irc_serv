@@ -19,9 +19,6 @@ bool   Client::set_topic(Channel &channel, std::string &topic){
 
 
 
-
-
-
 std::string Client::get_nickname()
 {
     return _nickname;

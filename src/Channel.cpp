@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 16:11:23 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 17:14:06 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void Channel::broadcast_message_exp(Client &client, std::string &message){
 std::string Channel::get_topic_setter() const{
     return (this->_topic_setter);
 };
+
 std::string Channel::get_topic_date() const{
     return (this->_topic_date);
 };
@@ -71,8 +72,15 @@ std::string timeToString(time_t timeVal) {
     return oss.str();
 }
 
+void Channel::remove_user(Client &client) {
+    if (this->is_member(client)){
+        if (client.is_operator((*this)))
+            this->unpromote(client);
+        this->_clients.erase(client.get_fd());  
+    }
+};
 
-void Channel::addUser(Client &client) {
+void Channel::add_user(Client &client) {
     this->_clients[client.get_fd()] = client;
 };
 
@@ -82,6 +90,18 @@ std::string Channel::get_name() const{
 
 void Channel::set_name(std::string &new_name){ // IMADD
     this->_name = new_name;
+};
+
+bool Channel::is_member(Client &client){
+    std::map<int, Client>::iterator it = _clients.begin();
+
+    while (it != _clients.end()){
+        if (it->first == client.get_fd()){
+            return (true);
+        }
+        it++;
+    }
+    return (false);
 };
 
 bool Channel::is_operator(Client &client){
@@ -120,8 +140,32 @@ std::string Channel::get_topic() const{
     return (this->_topic);
 };
 
-// Generally, channel names can include letters, digits, and some special characters.
-// Typically allowed characters are: a-z, A-Z, 0-9, as well as underscores _, hyphens -, and periods .
+
+
+
+void leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels){
+    std::string channel_name = extractChannelName(command);
+
+    if(!channel_exist(channels, channel_name)){
+        //NO_CHANNEL
+        return ; 
+    }
+    if (!channels[channel_name].is_member(client)){
+        //CLIENT_NOT_A_CHANNEL_MEMBER
+        // RR_NOTONCHANNEL (442)  :ServerName 442 ClientNick #channel :You're not on that channel
+        return ; 
+    }
+    // departure notify 
+    std::string Reply = RPL_NOTIFYPART(client.get_nickname(), channel_name);
+    channels[channel_name].broadcast_message(Reply);
+    
+    // remove client from channel
+    channels[channel_name].remove_user(client);
+    
+    
+};
+
+
 
 
 bool channel_name_is_valid(std::string &channel_name){
@@ -190,14 +234,14 @@ bool channel_exist(std::map<std::string, Channel>& channels, std::string &needle
 
 void Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients) {
     channels[new_channel_name].set_name(new_channel_name);
-    channels[new_channel_name].addUser(client);
+    channels[new_channel_name].add_user(client);
     
     // promotes the user to be an operator 
     channels[new_channel_name].promote(client);
 };
 
 void channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients){
-    channels[channel_name].addUser(client);
+    channels[channel_name].add_user(client);
 };
 
 void send_names_list(Client &client, Channel &channel){

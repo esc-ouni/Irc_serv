@@ -24,7 +24,7 @@ class Channel
         std::string                 _key;
         int                         _limit;
     public:
-        void        addUser(Client &client);
+        void        add_user(Client &client);
         void        promote(Client &client);
         void        unpromote(Client &client); // need to be added when client leave
         bool        is_operator(Client &client);
@@ -32,7 +32,8 @@ class Channel
         std::string get_topic() const;
 
 
-
+        void        remove_user(Client &client);
+        bool        is_member(Client &client);
         void        set_name(std::string &new_name);
         std::string get_name() const;
         std::string get_topic_setter() const;
