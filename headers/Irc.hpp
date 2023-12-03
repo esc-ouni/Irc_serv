@@ -165,3 +165,4 @@ void        sendMessage(int clientSocket, const std::string& message);
 void        send_names_list(Client &client, Channel &channel);
 void        leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels);
 void        quit_server(Client &client, std::map<int, Client> &clients, std::map<std::string, Channel>& channels);
+void        kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);

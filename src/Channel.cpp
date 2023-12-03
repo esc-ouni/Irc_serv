@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 17:57:23 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 18:44:03 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,41 @@ void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::s
     clients.erase(client.get_fd());
 };
 
+
+void kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
+    std::string channel_name = extractChannelName(command);
+
+    // get target client
+    // extract reason from command
+
+    
+    if(!channel_exist(channels, channel_name)){
+        //NO_CHANNEL
+        return ; 
+    }
+    if (!channels[channel_name].is_member(client)){
+        //CLIENT_NOT_A_CHANNEL_MEMBER
+        // RR_NOTONCHANNEL (442)  :ServerName 442 ClientNick #channel :You're not on that channel
+        return ; 
+    }
+    // if (!channels[channel_name].is_member(target)){
+    //     //TARGET_NOT_A_CHANNEL_MEMBER
+    //     // ERR_USERNOTINCHANNEL (441)
+    //     return ; 
+    // }
+    if (!channels[channel_name].is_operator(client)){
+        //CLIENT_HAS_NO_PRIVELLIGES
+        // ERR_CHANOPRIVSNEEDED (482)
+        return ; 
+    }
+    std::string kick_message = RPL_KICK(client.get_nickname(), channel_name, "test", "istighlal_solta");
+    
+    // kick the user
+    channels[channel_name].broadcast_message(kick_message);
+    
+    // channels[channel_name].remove_user(target)
+    
+};
 
 
 bool channel_name_is_valid(std::string &channel_name){

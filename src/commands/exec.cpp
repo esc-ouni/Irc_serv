@@ -37,6 +37,12 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 4) == "QUIT" && client.is_authenticated()){
         quit_server(client, clients, channels);
     }
+    else if (command.substr(0, 4) == "KICK" && client.is_authenticated()){
+        kick_user(command, client, channels, clients);
+        // std::cout << "KICK         : <" << trim(command, "\r\n") << "> " << std::endl;
+        // std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
+        // std::cout << "KICK topic   : <" << extracTopic(command) << "> " << std::endl;
+    }
 
 
 
@@ -58,10 +64,6 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     // }
 };
 
-//     else if (command.substr(0, 4) == "KICK" && client.is_authenticated())
-//     {
-//         kick(command, client, channels);
-//     }
 //     // INVITE
 //     else if (command.substr(0, 6) == "INVITE" && client.is_authenticated())
 //     {
