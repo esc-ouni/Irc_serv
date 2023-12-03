@@ -32,6 +32,15 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     {
         set_topic(command, client, channels, clients);
     }
+    else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
+    {
+
+        // privmsg(command, client, clients, channels);
+        
+        std::string Message = RPL_CHANNMSG(client.get_nickname(), "host", extractChannelName(command), extracTopic(command));
+        channels[extractChannelName(command)].broadcast_message_exp(client, Message);
+        std::cout << "PRIVMSG : <" << extracTopic(command) << "> " << std::endl;
+    }
 };
 
 //     else if (command.substr(0, 4) == "KICK" && client.is_authenticated())
@@ -47,11 +56,6 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
 //     {
 //         mode(command, client, channels);
 //     }
-    // else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
-    // {
-    //     privmsg(command, client, clients, channels);
-    //     std::cout << "PRIVMSG" << std::endl;
-    // }
 //     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())
 //     {
 //         Irc::handleLogTime(client);
