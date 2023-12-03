@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 16:57:33 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 17:48:59 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,10 @@
 #define ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " " + channel + " :No such channel\r\n")
 
 ///IMPT
+// QUIT
+// :Nickname!Username@Host QUIT :Quit Message
+#define RPL_NOTIFYQUIT(client, message) (":" + client + "!" + "client_host"+ " QUIT :" + message + "\r\n");
+
 // PART
 // :ClientNick!ClientHost PART #channel
 #define RPL_NOTIFYPART(client, channel) (":" + client + "!" + "client_host"+ " PART " + channel + "\r\n");

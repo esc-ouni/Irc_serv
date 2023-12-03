@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 17:14:06 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 17:57:23 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,24 @@ void leave_channel(std::string command, Client &client, std::map<std::string, Ch
     
 };
 
+
+void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::string, Channel>& channels){
+    std::map<std::string, Channel>::iterator it = channels.begin();
+    std::string quit_message = RPL_NOTIFYQUIT(client.get_nickname(), "SEE YALL");
+
+    
+    
+    // quit notify 
+    while (it != channels.end()){
+        if (channels[it->first].is_member(client)){
+            channels[it->first].broadcast_message_exp(client, quit_message);
+            channels[it->first].remove_user(client);
+        }
+        it++;
+    }
+    // quit
+    clients.erase(client.get_fd());
+};
 
 
 
