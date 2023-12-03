@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 11:28:15 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 13:24:59 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,19 @@
 #define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + "  :" + message + "\r\n")
 
 
-#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client.get_host()"+ " JOIN :" + channel + "\r\n");
-#define RPL_NAMREPLY(client, channel, all_users) (": 353 " + client + " = " + channel + " :" + all_users + "\r\n")
-#define RPL_ENDOFNAMES(client, channel) (": 366 " + client + " " + channel + " :End of /NAMES list\r\n")
 
 
 #define ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " " + channel + " :No such channel\r\n")
 
+///IMPT
 
+#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client.get_host()"+ " JOIN :" + channel + "\r\n");
 
+// :ServerName 353 YourNickname = #ChannelName :User1 User2 User3...
+#define RPL_NAMREPLY(client, channel, all_users) (": 353 " + client + " = " + channel + " :" + all_users + "\r\n")
+
+// :ServerName 366 YourNickname #ChannelName :End of /NAMES list
+#define RPL_ENDOFNAMES(client, channel) (": 366 " + client + " " + channel + " :End of /NAMES list\r\n")
 
 // msg channel
 #define RPL_CHANNMSG(client, host, channel, message) (":" + client + "!" + host + " PRIVMSG " + channel + "  :" + message + "\r\n")
@@ -82,8 +86,6 @@
 #define RPL_NOTOPIC(client, channel, datetime) (": 333 " + client + " " + channel  + "setter_here" + datetime + " \r\n")
 
 // Broadcast Topic Change
-// std::string br = ":" + client.get_nickname() + "!"+ "UserHost" + " TOPIC " + channel_name + " :" +  channels[channel_name].get_topic() + "\r\n";
-
 #define RPL_TOPICCHANGE(client, channel, topic) (":" + client + "!"+ "UserHost" + " TOPIC " + channel_name + " :" +  topic + " \r\n")
 
 

@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/02 22:40:49 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/03 13:34:25 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,20 @@ void Channel::broadcast_message(std::string &message){
         ++it;
     }
 };
+
+std::string Channel::get_all_users(){
+    std::string                     ALL_USERS = "";
+    std::map<int, Client>::iterator it = this->_clients.begin();
+    
+    while (it != this->_clients.end()) {
+        if (it->second.is_operator((*this)))
+            ALL_USERS += "@" + it->second.get_nickname() + " ";
+        else
+            ALL_USERS += it->second.get_nickname() + " ";
+        it++;
+    }
+    return ALL_USERS;
+}
 
 
 void Channel::broadcast_message_exp(Client &client, std::string &message){
@@ -180,58 +194,23 @@ void Create_channel_join(Client &client, std::map<std::string, Channel>& channel
     
     // promotes the user to be an operator 
     channels[new_channel_name].promote(client);
+};
 
-    
-    // Corrected JOIN confirmation message
-    std::string Message = RPL_JOIN(client.get_nickname(), new_channel_name);
-    sendMessage(client.get_socket_fd(), Message);
+void channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients){
+    channels[channel_name].addUser(client);
+};
 
-    // Send NAMES list
-    Message = RPL_NAMREPLY(client.get_nickname(), new_channel_name, Get_Users_list(clients, channels[new_channel_name]));
-    sendMessage(client.get_socket_fd(), Message);
+void send_names_list(Client &client, Channel &channel){
+        // Send NAMES list
+    std::string Message = RPL_NAMREPLY(client.get_nickname(), channel.get_name(), channel.get_all_users());
+    channel.broadcast_message(Message);
+    // sendMessage(client.get_fd(), Message);
 
     // End of NAMES list
-    Message = RPL_ENDOFNAMES(client.get_nickname(), new_channel_name);
-    sendMessage(client.get_socket_fd(), Message);
-
-};
-
-
-
-std::string Get_Users_list(std::map<int, Client> &clients, Channel &channel){
-
-    std::map<int, Client>::iterator it = clients.begin();
-    std::string                     ALL_USERS = "";
-    
-    while (it != clients.end()) {
-        if (it->second.is_operator(channel))
-            ALL_USERS += "@" + it->second.get_nickname() + " ";
-        else
-            ALL_USERS += it->second.get_nickname() + " ";
-        it++;
-    }
-    return ALL_USERS;
-        
-};
-
-
-
-void channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients){
-    channels[new_channel_name].addUser(client);
-    
-    // Corrected JOIN confirmation message
-    std::string Message = RPL_JOIN(client.get_nickname(), new_channel_name);
-    sendMessage(client.get_socket_fd(), Message);
-
-    // Send NAMES list
-    Message = RPL_NAMREPLY(client.get_nickname(), new_channel_name, Get_Users_list(clients, channels[new_channel_name]));
-    sendMessage(client.get_socket_fd(), Message);
-
-    // End of NAMES list
-    Message = RPL_ENDOFNAMES(client.get_nickname(), new_channel_name);
-    sendMessage(client.get_socket_fd(), Message);
-    
-};
+    Message = RPL_ENDOFNAMES(client.get_nickname(), channel.get_name());
+    channel.broadcast_message(Message);
+    // sendMessage(client.get_fd(), Message);
+}
 
 
 void handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients) {
@@ -251,18 +230,22 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
             if (!channel_exist(channels, channel_name)){
                 Create_channel_join(client, channels, channel_name, clients);
             }
-            else {
+            else if (channel_exist(channels, channel_name)){
                 channel_join(client, channels, channel_name, clients);
             }
             // notifyUsersOfNewJoin
             Message = RPL_JOIN(client.get_nickname(), channel_name);
-            channels[channel_name].broadcast_message_exp(client, Message);   
+            channels[channel_name].broadcast_message(Message);
+            
+            send_names_list(client, channels[channel_name]);
+            
             if (!channels[channel_name].get_topic().empty()){
                 // RPL_TOPIC
                 sendMessage(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
                 // RPL_TOPICWHOTIME
                 sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), timeToString(time_teller())));
             }
+            std::cout << "Channel : <"<< channel_name <<">\t, List of users : <" << channels[channel_name].get_all_users() << ">"<< std::endl;
         }
     }
 };

@@ -36,10 +36,15 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     {
 
         // privmsg(command, client, clients, channels);
-        
+
         std::string Message = RPL_CHANNMSG(client.get_nickname(), "host", extractChannelName(command), extracTopic(command));
         channels[extractChannelName(command)].broadcast_message_exp(client, Message);
         std::cout << "PRIVMSG : <" << extracTopic(command) << "> " << std::endl;
+    }
+    else if (command.substr(0, 4) == "PART" && client.is_authenticated())
+    {
+        // leave_channel()
+        std::cout << " <"<< trim(command, "\r\n") << "> "<< std::endl;
     }
 };
 

@@ -40,14 +40,8 @@ class Channel
         void        broadcast_message(std::string &message);
         void        broadcast_message_exp(Client &client, std::string &message);
 
+        std::string get_all_users();
+
         
 
 };
-
-
-bool        channel_name_is_valid(std::string &channel_name);
-bool        valid_sp_character(int c);
-bool        is_valid_topic(std::string &new_topic);
-void        handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
-std::string Get_Users_list(std::map<int, Client> &clients, Channel &channel);
-void        set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
