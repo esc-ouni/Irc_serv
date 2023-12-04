@@ -44,23 +44,22 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     {
         privmsg(command, client, clients, channels);
     }
-
-
-
-
-
+    else if (command.substr(0, 6) == "INVITE" && client.is_authenticated()){
+        invite_user(command, client, channels, clients);
+    }
     // else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
     // {
     //     // mode(command, client, channels);
     //     std::cout << " <"<< trim(command, "\r\n") << "> "<< std::endl;
     // }
+
+
+
+
+
 };
 
 //     // INVITE
-//     else if (command.substr(0, 6) == "INVITE" && client.is_authenticated())
-//     {
-//         invite(command, client, channels, clients);
-//     }
 //     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())
 //     {
 //         Irc::handleLogTime(client);
