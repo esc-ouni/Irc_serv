@@ -167,5 +167,6 @@ void        leave_channel(std::string command, Client &client, std::map<std::str
 void        quit_server(Client &client, std::map<int, Client> &clients, std::map<std::string, Channel>& channels);
 void        kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
 void        invite_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
+void        mode(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
 std::string extract_target(std::string& command);
 std::string extract_reason(std::string& command);
