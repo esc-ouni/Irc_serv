@@ -82,6 +82,11 @@ void nick(std::string command, Client &client, std::map<int, Client> clients)
         {
             std::string old_nick = client.get_nickname();
             client.set_nickname(nickname);
+            
+            
+            // todo : change nickname in all channels
+            
+            
             // send(client.get_fd(), RPL_NICK(old_nick, client.get_username(), nickname).c_str(), RPL_NICK(old_nick, client.get_username(), nickname).length(), 0);
             return;
         }

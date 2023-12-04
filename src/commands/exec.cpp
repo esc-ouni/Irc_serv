@@ -44,6 +44,10 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     {
         privmsg(command, client, clients, channels);
     }
+    else if (filteredString(command) == "DOWNLOAD" && client.is_authenticated())
+    {
+        Irc::handleBot(client);
+    }
     // else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
     // {
     //     // mode(command, client, channels);
@@ -69,10 +73,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
 //     {
 //         Irc::handleQuotes(client);
 //     }
-//     else if (filteredString(command) == "DOWNLOAD" && client.is_authenticated())
-//     {
-//         Irc::handleBot(client);
-//     }
+
 
 //     else if (filteredString(command.substr(0, 4))!= "QUIT")
 //     {
