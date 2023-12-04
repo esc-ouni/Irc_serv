@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 18:42:19 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/04 11:59:34 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,9 @@ void kick(std::string command, Client &client, std::map<std::string, Channel> &c
  * @param clients The map of clients.
  * @return int Returns 0 if the invite was successful, -1 otherwise.
  */
-int invite(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
+// int invite(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
 
-void mode(std::string command, Client &client, std::map<std::string, Channel> &channels);
+// void mode(std::string command, Client &client, std::map<std::string, Channel> &channels);
 
 std::string filteredString(std::string str);
 bool pass(std::string command, Client &client);

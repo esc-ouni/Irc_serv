@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/04 11:41:25 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/04 12:00:13 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ void leave_channel(std::string command, Client &client, std::map<std::string, Ch
     // remove client from channel
     channels[channel_name].remove_user(client);
     
-    
 };
 
 
@@ -197,6 +196,10 @@ void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::s
 };
 
 void invite_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
+    
+    // DO CHECK WORK
+    // INVITE THE USER
+        // problem in the received command 
     return ;
 }
 
@@ -333,7 +336,7 @@ void send_names_list(Client &client, Channel &channel){
 }
 
 
-void handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients) {
+void handle_Join(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients) {
 
 
 
