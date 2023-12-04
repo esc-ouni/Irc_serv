@@ -21,7 +21,6 @@ private:
 
 public:
     Client();
-    bool is_operator(Channel &channel);
     
     Client(int);
     std::string get_nickname();
@@ -30,8 +29,9 @@ public:
     std::string get_servername();
     std::string get_buff_to_send();
 
-    std::string get_topic(Channel &channel);
+    bool        is_operator(Channel &channel);
     bool        set_topic(Channel &channel, std::string &topic);
+    std::string get_topic(Channel &channel);
 
     
     int get_socket_fd();

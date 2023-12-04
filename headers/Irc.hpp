@@ -154,7 +154,7 @@ bool        channel_name_is_valid(std::string &channel_name);
 bool        valid_sp_character(int c);
 bool        is_valid_topic(std::string &new_topic);
 std::string trim(std::string &str, const std::string& charsToTrim);
-std::string extractChannelName(const std::string& command);
+std::string extract_channel_name(const std::string& command);
 bool        channel_exist(std::map<std::string, Channel>& channels, std::string &needle);
 void        Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
 void        set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);

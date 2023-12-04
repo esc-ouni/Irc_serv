@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 22:24:19 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/04 11:16:25 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,18 @@ void Channel::set_name(std::string &new_name){ // IMADD
     this->_name = new_name;
 };
 
+int  Channel::is_member(std::string &client_name){
+    std::map<int, Client>::iterator it = _clients.begin();
+
+    while (it != _clients.end()){
+        if (it->second.get_nickname() == client_name){
+            return (it->first);
+        }
+        it++;
+    }
+    return (0);
+};
+
 bool Channel::is_member(Client &client){
     std::map<int, Client>::iterator it = _clients.begin();
 
@@ -144,7 +156,7 @@ std::string Channel::get_topic() const{
 
 
 void leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels){
-    std::string channel_name = extractChannelName(command);
+    std::string channel_name = extract_channel_name(command);
 
     if(!channel_exist(channels, channel_name)){
         //NO_CHANNEL
@@ -188,45 +200,54 @@ void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::s
 void kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
     
     std::cout << "KICK         : <" << trim(command, "\r\n") << "> " << std::endl;
-    std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
+    std::cout << "KICK channel : <" << extract_channel_name(command) << "> " << std::endl;
     std::cout << "KICK target  : <" << extract_target(command) << "> " << std::endl;
     std::cout << "KICK reason  : <" << extract_reason(command) << "> " << std::endl;
+    std::cout << "KICK kicker  : <" << client.get_nickname() << "> " << std::endl;
 
 
-    std::string target =       extract_target(command);
-    std::string reason =       extract_reason(command);
-    std::string channel_name = extractChannelName(command);
-
-    // get target client
     // extract reason from command
-
+    std::string reason =       extract_reason(command);
     
+    std::string target =       extract_target(command);
+    std::string channel_name = extract_channel_name(command);
+    int         target_fd = 0;
+
+    // check channel existence
     if(!channel_exist(channels, channel_name)){
         //NO_CHANNEL
         return ; 
     }
+    
+    // check kicker client
     if (!channels[channel_name].is_member(client)){
         //CLIENT_NOT_A_CHANNEL_MEMBER
         // RR_NOTONCHANNEL (442)  :ServerName 442 ClientNick #channel :You're not on that channel
         return ; 
     }
-    // if (!channels[channel_name].is_member(target)){
-    //     //TARGET_NOT_A_CHANNEL_MEMBER
-    //     // ERR_USERNOTINCHANNEL (441)
-    //     return ; 
-    // }
+    
+    // check kicker permission
     if (!channels[channel_name].is_operator(client)){
         //CLIENT_HAS_NO_PRIVELLIGES
         // ERR_CHANOPRIVSNEEDED (482)
         return ; 
     }
-    std::string kick_message = RPL_KICK(client.get_nickname(), channel_name, "test", "istighlal_solta");
     
-    // kick the user
+    // check target client
+    target_fd = channels[channel_name].is_member(target);
+    if (!target_fd){
+        //TARGET_NOT_A_CHANNEL_MEMBER
+        // RR_NOTONCHANNEL (442)  :ServerName 442 ClientNick #channel :You're not on that channel
+        return ; 
+    }
+
+    
+    std::string kick_message = RPL_KICK(client.get_nickname(), channel_name, clients[target_fd].get_nickname() , reason);
+    
+    // // kick the user
     channels[channel_name].broadcast_message(kick_message);
-    
-    // channels[channel_name].remove_user(target)
-    
+        
+    channels[channel_name].remove_user(clients[target_fd]);
 };
 
 
@@ -268,7 +289,7 @@ std::string trim(std::string &str, const std::string& charsToTrim) {
     return (str);
 };
 
-std::string extractChannelName(const std::string& command) {
+std::string extract_channel_name(const std::string& command) {
     size_t n = command.find('#');
     std::string ch_name = "";
     
@@ -321,7 +342,7 @@ void handleJoinCommand(std::string command, Client &client, std::map<std::string
 
 
 
-    std::string         input = extractChannelName(command);
+    std::string         input = extract_channel_name(command);
     std::istringstream  iss(input);
     std::string         channel_name;
     std::string         Message;
@@ -411,7 +432,7 @@ std::string extract_reason(std::string& command) {
 
 void set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
     std::string topic = extract_topic(command);
-    std::string channel_name = extractChannelName(command);
+    std::string channel_name = extract_channel_name(command);
 
 //  Channel Existence Check
     if(!channel_exist(channels, channel_name)){

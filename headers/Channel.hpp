@@ -34,6 +34,7 @@ class Channel
 
         void        remove_user(Client &client);
         bool        is_member(Client &client);
+        int         is_member(std::string &client_name);
         void        set_name(std::string &new_name);
         std::string get_name() const;
         std::string get_topic_setter() const;

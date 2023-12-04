@@ -25,7 +25,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
         std::string auth = ":localhost 001 " + client.get_nickname() + " :You are now " + (client.is_authenticated() ? "authenticated" : "not authenticated") + "\r\n";
         send(client.get_fd(), auth.c_str(), auth.length(), 0);
     }
-    else if (command.substr(0, 4) == "JOIN"){
+    else if (command.substr(0, 4) == "JOIN" && client.is_authenticated()){
         handleJoinCommand(command, client, channels, clients);
     }
     else if (command.substr(0, 5) == "TOPIC" && client.is_authenticated()){
@@ -39,9 +39,6 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     }
     else if (command.substr(0, 4) == "KICK" && client.is_authenticated()){
         kick_user(command, client, channels, clients);
-        // std::cout << "KICK         : <" << trim(command, "\r\n") << "> " << std::endl;
-        // std::cout << "KICK channel : <" << extractChannelName(command) << "> " << std::endl;
-        // std::cout << "KICK topic   : <" << extracTopic(command) << "> " << std::endl;
     }
     else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
     {
