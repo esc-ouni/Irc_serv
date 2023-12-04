@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/04 12:00:13 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/04 14:23:03 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Channel::broadcast_message(std::string &message){
 
     while (it != this->_clients.end()){
         sendMessage(it->first, message);
-        ++it;
+        it++;
     }
 };
 
@@ -48,7 +48,7 @@ void Channel::broadcast_message_exp(Client &client, std::string &message){
     while (it != this->_clients.end()){
         if (it->first != client.get_fd())
             sendMessage(it->first, message);
-        ++it;
+        it++;
     }
 };
 
