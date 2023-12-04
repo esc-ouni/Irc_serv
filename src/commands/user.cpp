@@ -85,7 +85,8 @@ void user(std::string command, Client &client)
             std::string result = ss.str();
 
             std::string datetime = getCurrentTime();
-            client.set_username(username);
+            std::string user = filteredString(username);
+            client.set_username(user);
             client.set_authenticated(true);
             send(client.get_fd(), RPL_WELCOME(result, client.get_nickname()).c_str(), RPL_WELCOME(result, client.get_nickname()).length(), 0);
             send(client.get_fd(), RPL_YOURHOST(client.get_nickname(), "the best irc server").c_str(), RPL_YOURHOST(client.get_nickname(), "the best irc server").length(), 0);
