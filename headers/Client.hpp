@@ -28,7 +28,6 @@ public:
     std::string get_username();
     std::string get_socket_fd_str();
     std::string get_servername();
-    std::string get_buff_to_send();
 
     std::string get_topic(Channel &channel);
     bool        set_topic(Channel &channel, std::string &topic);

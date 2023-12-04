@@ -16,7 +16,7 @@ void privmsg_user(std::string to_send, Client &client, std::map<int, Client> &cl
         {
             if (it->second.get_nickname() == receiver)
             {
-                send(it->second.get_fd(), RPL_PRIVMSG(client.get_nickname(), client.get_nickname(), receiver, to_send).c_str(), RPL_PRIVMSG(client.get_nickname(), client.get_nickname(), receiver, to_send).length(), 0);
+                send(it->second.get_fd(), RPL_PRIVMSG(client.get_nickname(), it->second.get_username(), receiver, to_send).c_str(), RPL_PRIVMSG(client.get_nickname(), it->second.get_username(), receiver, to_send).length(), 0);
                 break;
             }
         }
@@ -113,7 +113,8 @@ void broadcast_to_channel(std::string msg_to_send, Client &client, std::map<std:
 
     if (!checkIfTheChennelExists(channels, cha))
     {
-        send(client.get_fd(), ERR_CANNOTSENDTOCHAN(client.get_nickname(), cha).c_str(), ERR_CANNOTSENDTOCHAN(client.get_nickname(), cha).length(), 0);
+        ERR_NOSUCHCHANNEL(client.get_nickname(), cha);
+        send(client.get_fd(), ERR_NOSUCHCHANNEL(client.get_nickname(), cha).c_str(), ERR_NOSUCHCHANNEL(client.get_nickname(), cha).length(), 0);
     }
     if (!chechIfClientIsInChannel(channels, client ,cha))
     {
@@ -121,14 +122,16 @@ void broadcast_to_channel(std::string msg_to_send, Client &client, std::map<std:
     }
     else
     {
-        std::string sessage = ": " + msg_to_send + "\r\n";
+        // std::string sessage = ": " + msg_to_send + "\r\n";
+        std::string sessage = msg_to_send + "\r\n";
         std::string Message = RPL_PRIVMSG(client.get_nickname(), client.get_nickname(), cha, remove_two_pts(sessage));
 
         channels[cha].broadcast_message_exp(client, Message);
     }
 
 }
-
+// zaki // client 2 :PRIVMSG i :DCC SEND imimouni.jpeg 2130706433 1099 162653
+//       Client [4] : PRIVMSG i :DCC SEND imimouni.jpeg ::1 1099 162653
 void privmsg(std::string message, Client &client, std::map<int, Client> &clients, std::map<std::string, Channel> &channels)
 {
     std::string receiver = receivername(message);

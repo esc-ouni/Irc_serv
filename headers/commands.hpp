@@ -14,7 +14,8 @@
 
 #include "Irc.hpp"
 #include "Channel.hpp"
-#define user_forma(nickname, username, adress) (":" + nickname + "!" + username + "@" + adress)
+// #define user_forma(nickname, username, adress) (":" + nickname + "!" + username + "@" + adress)
+#define user_forma(nickname, username, adress) (":" + nickname + "!" + username + "@localhost")
 
 // #define user_forma(nickname, username) (":" + nickname + "!" + username + "@localhost")
 #define ERR(command) (": 421 !" + command + "\r\n")//
@@ -71,18 +72,19 @@
 
 // QUIT
 // :Nickname!Username@Host QUIT :Quit Message
-#define RPL_NOTIFYQUIT(client, message) (":" + client + "!" + "client_host"+ " QUIT :" + message + "\r\n");
+#define RPL_NOTIFYQUIT(client, message) (":" + client + "!" + "localhost"+ " QUIT :" + message + "\r\n");
 
 // PART
 // :ClientNick!ClientHost PART #channel
-#define RPL_NOTIFYPART(client, channel) (":" + client + "!" + "client_host"+ " PART " + channel + "\r\n");
+#define RPL_NOTIFYPART(client, channel) (":" + client + "!" + "localhost"+ " PART " + channel + "\r\n");
 
 
 // :Nickname!Username@Host JOIN #channel
-#define RPL_NOTIFYJOIN(client, channel) (":" + client + "!" + client + "@" + "client_host"+ " JOIN " + channel + "\r\n");
+#define RPL_NOTIFYJOIN(client, channel) (":" + client + "!" + client + "@" + "localhost"+ " JOIN " + channel + "\r\n");
+// #define RPL_NOTIFYJOIN(client, channel) (":" + client + "!" + client + "@" + "client_host"+ " JOIN " + channel + "\r\n");
 
 //JOIN
-#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client_host"+ " JOIN :" + channel + "\r\n");
+#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "localhost"+ " JOIN :" + channel + "\r\n");
 
 // :ServerName 353 YourNickname = #ChannelName :User1 User2 User3...
 #define RPL_NAMREPLY(client, channel, all_users) (": 353 " + client + " = " + channel + " :" + all_users + "\r\n")
