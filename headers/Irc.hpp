@@ -170,3 +170,4 @@ void        invite_user(std::string command, Client &client, std::map<std::strin
 void        mode(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
 std::string extract_target(std::string& command);
 std::string extract_reason(std::string& command);
+bool        is_valid_password(std::string pass);

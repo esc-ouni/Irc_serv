@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/05 16:25:52 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/05 16:27:21 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ bool is_valid_password(std::string pass){
     }
     return (true);
 }
-
 
 std::string Channel::get_password() const{
     return (this->_password);
