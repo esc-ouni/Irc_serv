@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/05 16:08:58 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/05 16:25:52 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,39 @@
 #include "../headers/Client.hpp"
 #include "../headers/commands.hpp"
 
+
+bool is_valid_password(std::string pass){
+    if (pass.empty() || (pass.length() > 20))
+        return(false);
+    for (int i = 0; i < pass.length(); i++){
+        if ((!std::isalnum(pass.c_str()[i]) && !valid_sp_character(pass.c_str()[i])) || std::isspace(pass.c_str()[i]))
+            return(false);
+    }
+    return (true);
+}
+
+
+std::string Channel::get_password() const{
+    return (this->_password);
+};
+
+bool        Channel::set_password(std::string password){
+    if (is_valid_password(password)){
+        if (this->_password != password){
+            this->_password = password;
+            return (true);
+        }
+    }
+    return (false);
+};
+
+Channel::Channel(){
+    std::cout << "\t\t=> DEBUG::CONSTRUCTOR_CALLED !" << std::endl; 
+};
+
+Channel::~Channel(){
+    std::cout << "\t\t=> DEBUG::DESSTRUCTOR_CALLED !" << std::endl; 
+};
 
 bool        Channel::get_option_l() const{
     return (this->_modes.l);

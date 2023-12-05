@@ -29,10 +29,9 @@ class Channel
         t_mode_options              _modes;
         std::string                 _password;
 
-
-        std::vector<std::string>    _invitees;
-        std::string                 _key;
     public:
+        Channel();
+        ~Channel();
         void        add_user(Client &client);
         void        promote(Client &client);
         void        unpromote(Client &client); // need to be added when client leave
@@ -50,8 +49,11 @@ class Channel
         std::string get_topic_date() const;
         void        broadcast_message(std::string &message);
         void        broadcast_message_exp(Client &client, std::string &message);
-
         std::string get_all_users();
+
+        std::string get_password() const;
+        bool        set_password(std::string password);
+
         int         get_limit() const;
         bool        set_limit(int limit);
 
