@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/05 18:46:15 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/05 20:28:11 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ long int contains_only_nums(std::string string){
 
 
 bool    valid_option(std::string &option){
-    if (option.length() != 2 || option.empty() || option.at(0) != '+' || option.at(0) != '-'){
+    if (option.length() != 2 || option.empty() || (option.at(0) != '+' && option.at(0) != '-')){
         if (option.at(1) != 'i' || option.at(1) != 't' || option.at(1) != 'k' || option.at(1) != 'o' || option.at(1) != 'l')
             return (false);        
     }
@@ -60,18 +60,19 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
     std::vector<std::string> args = parser(command, ' ');
     int argc = args.size();
 
-//     std::cout << "full cmd : <"<< trim(command, "\r\n") << "> "<< std::endl;
+    std::cout << "full cmd : <"<< trim(command, "\r\n") << "> "<< std::endl;
     
-//     for (int i = 0; i < args.size(); i++){
-//         std::cout << "cmd      : <" << args[i] << "> " << std::endl;
-//     }
-
+    for (int i = 0; i < args.size(); i++){
+        std::cout << "cmd      : <" << args[i] << "> " << std::endl;
+    }
 
 // // START
     if (argc == 1)
+        std::cout << "Reply(650): MODE <target> [[(+|-)]<modes> [<mode-parameters>]]" << std::endl;
         // Reply(650): MODE <target> [[(+|-)]<modes> [<mode-parameters>]]
     if (argc == 2){
         if (!channel_exist(channels, args[1])){
+            std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
             //  ERR_NOSUCHCHANNEL (403)
             return ;   
         }
@@ -84,23 +85,28 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
     }
     if (argc == 3){
         if (!channel_exist(channels, args[1])){
+            std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
             //  ERR_NOSUCHCHANNEL (403)
             return ;   
         }
         if (!client.is_operator(channels[args[1]])){
+            std::cout << "ERR_CHANOPRIVSNEEDED" << std::endl;
             //  ERR_CHANOPRIVSNEEDED (482)
             return ;
         }    
         if (!valid_option(args[2])){
+            std::cout << "ERR_UMODEUNKNOWNFLAG" << std::endl;
             // ERR_UMODEUNKNOWNFLAG (501)
             return ;
         }
         if (args[2].at(1) == 'k' || args[2].at(1) == 'o'){
+            std::cout << "ERR_INVALIDMODEPARAM" << std::endl;
             // ERR_INVALIDMODEPARAM (696)
             return ;
         }
         if (args[2].at(1) == 'i'){
             if (args[2].at(0) == '+' && !channels[args[1]].get_option_i()){
+                std::cout << "MODE #Channel +i" << std::endl;
                 // broadcast the mode change to all channel users
                 // RP => :UserNick!UserHost MODE #Channel +i
                 // channels[args[1]].broadcast_message();
@@ -108,6 +114,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
                 return ;
             }
             if (args[2].at(0) == '-' && channels[args[1]].get_option_i()){
+                std::cout << "MODE #Channel -i" << std::endl;
                 // broadcast the mode change to all channel users
                 // RP => :UserNick!UserHost MODE #Channel -i
                 // channels[args[1]].broadcast_message();
@@ -118,6 +125,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
         }
         else if (args[2].at(1) == 't'){
             if (args[2].at(0) == '+' && !channels[args[1]].get_option_t()){
+                std::cout << "MODE #Channel +t" << std::endl;
                 // broadcast the mode change to all channel users
                 // RP => :UserNick!UserHost MODE #Channel +t
                 // channels[args[1]].broadcast_message();
@@ -125,6 +133,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
                 return ;
             }
             if (args[2].at(0) == '-' && channels[args[1]].get_option_t()){
+                std::cout << "MODE #Channel -t" << std::endl;
                 // broadcast the mode change to all channel users
                 // RP => :UserNick!UserHost MODE #Channel -t
                 // channels[args[1]].broadcast_message();
@@ -133,9 +142,10 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
             }
             return ;
         }
-        if (args[2].at(0) == '-' && channels[args[1]].get_option_l()){
+        if (args[2].at(1) == 'l' && args[2].at(0) == '-' && channels[args[1]].get_option_l()){
             if (contains_only_nums(args[3]) != -1){
                 if (channels[args[1]].set_limit(CHANNEL_LIMIT)){
+                    std::cout << "MODE #Channel -l" << std::endl;
                     // :UserNick!UserHost MODE #Channel -l
                     channels[args[1]].set_option_l(false); 
                     return ;
@@ -146,28 +156,34 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
     }
     if (argc == 4){
         if (!channel_exist(channels, args[1])){
+                std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
             //  ERR_NOSUCHCHANNEL (403)
             return ;   
         }
         if (!client.is_operator(channels[args[1]])){
+            std::cout << "ERR_CHANOPRIVSNEEDED" << std::endl;
             //  ERR_CHANOPRIVSNEEDED (482)
             return ;
         }    
         if (!valid_option(args[2])){
+            std::cout << "ERR_UMODEUNKNOWNFLAG" << std::endl;
             // ERR_UMODEUNKNOWNFLAG (501)
             return ;
         }
-        if (args[2].at(1) != 'i' || args[2].at(1) != 't'){
+        if (args[2].at(1) == 'i' || args[2].at(1) == 't'){
+            std::cout << "ERR_INVALIDMODEPARAM" << std::endl;
             // ERR_INVALIDMODEPARAM (696)
             return ;
         }
         if (args[2].at(1) == 'k'){
             if (args[2].at(0) == '+' && !channels[args[1]].get_option_k()){
                 if (!is_valid_password(args[3])){
+                    std::cout << "ERR_INVALIDKEY" << std::endl;
                     // ERR_INVALIDKEY (525)
                     return ;
                 }
                 if (channels[args[1]].set_password(args[3])){
+                    std::cout << "MODE #Channel +k key" << std::endl;
                     // broadcast the mode change to all channel users
                     // :UserNick!UserHost MODE #Channel +k key
                     // channels[args[1]].broadcast_message();
@@ -177,6 +193,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
             }
             if (args[2].at(0) == '-' && channels[args[1]].get_option_k()){
                 if (args[3] == channels[args[1]].get_password()){
+                    std::cout << "MODE #Channel -k key" << std::endl;
                     // broadcast the mode change to all channel users
                     // :UserNick!UserHost MODE #Channel -k key
                     // channels[args[1]].broadcast_message();
@@ -190,6 +207,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
             if (args[2].at(0) == '+' && !channels[args[1]].get_option_l()){
                 if (contains_only_nums(args[3]) != -1){
                     if (channels[args[1]].set_limit(contains_only_nums(args[3]))){
+                        std::cout << "MODE #Channel +l number" << std::endl;
                         // :UserNick!UserHost MODE #Channel +l number
                         channels[args[1]].set_option_l(true);
                     }
@@ -200,6 +218,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
         }
         
     }
+    std::cout << "ERR_UNKNOWNMODE" << std::endl;
     // ERR_UNKNOWNMODE (472)
 };
         // else if (args[2].at(1) == 'o'){

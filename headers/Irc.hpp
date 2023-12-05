@@ -33,6 +33,8 @@
 #define MAX_CLIENTS 100
 #define PRINT(x) std::cout << x << std::endl;
 
+#define CHANNEL_LIMIT 10000
+
 #include "Client.hpp"
 #include "Channel.hpp"
 
