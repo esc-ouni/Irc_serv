@@ -158,7 +158,7 @@ Client &get_client_by_nickname(std::string &nick, std::map<int, Client> &clients
  * @return The filtered string.
  */
 std::string filteredString(std::string str);
-void nick(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> clients);
+void nick(std::map<std::string, Channel> &channels,std::string command, Client &client, std::map<int, Client> clients);
 void user(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> clients);
 bool pass(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
 bool is_multipe_words(std::string message);

@@ -14,7 +14,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     }
     else if (command.substr(0, 4) == "NICK" && client.hasPassword() == true)
     {
-        nick(command, client, clients);
+        nick(channels, command, client, clients);
     }
     else if (command.substr(0, 4) == "USER" && client.hasPassword() == true && client.hasNickname() == true)
     {
@@ -40,7 +40,12 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 4) == "KICK" && client.is_authenticated()){
         kick_user(command, client, channels, clients);
     }
-    else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
+
+
+
+
+
+    else if (command.substr(0, 8) == "PRIVMSG " && client.is_authenticated())
     {
         privmsg(command, client, clients, channels);
     }
