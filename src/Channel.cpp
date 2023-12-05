@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/05 12:10:01 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/05 16:08:58 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,69 @@
 #include "../headers/Client.hpp"
 #include "../headers/commands.hpp"
 
+
+bool        Channel::get_option_l() const{
+    return (this->_modes.l);
+};
+
+bool        Channel::get_option_k() const{
+    return (this->_modes.k);
+};
+
+bool        Channel::get_option_t() const{
+    return (this->_modes.t);
+};
+
+bool        Channel::get_option_i() const{
+    return (this->_modes.i);
+};
+
+
+bool        Channel::set_option_l(bool bit){
+    if (bit != this->_modes.l){
+        this->_modes.l = bit;
+        return (true);
+    }
+    return (false);
+};
+
+bool        Channel::set_option_k(bool bit){
+    if (bit != this->_modes.k){
+        this->_modes.k = bit;
+        return (true);
+    }
+    return (false);
+};
+
+bool        Channel::set_option_t(bool bit){
+    if (bit != this->_modes.t){
+        this->_modes.t = bit;
+        return (true);
+    }
+    return (false);
+};
+
+bool        Channel::set_option_i(bool bit){
+    if (bit != this->_modes.i){
+        this->_modes.i = bit;
+        return (true);
+    }
+    return (false);
+};
+
+int Channel::get_limit() const{
+    return (this->_modes.limit);
+}
+
+bool Channel::set_limit(int limit) {
+    if (limit > 0 && limit <= 1000){
+        if (this->_modes.limit != limit){
+            this->_modes.limit = limit;
+            return (true);
+        }
+    }
+    return (false);
+}
 
 void Channel::broadcast_message(std::string &message){
     

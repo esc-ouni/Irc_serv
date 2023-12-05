@@ -11,7 +11,7 @@ all: $(EXEC)
 
 $(EXEC): $(OBJS) $(H_FILES)
 	@$(CC) $(FLAGS) $(OBJS) -o $(EXEC)
-	# @clear
+	#@clear
 	./ircserv 6667 pass
 
 

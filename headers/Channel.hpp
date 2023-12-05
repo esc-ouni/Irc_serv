@@ -6,6 +6,15 @@
 // #include "Client.hpp"
 #include <map>
 
+typedef struct mode_options{
+    bool         i;
+    bool         t;
+    bool         k;
+    bool         l;
+    unsigned int limit;
+}   t_mode_options;
+
+
 class Client;
 
 class Channel
@@ -17,12 +26,12 @@ class Channel
         std::string                 _topic_date;
         std::map<int, Client>       _clients;
         std::map<int, Client>       _operators;
+        t_mode_options              _modes;
+        std::string                 _password;
 
 
-        std::map<char, char>        _modes;
         std::vector<std::string>    _invitees;
         std::string                 _key;
-        int                         _limit;
     public:
         void        add_user(Client &client);
         void        promote(Client &client);
@@ -43,68 +52,17 @@ class Channel
         void        broadcast_message_exp(Client &client, std::string &message);
 
         std::string get_all_users();
+        int         get_limit() const;
+        bool        set_limit(int limit);
 
-        
+        bool        get_option_l() const;
+        bool        get_option_k() const;
+        bool        get_option_t() const;
+        bool        get_option_i() const;
 
-    std::map<int, Client> &get_clients()
-    {
-        return _clients;
-    }
-
-    const std::map<int, Client>& getClients() const {
-        return _clients;
-    }
-
-    void setClients(const std::map<int, Client>& clients) {
-        _clients = clients;
-    }
-
-    std::string getTopic() const {
-        return _topic;
-    }
-
-    void setTopic(const std::string& topic) {
-        _topic = topic;
-    }
-
-    const std::map<char, char>& getModes() const {
-        return _modes;
-    }
-
-    void setModes(const std::map<char, char>& modes) {
-        _modes = modes;
-    }
-
-    const std::map<int, Client>& getOperators() const {
-        return _operators;
-    }
-
-    void setOperators(const std::map<int, Client>& operators) {
-        _operators = operators;
-    }
-
-    const std::vector<std::string>& getInvitees() const {
-        return _invitees;
-    }
-
-    void setInvitees(const std::vector<std::string>& invitees) {
-        _invitees = invitees;
-    }
-
-    std::string getKey() const {
-        return _key;
-    }
-
-    void setKey(const std::string& key) {
-        _key = key;
-    }
-
-    int getLimit() const {
-        return _limit;
-    }
-
-    void setLimit(int limit) {
-        _limit = limit;
-    }
+        bool        set_option_l(bool bit);
+        bool        set_option_k(bool bit);
+        bool        set_option_t(bool bit);
+        bool        set_option_i(bool bit);
 
 };
