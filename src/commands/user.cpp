@@ -92,29 +92,24 @@ void user(std::string command, Client &client)
             send(client.get_fd(), RPL_CREATED(client.get_nickname(), datetime).c_str(), RPL_CREATED(client.get_nickname(), datetime).length(), 0);
             
             result = "*************************************************************";
-            sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
-            result = "*                                                                                          *";
-            sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
-            result = "*                       Welcome to the best Irc server                     *";
-            sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
-            result = "*                                                                                           *";
-            sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
-            result = "*    Connect with the world. Chat, share, and have a great    *";
-            sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
-            result = "*                                                                                          *";
-            sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
-            result = "*             Enjoy your stay and happy chatting!                      *";
-            sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
-            result = "*                                                                                          *";
-            sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "                                                                                                 ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "                              Welcome to the best Irc server                     ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "                                                                                                  ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "           Connect with the world. Chat, share, and have a great    ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "                                                                                                 ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "                    Enjoy your stay and happy chatting!                      ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "                                                                                                 ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             result = "*************************************************************";
-            sendMessage(client.get_fd(),RPL(result, client.get_nickname()));
-            send(client.get_fd(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).c_str(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).length(), 0);
-
-
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            // send(client.get_fd(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).c_str(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).length(), 0);
         }
     }
 }
-
-
-

@@ -46,4 +46,65 @@ class Channel
 
         
 
+    std::map<int, Client> &get_clients()
+    {
+        return _clients;
+    }
+
+    const std::map<int, Client>& getClients() const {
+        return _clients;
+    }
+
+    void setClients(const std::map<int, Client>& clients) {
+        _clients = clients;
+    }
+
+    std::string getTopic() const {
+        return _topic;
+    }
+
+    void setTopic(const std::string& topic) {
+        _topic = topic;
+    }
+
+    const std::map<char, char>& getModes() const {
+        return _modes;
+    }
+
+    void setModes(const std::map<char, char>& modes) {
+        _modes = modes;
+    }
+
+    const std::map<int, Client>& getOperators() const {
+        return _operators;
+    }
+
+    void setOperators(const std::map<int, Client>& operators) {
+        _operators = operators;
+    }
+
+    const std::vector<std::string>& getInvitees() const {
+        return _invitees;
+    }
+
+    void setInvitees(const std::vector<std::string>& invitees) {
+        _invitees = invitees;
+    }
+
+    std::string getKey() const {
+        return _key;
+    }
+
+    void setKey(const std::string& key) {
+        _key = key;
+    }
+
+    int getLimit() const {
+        return _limit;
+    }
+
+    void setLimit(int limit) {
+        _limit = limit;
+    }
+
 };
