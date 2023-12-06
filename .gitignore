@@ -3,3 +3,5 @@
 *.o
 */*.o
 ircserv
+fileTransfer/transfer
+bot/bot

@@ -19,10 +19,12 @@ $(EXEC): $(OBJS) $(H_FILES)
 
 clean:
 	$(RM) $(OBJS)
+	$(RM) ./fileTransfer/*.o
 	@clear && echo "==Object_files_deleted======="
 
 fclean: clean
 	$(RM) $(EXEC)
+	$(RM) ./fileTransfer/transfer
 	$(RM) .vscode
 	$(RM) *.dSYM
 	@clear && echo "==All_created_files_deleted=="
@@ -30,9 +32,14 @@ fclean: clean
 re: fclean all
 	@clear && echo "==Compilation_reseted========"
 
-transter:
-	@c++ fileTransfer/filetransfer.cpp -o fileTransfer/Transfer
+Transfer:
+	@c++ fileTransfer/filetransfer.cpp -o fileTransfer/transfer
 	@clear
-	@echo "./fileTransfer/bot <Pathfile>"
+	@echo "./fileTransfer/transfer <Pathfile>"
 
-.PHONY: all clean fclean re
+Boot:
+	@c++ bot/bot.cpp -o bot/bot
+	@clear
+	@echo "./bot/bot <IP> <PORT>"
+
+.PHONY: all clean fclean re transfer
