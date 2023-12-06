@@ -138,12 +138,32 @@ void Irc::printc(std::string msg, std::string color, int ex)
         exit(EXIT_SUCCESS);
 }
 
-void Irc::handleBot(Client &client)
+
+static std::string downloadPath(std::string str)
 {
+    std::string result;
+    for (size_t i = 0; i < str.length(); i++)
+    {
+        if (str[i] != '\n' && str[i] != '\r' \
+           && str[i] != '\t' && str[i] != '\v'\
+           && str[i] != '\f' && str[i] != ' ' \
+           && str[i] != '\'' && str[i] != '"'\
+           && str[i] != ':')
+        {
+            result += str[i];
+        }
+    }
+    return (result);
+}
+
+
+void Irc::handleBot(Client &client, std::string command)
+{
+    std::string path = downloadPath(command.substr(9, command.length() - 9));
     std::string msg;
     char buffer[1000];
     std::string file;
-    FILE *fd = fopen(FILE_PATH, "rb");
+    FILE *fd = fopen(path.c_str(), "rb");
     if (fd == NULL)
     {
         msg = "PRIVMSG " + client.get_nickname() + " :" + "Error opening file" + "\r\n";
@@ -159,7 +179,7 @@ void Irc::handleBot(Client &client)
     }
     fclose(fd);
 
-    msg = "PRIVMSG " + client.get_nickname() + " :" + '\x01' + "DCC SEND " + FILE_PATH + " 0 9999 " + std::to_string(file.size()) + '\x01';
+    msg = "PRIVMSG " + client.get_nickname() + " :" + '\x01' + "DCC SEND " + path.c_str() + " 0 9999 " + std::to_string(file.size()) + '\x01';
     msg += "\r\n";
     send(client.get_fd(), msg.c_str(), msg.size(), 0);
 }

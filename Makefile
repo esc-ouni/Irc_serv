@@ -30,9 +30,9 @@ fclean: clean
 re: fclean all
 	@clear && echo "==Compilation_reseted========"
 
-bonus:
-	@c++ fileTransfer/filetransfer.cpp -o fileTransfer/bot
+transter:
+	@c++ fileTransfer/filetransfer.cpp -o fileTransfer/Transfer
 	@clear
-	@echo ./fileTransfer/bot
+	@echo "./fileTransfer/bot <Pathfile>"
 
 .PHONY: all clean fclean re
