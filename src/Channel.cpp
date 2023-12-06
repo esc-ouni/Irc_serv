@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/06 20:42:36 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/06 20:50:53 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,7 +396,7 @@ bool is_valid_topic(std::string &new_topic){
 
 void sendMessage(int clientSocket, const std::string& message) {
     if (send(clientSocket, message.c_str(), message.length(), 0) == -1)
-        std::cerr << "Err: failling sending message th the client !" << std::endl;
+        std::cerr << "Err: failling sending message to the client !" << std::endl;
 };
 
 std::string trim(std::string &str, const std::string& charsToTrim) {
@@ -426,12 +426,11 @@ bool channel_exist(std::map<std::string, Channel>& channels, std::string &needle
     std::map<std::string, Channel>::iterator it = channels.begin();
     
     while (it != channels.end()){
-        if (!needle.compare(it->first))
+        if (needle == it->second.get_name())
             return (true);
         it++;
     }
     return (false);
-    
 }
 
 bool Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients) {
@@ -462,9 +461,6 @@ void send_names_list(Client &client, Channel &channel){
 
 
 void handle_Join(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients) {
-
-
-
     std::string         input = extract_channel_name(command);
     std::istringstream  iss(input);
     std::string         channel_name;
