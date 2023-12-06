@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/04 11:59:34 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/06 17:40:09 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,24 @@
 
 
 
-#define ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " " + channel + " :No such channel\r\n")
-
 ///IMPT
+// #define  ERR_NOSUCHCHANNEL (client, channel) (":ServerName 403 " + client + " " + channel + " :No such channel\r\n")
+// #define  RPL_CHANNELMODEIS (client, channel) (":ServerName 324 " + client + " " + channel + " mode parameters\r\n")
+// #define  RPL_CREATIONTIME (client, channel, datetime) (":ServerName 329 " + client + " " + channel + " " + datetime + "\r\n") 
+
+// #define  ERR_CHANOPRIVSNEEDED (client, channel) ("ServerName 482 " + client + " " + channel + " :You're not channel operator\r\n")
+// #define  ERR_UMODEUNKNOWNFLAG (client, channel) (":ServerName 501 " + client + " :Unknown MODE flag\r\n")
+// #define  ERR_INVALIDMODEPARAM (client, channel) (":ServerName 696 " + client + " " + channel + " <mode> :Invalid MODE parameter\r\n")
+// #define  ERR_UNKNOWNMODE (client, channel) (":ServerName 472 " + client + " <mode char> :is unknown mode char to me\r\n")
+// #define  ERR_INVALIDKEY (client, channel) (":ServerName 525 " + client + " " + channel + " :Cannot join channel (+k) - bad key\r\n")
+// #define  ERR_CHANNELISFULL (client, channel) (":ServerName 471 " + client + " " + channel + " :Cannot join channel (+l) - channel is full\r\n")
+// #define  ERR_INVITEONLYCHAN (client, channel) (":ServerName 473 " + client + " " + channel + " :Cannot join channel (+i) - invite only\r\n") 
+
+// #define  MODE_CHANGED () ("\r\n") ()
+// #define  RP => :UserNick!UserHost MODE #Channel -+mode param
+
+
+
 // KICK
 // :KickerNick!KickerUser@KickerHost KICK <channel> <user> :[reason]
 #define RPL_KICK(client, channel, kicked, reason) (":" + client + "!" + "Kicker@KickerHost KICK " + channel + " " + kicked + " :" + reason + "\r\n");
@@ -97,7 +112,7 @@
 #define RPL_TOPIC(client, channel, topic) (": 332 " + client + " " + channel + " :" + topic + " \r\n")
 
 // :server 333 user #channel setter_nick timestamp
-// ": 333 " + client.get_nickname() + " " + channel_name + " " + channels[channel_name].get_topic_setter() + " " +  timeToString(time_teller()) + "\r\n";
+// ": 333 " + client.get_nickname() + " " + channel_name + " " + channels[channel_name].get_topic_setter() + " " +  time_to_string(time_teller()) + "\r\n";
 
 #define RPL_TOPICWHOTIME(client, channel, setter, datetime) (": 333 " + client + " " + channel + " "  + setter + " " + datetime + " \r\n")
 

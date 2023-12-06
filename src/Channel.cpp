@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/05 16:27:21 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/06 20:42:36 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,28 @@
 #include "../headers/Client.hpp"
 #include "../headers/commands.hpp"
 
+
+Channel::Channel(){
+    this->_creation_date = time_to_string(time_teller());
+    this->_modes.limit = CHANNEL_LIMIT;
+    this->_modes.i = false;
+    this->_modes.k = false;
+    this->_modes.t = false;
+    this->_modes.l = false;
+    this->_total_clients = 0;
+    std::cout << "\t\t=> DEBUG::CONSTRUCTOR_CALLED !" << std::endl; 
+};
+
+Channel::~Channel(){
+    std::cout << "\t\t=> DEBUG::DESSTRUCTOR_CALLED !" << std::endl; 
+};
+
+void   Channel::lock(){
+    this->_locked = true;
+};
+void   Channel::unlock(){
+    this->_locked = false;
+};
 
 bool is_valid_password(std::string pass){
     if (pass.empty() || (pass.length() > 20))
@@ -25,6 +47,10 @@ bool is_valid_password(std::string pass){
     }
     return (true);
 }
+
+std::string Channel::get_creation_date() const{
+    return (this->_creation_date);
+};
 
 std::string Channel::get_password() const{
     return (this->_password);
@@ -40,13 +66,6 @@ bool        Channel::set_password(std::string password){
     return (false);
 };
 
-Channel::Channel(){
-    std::cout << "\t\t=> DEBUG::CONSTRUCTOR_CALLED !" << std::endl; 
-};
-
-Channel::~Channel(){
-    std::cout << "\t\t=> DEBUG::DESSTRUCTOR_CALLED !" << std::endl; 
-};
 
 bool        Channel::get_option_l() const{
     return (this->_modes.l);
@@ -161,22 +180,28 @@ time_t time_teller(){
     return (current_time);
 }
 
-std::string timeToString(time_t timeVal) {
-    std::ostringstream oss;
-    oss << timeVal;
-    return oss.str();
+std::string time_to_string(time_t timeVal) {
+    std::stringstream convert;
+    convert << timeVal;
+    return (convert.str());
 }
 
 void Channel::remove_user(Client &client) {
     if (this->is_member(client)){
         if (client.is_operator((*this)))
             this->unpromote(client);
-        this->_clients.erase(client.get_fd());  
+        this->_clients.erase(client.get_fd());
     }
 };
 
-void Channel::add_user(Client &client) {
+bool Channel::add_user(Client &client) {
+    if (this->_clients.size() + 1 >= this->_modes.limit){
+        // ERR_CHANNELISFULL
+        return false;
+    }
     this->_clients[client.get_fd()] = client;
+    this->_total_clients++;
+    return true;
 };
 
 std::string Channel::get_name() const{
@@ -229,6 +254,7 @@ void Channel::promote(Client &client){
 
 void Channel::unpromote(Client &client){
     if (is_operator(client)){
+        std::cout << "unpromote" << std::endl;
         this->_operators.erase(client.get_fd());
     };
 };
@@ -237,7 +263,7 @@ bool  Channel::set_topic(Client &client, std::string &new_topic){
     if (is_operator(client) && this->_topic.compare(new_topic) && is_valid_topic(new_topic)){
         this->_topic        = new_topic;
         this->_topic_setter = client.get_nickname();
-        this->_topic_date   = timeToString(time_teller());
+        this->_topic_date   = time_to_string(time_teller());
         return (true);
     }
     return (false);
@@ -408,16 +434,20 @@ bool channel_exist(std::map<std::string, Channel>& channels, std::string &needle
     
 }
 
-void Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients) {
+bool Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients) {
+    if (!channels[new_channel_name].add_user(client))
+        return false;
     channels[new_channel_name].set_name(new_channel_name);
-    channels[new_channel_name].add_user(client);
     
     // promotes the user to be an operator 
     channels[new_channel_name].promote(client);
+    return true;
 };
 
-void channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients){
-    channels[channel_name].add_user(client);
+bool channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients){
+    if (!channels[channel_name].add_user(client))
+        return false;
+    return true;
 };
 
 void send_names_list(Client &client, Channel &channel){
@@ -446,10 +476,13 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
         
         if (!channel_name.empty() && channel_name_is_valid(channel_name)){
             if (!channel_exist(channels, channel_name)){
-                Create_channel_join(client, channels, channel_name, clients);
+                if(!Create_channel_join(client, channels, channel_name, clients))
+                    return ;
             }
             else if (channel_exist(channels, channel_name)){
-                channel_join(client, channels, channel_name, clients);
+                if(!channel_join(client, channels, channel_name, clients))
+                    // ERR_CHANNELISFULL
+                    return ;
             }
             // notifyUsersOfNewJoin
             Message = RPL_NOTIFYJOIN(client.get_nickname(), channel_name);
@@ -459,7 +492,7 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
                 // RPL_TOPIC
                 sendMessage(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
                 // RPL_TOPICWHOTIME
-                sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), timeToString(time_teller())));
+                sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), time_to_string(time_teller())));
             }
             send_names_list(client, channels[channel_name]);
         }
@@ -528,7 +561,7 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
 
 //  Channel Existence Check
     if(!channel_exist(channels, channel_name)){
-        sendMessage(client.get_fd(), ERR_NOSUCHCHANNEL(client.get_nickname(), channel_name));
+        // sendMessage(client.get_fd(), ERR_NOSUCHCHANNEL(client.get_nickname(), channel_name));
         return ;
     }
 
@@ -542,7 +575,7 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
     else{
         if (!channels[channel_name].get_topic().empty()){
             sendMessage(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic())); 
-            sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), timeToString(time_teller())));
+            sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), time_to_string(time_teller())));
         }
         else if (channels[channel_name].get_topic().empty()){
             sendMessage(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));

@@ -24,15 +24,19 @@ class Channel
         std::string                 _topic;
         std::string                 _topic_setter;
         std::string                 _topic_date;
+        std::string                 _creation_date;
         std::map<int, Client>       _clients;
         std::map<int, Client>       _operators;
         t_mode_options              _modes;
+        unsigned int                _total_clients;
+
         std::string                 _password;
+        bool                        _locked;
 
     public:
         Channel();
         ~Channel();
-        void        add_user(Client &client);
+        bool        add_user(Client &client);
         void        promote(Client &client);
         void        unpromote(Client &client); // need to be added when client leave
         bool        is_operator(Client &client);
@@ -49,6 +53,7 @@ class Channel
         std::string get_topic_date() const;
         void        broadcast_message(std::string &message);
         void        broadcast_message_exp(Client &client, std::string &message);
+        std::string get_creation_date() const;
         std::string get_all_users();
 
         std::string get_password() const;
@@ -66,5 +71,7 @@ class Channel
         bool        set_option_k(bool bit);
         bool        set_option_t(bool bit);
         bool        set_option_i(bool bit);
+        void        lock();
+        void        unlock();
 
 };
