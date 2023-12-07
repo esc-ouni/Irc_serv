@@ -19,6 +19,8 @@ static int IsDigit(char *argv)
     return (0);
 }
 
+std::string filteredString(std::string str);
+
 int main(int ac, char *argv[])
 {
     if (ac != 3 || IsDigit(argv[1]) || argv[2] == NULL || !strlen(argv[2]))
@@ -26,6 +28,13 @@ int main(int ac, char *argv[])
         std::cerr << RED << "try ./ircserv [port] [password]" << RESET << std::endl;
         exit(EXIT_FAILURE);
     }
+    std::string pass = filteredString(argv[2]);
+    if (filteredString(pass).empty())
+    {
+        std::cerr << RED << "try other password" << RESET << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
     signal(SIGINT, signal_handler);
 
     try
