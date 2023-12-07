@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 17:54:54 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 18:30:29 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,6 @@
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
-
-long int contains_only_nums(std::string string){
-    if (string.empty())
-        return (-1);
-    for (size_t i = 0; i < string.length(); i++){
-        if (string.c_str()[0] == '+')
-            continue ;
-        if (!isdigit(string.c_str()[i]) || i == 10)
-            return (-1);
-    }
-    return (std::atol(string.c_str()));
-};
-
-std::vector<std::string> parser(std::string &full_command, char dilimeter){
-    std::vector<std::string> args;
-    std::stringstream        stream(full_command);
-    std::string              token;
-    
-    if (full_command.empty())
-        return args;
-    while (!std::getline(stream , token,  dilimeter).eof()){
-        args.push_back(trim(token, "\r\n"));
-        token.clear();
-    }
-    if (!token.empty()){
-        args.push_back(trim(token, "\r\n"));
-    }
-    return args;
-};
-
-
-bool    valid_option(std::string &option){
-    if (option.length() != 2)
-        return (false);        
-    if ((option.at(0) != '+' && option.at(0) != '-'))
-        return (false);
-    if ((option.at(1) != 'i' && option.at(1) != 't' && option.at(1) != 'k' && option.at(1) != 'o' && option.at(1) != 'l'))
-        return (false);     
-    return (true);
-};
 
 void mode_one_param(Client &excuter){
     std::cout << "Reply(650): MODE <target> [[(+|-)]<modes> [<mode-parameters>]]" << std::endl;
@@ -213,10 +173,11 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
             }
         }
         return ;
-    }        
+    }
+    if (mode.at(1) == 'o'){
+        
+    }
 };
-
-
 
 //IMPLEMENT MODE COMMAND
 void mode(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){

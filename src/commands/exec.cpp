@@ -48,7 +48,6 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
         invite_user(command, client, channels, clients);
     }
     else if (command.substr(0, 4) == "MODE" && client.is_authenticated()){
-        std::cout << "ENTER_MODE" << std::endl;
         mode(command, client, channels, clients);
     }
 

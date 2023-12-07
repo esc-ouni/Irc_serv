@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 17:45:21 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 18:14:26 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,18 +86,18 @@
 
 // QUIT
 // :Nickname!Username@Host QUIT :Quit Message
-#define RPL_NOTIFYQUIT(client, message) (":" + client + "!" + "client_host"+ " QUIT :" + message + "\r\n");
+#define RPL_NOTIFYQUIT(client, message) (":" + client + "!" + "client_host"+ " QUIT :" + message + "\r\n")
 
 // PART
 // :ClientNick!ClientHost PART #channel
-#define RPL_NOTIFYPART(client, channel) (":" + client + "!" + "client_host"+ " PART " + channel + "\r\n");
+#define RPL_NOTIFYPART(client, channel) (":" + client + "!" + "client_host" + " PART " + channel + "\r\n")
 
 
 // :Nickname!Username@Host JOIN #channel
-#define RPL_NOTIFYJOIN(client, channel) (":" + client + "!" + client + "@" + "client_host"+ " JOIN " + channel + "\r\n");
+#define RPL_NOTIFYJOIN(client, channel) (":" + client + "!" + client + "@" + "client_host"+ " JOIN " + channel + "\r\n")
 
 //JOIN
-#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client_host"+ " JOIN :" + channel + "\r\n");
+#define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client_host"+ " JOIN :" + channel + "\r\n")
 
 // :IRCHub 353 YourNickname = #ChannelName :User1 User2 User3...
 #define RPL_NAMREPLY(client, channel, all_users) (": 353 " + client + " = " + channel + " :" + all_users + "\r\n")
