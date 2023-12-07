@@ -22,7 +22,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     }
     else if (command.substr(0, 5) == "AUTH ")
     {
-        std::string auth = ":localhost 001 " + client.get_nickname() + " :You are now " + (client.is_authenticated() ? "authenticated" : "not authenticated") + "\r\n";
+        std::string auth = ":IRCHub 001 " + client.get_nickname() + " :You are now " + (client.is_authenticated() ? "authenticated" : "not authenticated") + "\r\n";
         send(client.get_fd(), auth.c_str(), auth.length(), 0);
     }
     else if (command.substr(0, 5) == "JOIN " && client.is_authenticated()){
@@ -47,7 +47,8 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 7) == "INVITE " && client.is_authenticated()){
         invite_user(command, client, channels, clients);
     }
-    else if (command.substr(0, 5) == "MODE " && client.is_authenticated()){
+    else if (command.substr(0, 4) == "MODE" && client.is_authenticated()){
+        std::cout << "ENTER_MODE" << std::endl;
         mode(command, client, channels, clients);
     }
 

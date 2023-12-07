@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 13:24:57 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 13:28:00 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 14:55:50 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void user(std::string command, Client &client)
         }
         else
         {
-            std::string address = "localhost";
+            std::string address = "IRCHub";
             std::stringstream ss;
             ss << ":" << client.get_fd() << "!" << username << "@" << address;
 

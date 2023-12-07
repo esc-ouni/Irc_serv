@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 12:20:44 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 17:34:59 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,10 +482,7 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
     std::string         channel_name;
     std::string         Message;
 
-    std::cout << "INPUT : <" << input << "> " << std::endl;
     while (std::getline(iss, channel_name, ',')) {
-        std::cout << "part : <" << channel_name << "> \t\t" << std::boolalpha << channel_name_is_valid(channel_name) << std::endl;
-        
         if (!channel_name.empty() && channel_name_is_valid(channel_name)){
             if (!channel_exist(channels, channel_name)){
                 if(!Create_channel_join(client, channels, channel_name, clients))
@@ -496,14 +493,10 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
                     // ERR_CHANNELISFULL
                     return ;
             }
-            // notifyUsersOfNewJoin
             Message = RPL_NOTIFYJOIN(client.get_nickname(), channel_name);
             channels[channel_name].broadcast_message(Message);
-            
             if (!channels[channel_name].get_topic().empty()){
-                // RPL_TOPIC
                 send_message(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
-                // RPL_TOPICWHOTIME
                 send_message(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), time_to_string(time_teller())));
             }
             send_names_list(client, channels[channel_name]);

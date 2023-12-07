@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 12:32:03 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 17:54:54 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,18 @@ bool    valid_option(std::string &option){
     return (true);
 };
 
-void mode_one_param(){
+void mode_one_param(Client &excuter){
     std::cout << "Reply(650): MODE <target> [[(+|-)]<modes> [<mode-parameters>]]" << std::endl;
     // Reply(650): MODE <target> [[(+|-)]<modes> [<mode-parameters>]]
+    send_message(excuter.get_fd(), RPL("MODE <target> [[(+|-)]<modes> [<mode-parameters>]]", excuter.get_nickname()));
 };
 
 void send_mode_info(Client &excuter, Channel &channel){
   std::string notice;
         if (!channel.show_mode().empty()){
-            //  RPL_CHANNELMODEIS (324)
             notice = RPL_CHANNELMODEIS(excuter.get_nickname(), channel.get_name(), channel.show_mode());
             send_message(excuter.get_fd(), notice);
         }
-        //  RPL_CREATIONTIME (329)
         notice = RPL_CREATIONTIME(excuter.get_nickname(), channel.get_name(), channel.get_creation_date());
         send_message(excuter.get_fd(), notice);
         std::cout << "SHOW AVAILABLE MODS ON THIS CHANNEL !" << std::endl;
@@ -78,15 +77,13 @@ void send_mode_info(Client &excuter, Channel &channel){
 void mode_two_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name){
   std::string notice;
     if (!channel_exist(channels, channel_name)){
-        //  ERR_NOSUCHCHANNEL (403)
         std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
-        notice = ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name);
-        send_message(excuter.get_fd(), notice);
+        send_message(excuter.get_fd(), ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name));
         return ;
     }
     else if (!channels[channel_name].is_member(excuter)){
         std::cout << "ERR_NOTAMEMBER" << std::endl;
-        //  ERR_NOTONCHANNEL (482)    
+        send_message(excuter.get_fd(), ERR_NOTONCHANNEL(excuter.get_nickname(), channel_name));
         return ;   
     }
     else{
@@ -101,40 +98,32 @@ void mode_three_params(std::map<std::string, Channel>& channels, Client &excuter
         notice = ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name);
         send_message(excuter.get_fd(), notice);
         std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
-        //  ERR_NOSUCHCHANNEL (403)
         return ;   
     }
     if (!excuter.is_operator(channels[channel_name])){
         send_message(excuter.get_fd(), ERR_CHANOPRIVSNEEDED(excuter.get_nickname(), channel_name));
         std::cout << "ERR_CHANOPRIVSNEEDED" << std::endl;
-        //  ERR_CHANOPRIVSNEEDED (482)
         return ;
     }    
     if (!valid_option(mode)){
+        send_message(excuter.get_fd(), ERR_UMODEUNKNOWNFLAG(excuter.get_nickname(), channel_name));
         std::cout << "ERR_UMODEUNKNOWNFLAG" << std::endl;
-        // ERR_UMODEUNKNOWNFLAG (501)
         return ;
     }
     if (mode.at(1) == 'k' || mode.at(1) == 'o' || (mode.at(1) == 'l' && mode.at(0) == '+')){
+        send_message(excuter.get_fd(), ERR_INVALIDMODEPARAM(excuter.get_nickname(), channel_name, mode));
         std::cout << "ERR_INVALIDMODEPARAM" << std::endl;
-        // ERR_INVALIDMODEPARAM (696)
         return ;
     }
     if (mode.at(1) == 'i'){
         if (mode.at(0) == '+' && !channels[channel_name].get_option_i()){
             std::cout << "MODE #Channel +i" << std::endl;
-            // broadcast the mode change to all channel users
-            // RP => :UserNick!UserHost MODE #Channel +i
-            // channels[channel_name].broadcast_message();
             channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+i", ""));
             channels[channel_name].set_option_i(true);
             return ;
         }
         if (mode.at(0) == '-' && channels[channel_name].get_option_i()){
             std::cout << "MODE #Channel -i" << std::endl;
-            // broadcast the mode change to all channel users
-            // RP => :UserNick!UserHost MODE #Channel -i
-            // channels[channel_name].broadcast_message();
             channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-i", ""));
             channels[channel_name].set_option_i(false);
             return ;
@@ -144,18 +133,12 @@ void mode_three_params(std::map<std::string, Channel>& channels, Client &excuter
     else if (mode.at(1) == 't'){
         if (mode.at(0) == '+' && !channels[channel_name].get_option_t()){
             std::cout << "MODE #Channel +t" << std::endl;
-            // broadcast the mode change to all channel users
-            // RP => :UserNick!UserHost MODE #Channel +t
-            // channels[channel_name].broadcast_message();
             channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+t", ""));
             channels[channel_name].set_option_t(true);
             return ;
         }
         else if (mode.at(0) == '-' && channels[channel_name].get_option_t()){
             std::cout << "MODE #Channel -t" << std::endl;
-            // broadcast the mode change to all channel users
-            // RP => :UserNick!UserHost MODE #Channel -t
-            // channels[channel_name].broadcast_message();
             channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-t", ""));
             channels[channel_name].set_option_t(false);
             return ;
@@ -167,7 +150,6 @@ void mode_three_params(std::map<std::string, Channel>& channels, Client &excuter
         std::cout << "MODE #Channel -l" << std::endl;
         channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-l", ""));
         channels[channel_name].set_option_l(false);
-        // :UserNick!UserHost MODE #Channel -l
         return ;
     }
 };
@@ -176,36 +158,33 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
   std::string notice;
     if (!channel_exist(channels, channel_name)){
             std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
-            // notice = ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name);
             send_message(excuter.get_fd(), ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name));
         return ;   
     }
     if (!excuter.is_operator(channels[channel_name])){
-        std::cout << "ERR_CHANOPRIVSNEEDED" << std::endl;
         send_message(excuter.get_fd(), ERR_CHANOPRIVSNEEDED(excuter.get_nickname(), channel_name));
+        std::cout << "ERR_CHANOPRIVSNEEDED" << std::endl;
         return ;
     }    
     if (!valid_option(mode)){
+        send_message(excuter.get_fd(), ERR_UMODEUNKNOWNFLAG(excuter.get_nickname(), channel_name));
         std::cout << "ERR_UMODEUNKNOWNFLAG" << std::endl;
-        // ERR_UMODEUNKNOWNFLAG (501)
         return ;
     }
     if (mode.at(1) == 'i' || mode.at(1) == 't'){
+        send_message(excuter.get_fd(), ERR_INVALIDMODEPARAM(excuter.get_nickname(), channel_name, mode));
         std::cout << "ERR_INVALIDMODEPARAM" << std::endl;
-        // ERR_INVALIDMODEPARAM (696)
         return ;
     }
     if (mode.at(1) == 'k'){
         if (mode.at(0) == '+' && !channels[channel_name].get_option_k()){
             if (!is_valid_password(last_param)){
+                send_message(excuter.get_fd(), ERR_INVALIDKEY(excuter.get_nickname(), channel_name));
                 std::cout << "ERR_INVALIDKEY" << std::endl;
-                // ERR_INVALIDKEY (525)
                 return ;
             }
             if (channels[channel_name].set_password(last_param)){
                 std::cout << "MODE #Channel +k key" << std::endl;
-                // broadcast the mode change to all channel users
-                // :UserNick!UserHost MODE #Channel +k key
                 channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+k", ""));
                 channels[channel_name].set_option_k(true);                
                 channels[channel_name].lock();
@@ -215,9 +194,6 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
         else if (mode.at(0) == '-' && channels[channel_name].get_option_k()){
             if (last_param == channels[channel_name].get_password()){
                 std::cout << "MODE #Channel -k key" << std::endl;
-                // broadcast the mode change to all channel users
-                // :UserNick!UserHost MODE #Channel -k key
-                // channels[channel_name].broadcast_message();
                 channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-k", ""));
                 channels[channel_name].set_option_k(false);
                 channels[channel_name].unlock();
@@ -231,7 +207,6 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
             if (contains_only_nums(last_param) != -1){
                 if (channels[channel_name].set_limit(contains_only_nums(last_param))){
                     std::cout << "MODE #Channel +l number" << std::endl;
-                    // :UserNick!UserHost MODE #Channel +l number
                     channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+l", last_param));
                     channels[channel_name].set_option_l(true);
                 }
@@ -245,25 +220,23 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
 
 //IMPLEMENT MODE COMMAND
 void mode(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
-
-    //PARSIN WITH SS
     std::vector<std::string> args = parser(command, ' ');
+    if (args.at(0) != "MODE")
+        return ;
     int argc = args.size();
-
-    std::cout << "full cmd : <"<< trim(command, "\r\n") << "> "<< std::endl;
-    
-    for (int i = 0; i < args.size(); i++){
-        std::cout << "cmd      : <" << args[i] << "> " << std::endl;
-    }
-    std::cout << std::endl;
 
     std::string channel_name;
     std::string mode;
     std::string last_param;    
 
-// // START
+    // std::cout << "size     : <" << argc << "> " << std::endl;
+    // std::cout << "cmd      : <" << args[0] << "> " << std::endl;
+    // std::cout << "channel  : <" << channel_name << "> " << std::endl;
+    // std::cout << "mode     : <" << mode << "> " << std::endl;
+    // std::cout << "params   : <" << last_param << "> " << std::endl;
+    
     if (argc == 1)
-        mode_one_param();
+        mode_one_param(client);
     else if (argc == 2){
         channel_name = args[1];
         mode_two_params(channels, client, channel_name);
@@ -280,11 +253,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
         mode_four_params(channels, client, channel_name, mode, last_param);
     }
     else{
-        // send_message(client.get_fd(), ERR_UNKNOWNMODE());
+        send_message(client.get_fd(), ERR_UNKNOWNMODE(client.get_nickname(), channel_name, mode));
         std::cout << "ERR_UNKNOWNMODE" << std::endl;
     }
-    std::cout << "cmd      : <" << args[0] << "> " << std::endl;
-    std::cout << "channel  : <" << channel_name << "> " << std::endl;
-    std::cout << "mode     : <" << mode << "> " << std::endl;
-    std::cout << "params   : <" << last_param << "> " << std::endl;
 };
