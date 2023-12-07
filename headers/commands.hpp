@@ -28,6 +28,9 @@
 #define RPL_WELCOME(user_forma, nickname) (": 001 " + nickname + " :Welcome " + nickname + " to the Internet Relay Chat " + user_forma + "\r\n")
 #define RPL_YOURHOST(client, servername) (": 002 " + client + " :Your host is " + servername + "\r\n")
 #define RPL_CREATED(client, datetime) (": 003 " + client + " :This server was created " + datetime + "\r\n")
+# define RPL_MYINFO(client, servername, version, user_modes, chan_modes, chan_param_modes) (":localhost 004 " + client + " " + servername + " " + version + " " + user_modes + " " + chan_modes + " " + chan_param_modes + "\r\n")
+# define RPL_ISUPPORT(client, tokens) (":localhost 005 " + client + " " + tokens " :are supported by this server\r\n")
+
 
 // channels
 // #define RPL_JOIN(user_forma, client, channel) (user_forma + " JOIN :" + channel + "\r\n")
