@@ -27,6 +27,7 @@ class Channel
         std::string                 _creation_date;
         std::map<int, Client>       _clients;
         std::map<int, Client>       _operators;
+        std::map<int, Client>       _invitees;
         t_mode_options              _modes;
         unsigned int                _total_clients;
 
@@ -73,5 +74,6 @@ class Channel
         bool        set_option_i(bool bit);
         void        lock();
         void        unlock();
+        std::string show_mode();
 
 };

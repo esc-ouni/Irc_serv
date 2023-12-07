@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/06 17:40:09 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 11:32:37 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,9 @@
 
 ///IMPT
 // #define  ERR_NOSUCHCHANNEL (client, channel) (":ServerName 403 " + client + " " + channel + " :No such channel\r\n")
-// #define  RPL_CHANNELMODEIS (client, channel) (":ServerName 324 " + client + " " + channel + " mode parameters\r\n")
-// #define  RPL_CREATIONTIME (client, channel, datetime) (":ServerName 329 " + client + " " + channel + " " + datetime + "\r\n") 
+// :ServerName 324 YourNickname #Channel +mnt
+#define  RPL_CHANNELMODEIS(client, channel, mode) (":ServerName 324 " + client + " " + channel + " " + mode + "\r\n")
+#define  RPL_CREATIONTIME(client, channel, datetime) (":ServerName 329 " + client + " " + channel + " " + datetime + "\r\n") 
 
 // #define  ERR_CHANOPRIVSNEEDED (client, channel) ("ServerName 482 " + client + " " + channel + " :You're not channel operator\r\n")
 // #define  ERR_UMODEUNKNOWNFLAG (client, channel) (":ServerName 501 " + client + " :Unknown MODE flag\r\n")

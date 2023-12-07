@@ -6,13 +6,14 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/06 20:42:12 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 11:32:57 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/Irc.hpp"
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
+
 
 long int contains_only_nums(std::string string){
     if (string.empty())
@@ -71,9 +72,17 @@ void mode_two_params(std::map<std::string, Channel>& channels, Client &excuter, 
         return ;   
     }
     else{
-        //  RPL_CHANNELMODEIS (324)
+        std::string notice;
+        if (!channels[channel_name].show_mode().empty()){
+            //  RPL_CHANNELMODEIS (324)
+            notice = RPL_CHANNELMODEIS(excuter.get_nickname(), channel_name, channels[channel_name].show_mode());
+            sendMessage(excuter.get_fd(), notice);
+        }
+        notice = RPL_CREATIONTIME(excuter.get_nickname(), channel_name, channels[channel_name].get_creation_date());
+        sendMessage(excuter.get_fd(), notice);
         //  RPL_CREATIONTIME (329)
         std::cout << "SHOW AVAILABLE MODS ON THIS CHANNEL !" << std::endl;
+        std::cout << "CHANNEL mode : " << channels[channel_name].show_mode() << std::endl;
         return ;
     }
 };

@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/06 20:50:53 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 11:25:46 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,21 @@
 #include "../headers/Client.hpp"
 #include "../headers/commands.hpp"
 
+std::string Channel::show_mode(){
+    std::string mode;
+
+    if (this->_modes.i)
+        mode += 'i';
+    if (this->_modes.t)
+        mode += 't';
+    if (this->_modes.k)
+        mode += 'k';
+    if (this->_modes.l)
+        mode += 'l';
+    if (!mode.empty())
+        mode.insert(0, "+");
+    return (mode);
+};
 
 Channel::Channel(){
     this->_creation_date = time_to_string(time_teller());
