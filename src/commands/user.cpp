@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   user.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/07 13:24:57 by idouni            #+#    #+#             */
+/*   Updated: 2023/12/07 13:28:00 by idouni           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../headers/Irc.hpp"
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
@@ -86,7 +98,7 @@ void user(std::string command, Client &client)
             client.set_username(username);
             client.set_authenticated(true);
             send(client.get_fd(), RPL_WELCOME(result, client.get_nickname()).c_str(), RPL_WELCOME(result, client.get_nickname()).length(), 0);
-            send(client.get_fd(), RPL_YOURHOST(client.get_nickname(), "the best irc server").c_str(), RPL_YOURHOST(client.get_nickname(), "the best irc server").length(), 0);
+            send(client.get_fd(), RPL_YOURHOST(client.get_nickname(), "1337Hub").c_str(), RPL_YOURHOST(client.get_nickname(), "1337Hub").length(), 0);
             send(client.get_fd(), RPL_CREATED(client.get_nickname(), datetime).c_str(), RPL_CREATED(client.get_nickname(), datetime).length(), 0);
             
             // result = "*************************************************************";
@@ -123,8 +135,26 @@ void user(std::string command, Client &client)
 
 
                                                                                       
-        result = "***********************************";
-        send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            result = "***********************************************************";
+            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+    
+
+            result = "                          Welcome to 1337Hub                     ";
+            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            result = "                                                                                                  ";
+            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            result = " Connect with the world. Chat, share, and have a great DAY   ";
+            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            result = "                                                                                                 ";
+            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            result = "                Enjoy your stay and happy chatting!                      ";
+            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            result = "                                                                                                 ";
+            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            result = "***********************************************************";
+            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+
+
             // send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             // send(client.get_fd(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).c_str(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).length(), 0);
         }
