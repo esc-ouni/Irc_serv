@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 11:32:57 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 11:52:12 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,28 @@ void mode_one_param(){
     // Reply(650): MODE <target> [[(+|-)]<modes> [<mode-parameters>]]
 };
 
+void send_mode_info(Client &excuter, Channel &channel){
+  std::string notice;
+        if (!channel.show_mode().empty()){
+            //  RPL_CHANNELMODEIS (324)
+            notice = RPL_CHANNELMODEIS(excuter.get_nickname(), channel.get_name(), channel.show_mode());
+            send_message(excuter.get_fd(), notice);
+        }
+        //  RPL_CREATIONTIME (329)
+        notice = RPL_CREATIONTIME(excuter.get_nickname(), channel.get_name(), channel.get_creation_date());
+        send_message(excuter.get_fd(), notice);
+        std::cout << "SHOW AVAILABLE MODS ON THIS CHANNEL !" << std::endl;
+        std::cout << "CHANNEL mode : " << channel.show_mode() << std::endl;
+};
+
+
 void mode_two_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name){
+  std::string notice;
     if (!channel_exist(channels, channel_name)){
-        std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
         //  ERR_NOSUCHCHANNEL (403)
+        std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
+        notice = ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name);
+        send_message(excuter.get_fd(), notice);
         return ;
     }
     else if (!channels[channel_name].is_member(excuter)){
@@ -72,23 +90,16 @@ void mode_two_params(std::map<std::string, Channel>& channels, Client &excuter, 
         return ;   
     }
     else{
-        std::string notice;
-        if (!channels[channel_name].show_mode().empty()){
-            //  RPL_CHANNELMODEIS (324)
-            notice = RPL_CHANNELMODEIS(excuter.get_nickname(), channel_name, channels[channel_name].show_mode());
-            sendMessage(excuter.get_fd(), notice);
-        }
-        notice = RPL_CREATIONTIME(excuter.get_nickname(), channel_name, channels[channel_name].get_creation_date());
-        sendMessage(excuter.get_fd(), notice);
-        //  RPL_CREATIONTIME (329)
-        std::cout << "SHOW AVAILABLE MODS ON THIS CHANNEL !" << std::endl;
-        std::cout << "CHANNEL mode : " << channels[channel_name].show_mode() << std::endl;
+        send_mode_info(excuter, channels[channel_name]);
         return ;
     }
 };
 
 void mode_three_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode){
+  std::string notice;
     if (!channel_exist(channels, channel_name)){
+        notice = ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name);
+        send_message(excuter.get_fd(), notice);
         std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
         //  ERR_NOSUCHCHANNEL (403)
         return ;   
@@ -156,8 +167,11 @@ void mode_three_params(std::map<std::string, Channel>& channels, Client &excuter
 };
 
 void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::string &last_param){
+  std::string notice;
     if (!channel_exist(channels, channel_name)){
             std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
+            // notice = ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name);
+            send_message(excuter.get_fd(), ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name));
         //  ERR_NOSUCHCHANNEL (403)
         return ;   
     }
@@ -259,7 +273,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
         mode_four_params(channels, client, channel_name, mode, last_param);
     }
     else{
-        // sendMessage(client.get_fd(), ERR_UNKNOWNMODE());
+        // send_message(client.get_fd(), ERR_UNKNOWNMODE());
         std::cout << "ERR_UNKNOWNMODE" << std::endl;
     }
     std::cout << "cmd      : <" << args[0] << "> " << std::endl;

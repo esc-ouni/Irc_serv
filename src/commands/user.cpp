@@ -2,8 +2,6 @@
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
-void sendMessage(int clientSocket, const std::string& message);
-
 // splite username
 bool splitusername(const std::string& input) {
     std::istringstream stream(input);

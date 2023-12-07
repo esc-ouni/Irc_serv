@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 11:25:46 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 11:58:42 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void Channel::broadcast_message(std::string &message){
     std::map<int, Client>::iterator it = this->_clients.begin();
 
     while (it != this->_clients.end()){
-        sendMessage(it->first, message);
+        send_message(it->first, message);
         it++;
     }
 };
@@ -176,7 +176,7 @@ void Channel::broadcast_message_exp(Client &client, std::string &message){
 
     while (it != this->_clients.end()){
         if (it->first != client.get_fd())
-            sendMessage(it->first, message);
+            send_message(it->first, message);
         it++;
     }
 };
@@ -409,13 +409,13 @@ bool is_valid_topic(std::string &new_topic){
     return (true);
 }
 
-void sendMessage(int clientSocket, const std::string& message) {
+void send_message(int clientSocket, std::string message) {
     if (send(clientSocket, message.c_str(), message.length(), 0) == -1)
         std::cerr << "Err: failling sending message to the client !" << std::endl;
 };
 
-std::string trim(std::string &str, const std::string& charsToTrim) {
-    size_t endpos = str.find_last_not_of(charsToTrim);
+std::string trim(std::string &str, std::string charstotrim) {
+    size_t endpos = str.find_last_not_of(charstotrim);
 
     if (std::string::npos != endpos) {
         str = str.substr(0, endpos + 1);
@@ -423,7 +423,7 @@ std::string trim(std::string &str, const std::string& charsToTrim) {
     return (str);
 };
 
-std::string extract_channel_name(const std::string& command) {
+std::string extract_channel_name(std::string& command) {
     size_t n = command.find('#');
     std::string ch_name = "";
     
@@ -467,11 +467,11 @@ bool channel_join(Client &client, std::map<std::string, Channel>& channels, std:
 void send_names_list(Client &client, Channel &channel){
     // Send NAMES list
     std::string Message = RPL_NAMREPLY(client.get_nickname(), channel.get_name(), channel.get_all_users());
-    sendMessage(client.get_fd(), Message);
+    send_message(client.get_fd(), Message);
 
     // End of NAMES list
     Message = RPL_ENDOFNAMES(client.get_nickname(), channel.get_name());
-    sendMessage(client.get_fd(), Message);
+    send_message(client.get_fd(), Message);
 }
 
 
@@ -501,9 +501,9 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
             
             if (!channels[channel_name].get_topic().empty()){
                 // RPL_TOPIC
-                sendMessage(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
+                send_message(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
                 // RPL_TOPICWHOTIME
-                sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), time_to_string(time_teller())));
+                send_message(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), time_to_string(time_teller())));
             }
             send_names_list(client, channels[channel_name]);
         }
@@ -572,7 +572,7 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
 
 //  Channel Existence Check
     if(!channel_exist(channels, channel_name)){
-        // sendMessage(client.get_fd(), ERR_NOSUCHCHANNEL(client.get_nickname(), channel_name));
+        // send_message(client.get_fd(), ERR_NOSUCHCHANNEL(client.get_nickname(), channel_name));
         return ;
     }
 
@@ -585,11 +585,11 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
     }
     else{
         if (!channels[channel_name].get_topic().empty()){
-            sendMessage(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic())); 
-            sendMessage(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), time_to_string(time_teller())));
+            send_message(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic())); 
+            send_message(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), time_to_string(time_teller())));
         }
         else if (channels[channel_name].get_topic().empty()){
-            sendMessage(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
+            send_message(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
         }
     }
 };
