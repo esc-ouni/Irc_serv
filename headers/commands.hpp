@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 11:45:03 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 12:19:34 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 // #define RPL_JOIN(user_forma, client, channel) (user_forma + " JOIN :" + channel + "\r\n")
 #define ERR_USERONCHANNEL(client, nick, channel) (":localhost 443 " + client + " " + nick + " " + channel + " is already on channel\r\n")
 #define ERR_NOTONCHANNEL(client, channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel.\r\n")
-#define ERR_CHANOPRIVSNEEDED(client, channel) (":localhost 482 " + client + " " + channel + " :You're not channel operator.\r\n")
+// #define ERR_CHANOPRIVSNEEDED(client, channel) (":localhost 482 " + client + " " + channel + " :You're not channel operator.\r\n")
 // #define RPL_KICK(client, channel, kicked, reason) (":@" + client + " KICK " + channel + " " + kicked + " :" + reason + "\r\n")
 #define ERR_NOSUCHNICK(client, nickname) (":localhost 401 " + client + " " + nickname + " :No such nick/channel\r\n")
 #define ERR_BADCHANNELKEY(client, channel) (":localhost 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
@@ -66,8 +66,9 @@
 #define  ERR_NOSUCHCHANNEL(client, channel) (":ServerName 403 " + client + " " + channel + " :No such channel\r\n")
 #define  RPL_CHANNELMODEIS(client, channel, mode) (":ServerName 324 " + client + " " + channel + " " + mode + "\r\n")
 #define  RPL_CREATIONTIME(client, channel, datetime) (":ServerName 329 " + client + " " + channel + " " + datetime + "\r\n") 
+#define  ERR_CHANOPRIVSNEEDED(client, channel) ("ServerName 482 " + client + " " + channel + " :You're not channel operator\r\n")
+#define  MODE_CHANGED(client, channel, mode, last_param) (":" + client + "!UserHost MODE " + channel + " " + mode + " " + last_param + "\r\n")
 
-// #define  ERR_CHANOPRIVSNEEDED(client, channel) ("ServerName 482 " + client + " " + channel + " :You're not channel operator\r\n")
 // #define  ERR_UMODEUNKNOWNFLAG(client, channel) (":ServerName 501 " + client + " :Unknown MODE flag\r\n")
 // #define  ERR_INVALIDMODEPARAM(client, channel) (":ServerName 696 " + client + " " + channel + " <mode> :Invalid MODE parameter\r\n")
 // #define  ERR_UNKNOWNMODE(client, channel) (":ServerName 472 " + client + " <mode char> :is unknown mode char to me\r\n")
@@ -75,8 +76,6 @@
 // #define  ERR_CHANNELISFULL(client, channel) (":ServerName 471 " + client + " " + channel + " :Cannot join channel (+l) - channel is full\r\n")
 // #define  ERR_INVITEONLYCHAN(client, channel) (":ServerName 473 " + client + " " + channel + " :Cannot join channel (+i) - invite only\r\n") 
 
-// #define  MODE_CHANGED () ("\r\n") ()
-// #define  RP => :UserNick!UserHost MODE #Channel -+mode param
 
 
 

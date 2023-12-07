@@ -52,8 +52,8 @@ class Channel
         std::string get_name() const;
         std::string get_topic_setter() const;
         std::string get_topic_date() const;
-        void        broadcast_message(std::string &message);
-        void        broadcast_message_exp(Client &client, std::string &message);
+        void        broadcast_message(std::string message);
+        void        broadcast_message_exp(Client &client, std::string message);
         std::string get_creation_date() const;
         std::string get_all_users();
 

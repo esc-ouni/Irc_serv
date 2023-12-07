@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 11:58:42 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/07 12:20:44 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ bool Channel::set_limit(int limit) {
     return (false);
 }
 
-void Channel::broadcast_message(std::string &message){
+void Channel::broadcast_message(std::string message){
     
     std::map<int, Client>::iterator it = this->_clients.begin();
 
@@ -170,7 +170,7 @@ std::string Channel::get_all_users(){
 }
 
 
-void Channel::broadcast_message_exp(Client &client, std::string &message){
+void Channel::broadcast_message_exp(Client &client, std::string message){
     
     std::map<int, Client>::iterator it = this->_clients.begin();
 
@@ -364,6 +364,7 @@ void kick_user(std::string command, Client &client, std::map<std::string, Channe
     if (!channels[channel_name].is_operator(client)){
         //CLIENT_HAS_NO_PRIVELLIGES
         // ERR_CHANOPRIVSNEEDED (482)
+        send_message(client.get_fd(), ERR_CHANOPRIVSNEEDED(client.get_nickname(), channel_name));
         return ; 
     }
     
