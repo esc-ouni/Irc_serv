@@ -212,12 +212,12 @@ void Irc::Handle_activity()
                     recvClientsMsg(it->second, message);
                 if (it->second.get_buffer().find('\n') != std::string::npos)
                 {
-                    if (it->second.get_buffer().length() > 512)
+                    if (it->second.get_buffer().length() >= 512)
                     {
-                        // std::string msg = it->second.get_buffer().substr(it->second.get_buffer(), 0, 512);
-                        // send(it->second.get_fd(), msg.c_str(), strlen(msg.c_str()), 0);
-                        // it->second.set_buffer("");
-                        // continue;
+                        std::string msg = ": 421 ! more than 512 characters\r\n";
+                        send(it->second.get_fd(), msg.c_str(), strlen(msg.c_str()), 0);
+                        it->second.set_buffer("");
+                        continue;
                     }
                     excute_command(it->second.get_buffer(), it->second, _channels, _clients);
                     std::cout << BLUE << "Client [" << it->second.get_fd() << "] : "
