@@ -35,6 +35,8 @@ void nick(std::map<std::string, Channel> &channels, std::string command, Client 
 {
     std::string nickname = filteredString(command.substr(5, command.length() - 5));
 
+    std::cout << "nickname : '" << nickname << "'" << std::endl;
+
     if (client.hasNickname() == false)
     {
         if (nickname.empty())
