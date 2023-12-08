@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/08 15:56:34 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/08 18:02:43 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 // channels
 // #define RPL_JOIN(user_forma, client, channel) (user_forma + " JOIN :" + channel + "\r\n")
 // #define RPL_KICK(client, channel, kicked, reason) (":@" + client + " KICK " + channel + " " + kicked + " :" + reason + "\r\n")
-#define ERR_NOSUCHNICK(client, nickname) (":localhost 401 " + client + " " + nickname + " :No such nick/channel\r\n")
 // #define ERR_BADCHANNELKEY(client, channel) (":localhost 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
 // #define ERR_CHANNELISFULL(client, channel) (":localhost 471 " + client + " " + channel + " :Cannot join channel (+l)\r\n")
 #define ERR_IN  VITEONLYCHAN(client, channel) (":localhost 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
@@ -61,13 +60,19 @@
 
 
 ///IMPT
+
+// to the excuter :ServerName 341 InviterNick InvitedNick #Channel
+#define  RPL_INVITESEND(client, nick, channel) (":localhost 341 " + client + " " + nick + " " + channel + "\r\n")
+        
+// to the invitee :InviterNick!InviterUser@InviterHost INVITE InvitedNick :#Channel
+#define  RPL_INVITENOTIFY(client, nick, channel) (":" + client + "!InviterUser@InviterHost" + " INVITE " + nick+ " :" + channel + "\r\n")
+
+
 // :ServerName 443 YourNick User #Channel :is already on channel
 #define  ERR_USERNOTINCHANNEL(client, nick, channel) (":localhost 443 " + client +" " + nick + " " + channel + " :user not on channel.\r\n")
 #define  ERR_NEEDMOREPARAMS(client, command) (":localhost 461 " + client + " " + command + " :Not enough parameters.\r\n")
-#define  ERR_USERONCHANNEL(client, nick, channel) (":localhost 443 " + client + " " + nick + " " + channel + " is already on channel\r\n")
 #define  ERR_NOTONCHANNEL(client, channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel.\r\n")
 
-#define  ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " " + channel + " :No such channel\r\n")
 #define  RPL_CHANNELMODEIS(client, channel, mode) (":localhost 324 " + client + " " + channel + " " + mode + "\r\n")
 #define  RPL_CREATIONTIME(client, channel, datetime) (":localhost 329 " + client + " " + channel + " " + datetime + "\r\n") 
 #define  MODE_CHANGED(client, channel, mode, last_param) (":" + client + "!UserHost MODE " + channel + " " + mode + " " + last_param + "\r\n")
@@ -80,9 +85,13 @@
 #define  ERR_CHANNELISFULL(client, channel) (":localhost 471 " + client + " " + channel + " :Cannot join channel (+l) - channel is full\r\n")
 #define  ERR_INVITEONLYCHAN(client, channel) (":localhost 473 " + client + " " + channel + " :Cannot join channel (+i) - invite only\r\n") 
 
+// :ServerName 401 OperatorNick InvitedNick :No such nick/channel
+#define  ERR_NOSUCHNICK(client, target) (":localhost 401 " + client + " " + target + " :No such nick/channel\r\n")
+#define  ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " " + channel + " :No such channel\r\n")
 
 
 
+#define  ERR_USERONCHANNEL(client, nick, channel) (":localhost 443 " + client + " " + nick + " " + channel + " is already on channel\r\n")
 // KICK
 // :KickerNick!KickerUser@KickerHost KICK <channel> <user> :[reason]
 #define RPL_KICK(client, channel, kicked, reason) (":" + client + "!" + "Kicker@KickerHost KICK " + channel + " " + kicked + " :" + reason + "\r\n");
