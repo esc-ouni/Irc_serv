@@ -1,2 +1,7 @@
 .vscode/
 .DS_Store
+*.o
+*/*.o
+ircserv
+fileTransfer/transfer
+bot/bot

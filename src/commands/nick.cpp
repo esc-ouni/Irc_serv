@@ -35,6 +35,8 @@ void nick(std::string command, Client &client, std::map<int, Client> clients, st
 {
     std::string nickname = filteredString(command.substr(5, command.length() - 5));
 
+    std::cout << "nickname : '" << nickname << "'" << std::endl;
+
     if (client.hasNickname() == false)
     {
         if (nickname.empty())
@@ -87,7 +89,7 @@ void nick(std::string command, Client &client, std::map<int, Client> clients, st
             std::string reply = RPL_NICKCHANGED(old_nick, nickname);
 
             sendMessage(client.get_fd(), reply);
-            while (it != channels.end()){
+                while (it != channels.end()){
                 if (channels[it->first].is_member(client)){
                     channels[it->first].broadcast_message_exp(client, reply);
                 }

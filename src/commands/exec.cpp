@@ -40,9 +40,22 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 4) == "KICK" && client.is_authenticated()){
         kick_user(command, client, channels, clients);
     }
-    else if (command.substr(0, 7) == "PRIVMSG" && client.is_authenticated())
+
+
+
+
+
+    else if (command.substr(0, 8) == "PRIVMSG " && client.is_authenticated())
     {
         privmsg(command, client, clients, channels);
+    }
+    // else if (filteredString(command) == "DOWNLOAD" && client.is_authenticated())
+    // {
+    //     Irc::handleBot(client);
+    // }
+    else if (command.substr(0, 8) == "DOWNLOAD" && client.is_authenticated())
+    {
+        Irc::handleBot(client, command);
     }
     // else if (command.substr(0, 4) == "MODE" && client.is_authenticated())
     // {
@@ -69,10 +82,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
 //     {
 //         Irc::handleQuotes(client);
 //     }
-//     else if (filteredString(command) == "DOWNLOAD" && client.is_authenticated())
-//     {
-//         Irc::handleBot(client);
-//     }
+
 
 //     else if (filteredString(command.substr(0, 4))!= "QUIT")
 //     {
