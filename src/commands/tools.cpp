@@ -49,18 +49,19 @@ long int contains_only_nums(std::string string){
 
 std::vector<std::string> parser(std::string &full_command, char dilimeter){
     std::vector<std::string> args;
-    std::stringstream        stream(full_command);
+    std::stringstream        stream(trim(full_command, "\r\n"));
     std::string              token;
     
     if (full_command.empty())
         return args;
     while (!std::getline(stream , token,  dilimeter).eof()){
-        args.push_back(trim(token, "\r\n"));
-        token.clear();
+        if (!token.empty())
+            args.push_back(token);
     }
     if (!token.empty()){
-        args.push_back(trim(token, "\r\n"));
+        args.push_back(token);
     }
+    std::cout << "Total arg count : " << args.size() << std::endl;
     return args;
 };
 
