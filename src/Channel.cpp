@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/08 15:59:54 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/08 17:24:51 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,6 @@ void Channel::remove_user(Client &client) {
 
 bool Channel::add_user(Client &client) {
     if (this->_clients.size() >= this->_modes.limit){
-        // ERR_CHANNELISFULL
         return false;
     }
     this->_clients[client.get_fd()] = client;
@@ -302,4 +301,31 @@ bool  Channel::set_topic(Client &client, std::string &new_topic){
 std::string Channel::get_topic() const{
     return (this->_topic);
 };
+
+bool Channel::add_to_invitee(Client &client){
+    if (!is_invited(client)){
+        this->_invitees[client.get_fd()] = client.get_nickname();
+        return (true);
+    }
+    return (false);
+};
+
+bool  Channel::is_invited(Client &client){
+     std::map<int, std::string>::iterator it = this->_invitees.begin();
+     
+     while (it != this->_invitees.end()){
+        if (client.get_nickname() == it->second)
+            return (true);
+        it++;
+     }
+    return (false); 
+};
+
+void   Channel::remove_from_invite_list(Client &client){
+    if (is_invited(client))
+        this->_invitees.erase(client.get_fd());
+};
+
+
+
 

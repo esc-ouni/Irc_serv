@@ -25,9 +25,9 @@ class Channel
         std::string                 _topic_setter;
         std::string                 _topic_date;
         std::string                 _creation_date;
-        std::map<int, Client>       _clients;
-        std::map<int, Client>       _operators;
-        std::map<int, Client>       _invitees;
+        std::map<int, Client>       _clients;   //client to string  
+        std::map<int, Client>       _operators; //
+        std::map<int, std::string>  _invitees;
         t_mode_options              _modes;
         unsigned int                _total_clients;
 
@@ -76,6 +76,10 @@ class Channel
         bool        set_option_i(bool bit);
         void        lock();
         void        unlock();
-        std::string show_mode();
+        std::string show_mode();    
+        
+        bool        add_to_invitee(Client &client);
+        bool        is_invited(Client &client);
+        void        remove_from_invite_list(Client &client);
 
 };
