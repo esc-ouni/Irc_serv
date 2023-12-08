@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 18:00:37 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/08 15:59:54 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,14 +258,34 @@ bool Channel::is_operator(Client &client){
     return (false);
 };
 
+bool Channel::is_operator(std::string &client_name){
+    std::map<int, Client>::iterator it = _operators.begin();
+
+    while (it != _operators.end()){
+        if (it->second.get_nickname() == client_name){
+            return (true);
+        }
+        it++;
+    }
+    return (false);
+};
+
 void Channel::promote(Client &client){
     this->_operators[client.get_fd()] = client;
 };
+
 
 void Channel::unpromote(Client &client){
     if (is_operator(client)){
         std::cout << "unpromote" << std::endl;
         this->_operators.erase(client.get_fd());
+    };
+};
+
+void Channel::unpromote(int client_fd){
+    if (is_operator(_operators.at(client_fd))){
+        std::cout << "unpromote" << std::endl;
+        this->_operators.erase(client_fd);
     };
 };
 

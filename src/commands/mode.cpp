@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 18:30:29 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/08 15:53:47 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,7 @@ void mode_three_params(std::map<std::string, Channel>& channels, Client &excuter
     }
 };
 
-void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::string &last_param){
-  std::string notice;
+void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::string &last_param, std::map<int, Client> &clients){
     if (!channel_exist(channels, channel_name)){
             std::cout << "ERR_NOSUCHCHANNEL" << std::endl;
             send_message(excuter.get_fd(), ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name));
@@ -175,7 +174,23 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
         return ;
     }
     if (mode.at(1) == 'o'){
-        
+        if (!channels[channel_name].is_member(last_param)){
+            std::cout << "ERR_USERNOTINCHANNEL" << std::endl;
+            send_message(excuter.get_fd(), ERR_USERNOTINCHANNEL(excuter.get_nickname(), last_param, channel_name));
+            return ;
+        }
+        if (mode.at(0) == '-' && channels[channel_name].is_operator(last_param)){
+            std::cout << "MODE #Channel -o "<< last_param << std::endl;
+            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-o", last_param));
+            channels[channel_name].unpromote(channels[channel_name].is_member(last_param));         
+            return ;
+        }
+        if (mode.at(0) == '+' && !channels[channel_name].is_operator(last_param)){
+            std::cout << "MODE #Channel +o "<< last_param << std::endl;
+            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+o", last_param));
+            channels[channel_name].promote(clients[channels[channel_name].is_member(last_param)]);         
+            return ;
+        }
     }
 };
 
@@ -211,7 +226,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
         channel_name = args[1];
         mode         = args[2];      
         last_param   = args[3];      
-        mode_four_params(channels, client, channel_name, mode, last_param);
+        mode_four_params(channels, client, channel_name, mode, last_param, clients);
     }
     else{
         send_message(client.get_fd(), ERR_UNKNOWNMODE(client.get_nickname(), channel_name, mode));

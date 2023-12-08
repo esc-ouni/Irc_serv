@@ -22,7 +22,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     }
     else if (command.substr(0, 5) == "AUTH ")
     {
-        std::string auth = ":IRCHub 001 " + client.get_nickname() + " :You are now " + (client.is_authenticated() ? "authenticated" : "not authenticated") + "\r\n";
+        std::string auth = ":localhost 001 " + client.get_nickname() + " :You are now " + (client.is_authenticated() ? "authenticated" : "not authenticated") + "\r\n";
         send(client.get_fd(), auth.c_str(), auth.length(), 0);
     }
     else if (command.substr(0, 5) == "JOIN " && client.is_authenticated()){

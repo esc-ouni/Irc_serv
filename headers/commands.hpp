@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 18:14:26 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/08 15:56:34 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,66 +16,69 @@
 #include "Channel.hpp"
 #define user_forma(nickname, username, adress) (":" + nickname + "!" + username + "@" + adress)
 
-// #define user_forma(nickname, username) (":" + nickname + "!" + username + "@IRCHub")
+// #define user_forma(nickname, username) (":" + nickname + "!" + username + "@localhost")
 #define ERR(command) (": 421 !" + command + "\r\n")//
 #define ERR_NONICKNAMEGIVEN ": 431 :There is no nickname.\r\n"
 #define ERR_ERRONEUSNICKNAME(nickname) (": 432 ! " + nickname + " :Erroneous nickname\r\n")
-// #define RPL_NICK(oclient, uclient, client) (":IRCHub " + oclient + "!" + uclient + "@IRCHub NICK " + client + "\r\n")
-#define RPL_NICK(oclient, uclient, client) (":" + oclient + "!" + uclient + "@IRCHub NICK " + client + "\r\n")
+// #define RPL_NICK(oclient, uclient, client) (":localhost " + oclient + "!" + uclient + "@localhost NICK " + client + "\r\n")
+#define RPL_NICK(oclient, uclient, client) (":" + oclient + "!" + uclient + "@localhost NICK " + client + "\r\n")
 #define ERR_NICKNAMEINUSE(client, nickname) (": 433 !" + client + " " + nickname + " :Nickname is already in use.\r\n")//
 #define RPL(msg, nickname) (": 001 " + nickname + " : " + msg + "\r\n")
 #define RPL_WELCOME(user_forma, nickname) (": 001 " + nickname + " :Welcome " + nickname + " to the Internet Relay Chat " + user_forma + "\r\n")
-#define RPL_YOURHOST(client, IRCHub) (": 002 " + client + " :Your host is " + IRCHub + "\r\n")
+#define RPL_YOURHOST(client, localhost) (": 002 " + client + " :Your host is " + localhost + "\r\n")
 #define RPL_CREATED(client, datetime) (": 003 " + client + " :This server was created " + datetime + "\r\n")
+#define RPL_ISUPPORT(client, tokens) (":localhost 005 " + client + " " + tokens " :are supported by this server\r\n")
+
 
 // channels
 // #define RPL_JOIN(user_forma, client, channel) (user_forma + " JOIN :" + channel + "\r\n")
 // #define RPL_KICK(client, channel, kicked, reason) (":@" + client + " KICK " + channel + " " + kicked + " :" + reason + "\r\n")
-#define ERR_NOSUCHNICK(client, nickname) (":IRCHub 401 " + client + " " + nickname + " :No such nick/channel\r\n")
-// #define ERR_BADCHANNELKEY(client, channel) (":IRCHub 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
-// #define ERR_CHANNELISFULL(client, channel) (":IRCHub 471 " + client + " " + channel + " :Cannot join channel (+l)\r\n")
-#define ERR_IN  VITEONLYCHAN(client, channel) (":IRCHub 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
+#define ERR_NOSUCHNICK(client, nickname) (":localhost 401 " + client + " " + nickname + " :No such nick/channel\r\n")
+// #define ERR_BADCHANNELKEY(client, channel) (":localhost 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
+// #define ERR_CHANNELISFULL(client, channel) (":localhost 471 " + client + " " + channel + " :Cannot join channel (+l)\r\n")
+#define ERR_IN  VITEONLYCHAN(client, channel) (":localhost 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
 // INVITE
-#define RPL_INVITING(client, nickname, channel) (":IRCHub 341 " + client + " " + nickname + " " + channel + "\r\n")
+#define RPL_INVITING(client, nickname, channel) (":localhost 341 " + client + " " + nickname + " " + channel + "\r\n")
 // 301
-#define RPL_AWAY(client, nickname, away_message) (":IRCHub 301 " + client + " " + nickname + " :" + away_message + "\r\n")
+#define RPL_AWAY(client, nickname, away_message) (":localhost 301 " + client + " " + nickname + " :" + away_message + "\r\n")
 
 // end channels
-#define ERR_PASSWDMISMATCH(client) (":IRCHub 464 " + client + " :Password incorrect.\r\n")//
-// #define ERR_PASSWDMISMATCH(client) (":IRCHub 464 " client " :Password incorrect.\r\n")
+#define ERR_PASSWDMISMATCH(client) (":localhost 464 " + client + " :Password incorrect.\r\n")//
+// #define ERR_PASSWDMISMATCH(client) (":localhost 464 " client " :Password incorrect.\r\n")
 
-#define RPL_MYINFO(client, IRCHub, version, user_modes, chan_modes, chan_param_modes) (":IRCHub 004 " + client + " " + IRCHub + " " + version + " " + user_modes + " " + chan_modes + " " + chan_param_modes + "\r\n")
+#define RPL_MYINFO(client, localhost, version, user_modes, chan_modes, chan_param_modes) (":localhost 004 " + client + " " + localhost + " " + version + " " + user_modes + " " + chan_modes + " " + chan_param_modes + "\r\n")
 
 // privmsg
 #define ERR_NORECIPIENT(client) ("411 " + client + " :No recipient given PRIVMSG\r\n")
 #define ERR_NOTEXTTOSEND(client) ("412 " + client + " :No text to send\r\n")
 #define ERR_CANNOTSENDTOCHAN(client, channel) ("404 " + client + " " + channel + " :Cannot send to channel\r\n")
-#define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@IRCHub PRIVMSG " + target + "  :" + message + "\r\n")
+#define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + "  :" + message + "\r\n")
 
-// #define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@IRCHub PRIVMSG " + target + " " + message + "\r\n")
+// #define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + " " + message + "\r\n")
 
 
 
 
 
 ///IMPT
+// :ServerName 443 YourNick User #Channel :is already on channel
+#define  ERR_USERNOTINCHANNEL(client, nick, channel) (":localhost 443 " + client +" " + nick + " " + channel + " :user not on channel.\r\n")
+#define  ERR_NEEDMOREPARAMS(client, command) (":localhost 461 " + client + " " + command + " :Not enough parameters.\r\n")
+#define  ERR_USERONCHANNEL(client, nick, channel) (":localhost 443 " + client + " " + nick + " " + channel + " is already on channel\r\n")
+#define  ERR_NOTONCHANNEL(client, channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel.\r\n")
 
-#define  ERR_NEEDMOREPARAMS(client, command) (":IRCHub 461 " + client + " " + command + " :Not enough parameters.\r\n")
-#define  ERR_USERONCHANNEL(client, nick, channel) (":IRCHub 443 " + client + " " + nick + " " + channel + " is already on channel\r\n")
-#define  ERR_NOTONCHANNEL(client, channel) (":IRCHub 442 " + client + " " + channel + " :You're not on that channel.\r\n")
-
-#define  ERR_NOSUCHCHANNEL(client, channel) (":IRCHub 403 " + client + " " + channel + " :No such channel\r\n")
-#define  RPL_CHANNELMODEIS(client, channel, mode) (":IRCHub 324 " + client + " " + channel + " " + mode + "\r\n")
-#define  RPL_CREATIONTIME(client, channel, datetime) (":IRCHub 329 " + client + " " + channel + " " + datetime + "\r\n") 
+#define  ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " " + channel + " :No such channel\r\n")
+#define  RPL_CHANNELMODEIS(client, channel, mode) (":localhost 324 " + client + " " + channel + " " + mode + "\r\n")
+#define  RPL_CREATIONTIME(client, channel, datetime) (":localhost 329 " + client + " " + channel + " " + datetime + "\r\n") 
 #define  MODE_CHANGED(client, channel, mode, last_param) (":" + client + "!UserHost MODE " + channel + " " + mode + " " + last_param + "\r\n")
-#define  ERR_CHANOPRIVSNEEDED(client, channel) (":IRCHub 482 " + client + " " + channel + " :You're not channel operator.\r\n")
+#define  ERR_CHANOPRIVSNEEDED(client, channel) (":localhost 482 " + client + " " + channel + " :You're not channel operator.\r\n")
 
-#define  ERR_UMODEUNKNOWNFLAG(client, channel) (":IRCHub 501 " + client + " :Unknown MODE flag\r\n")
-#define  ERR_INVALIDMODEPARAM(client, channel, mode) (":IRCHub 696 " + client + " " + channel + " " + mode + " :Invalid MODE parameter\r\n")
-#define  ERR_UNKNOWNMODE(client, channel, mode) (":IRCHub 472 " + client + " " + mode + " :is unknown mode char to me\r\n")
-#define  ERR_INVALIDKEY(client, channel) (":IRCHub 525 " + client + " " + channel + " :Cannot join channel (+k) - bad key\r\n")
-#define  ERR_CHANNELISFULL(client, channel) (":IRCHub 471 " + client + " " + channel + " :Cannot join channel (+l) - channel is full\r\n")
-#define  ERR_INVITEONLYCHAN(client, channel) (":IRCHub 473 " + client + " " + channel + " :Cannot join channel (+i) - invite only\r\n") 
+#define  ERR_UMODEUNKNOWNFLAG(client, channel) (":localhost 501 " + client + " :Unknown MODE flag\r\n")
+#define  ERR_INVALIDMODEPARAM(client, channel, mode) (":localhost 696 " + client + " " + channel + " " + mode + " :Invalid MODE parameter\r\n")
+#define  ERR_UNKNOWNMODE(client, channel, mode) (":localhost 472 " + client + " " + mode + " :is unknown mode char to me\r\n")
+#define  ERR_INVALIDKEY(client, channel) (":localhost 525 " + client + " " + channel + " :Cannot join channel (+k) - bad key\r\n")
+#define  ERR_CHANNELISFULL(client, channel) (":localhost 471 " + client + " " + channel + " :Cannot join channel (+l) - channel is full\r\n")
+#define  ERR_INVITEONLYCHAN(client, channel) (":localhost 473 " + client + " " + channel + " :Cannot join channel (+i) - invite only\r\n") 
 
 
 
@@ -99,10 +102,10 @@
 //JOIN
 #define RPL_JOIN(client, channel) (":" + client + "!~" + client + "@" + "client_host"+ " JOIN :" + channel + "\r\n")
 
-// :IRCHub 353 YourNickname = #ChannelName :User1 User2 User3...
+// :localhost 353 YourNickname = #ChannelName :User1 User2 User3...
 #define RPL_NAMREPLY(client, channel, all_users) (": 353 " + client + " = " + channel + " :" + all_users + "\r\n")
 
-// :IRCHub 366 YourNickname #ChannelName :End of /NAMES list
+// :localhost 366 YourNickname #ChannelName :End of /NAMES list
 #define RPL_ENDOFNAMES(client, channel) (": 366 " + client + " " + channel + " :End of /NAMES list\r\n")
 
 // msg channel
@@ -116,7 +119,7 @@
 
 #define RPL_TOPICWHOTIME(client, channel, setter, datetime) (": 333 " + client + " " + channel + " "  + setter + " " + datetime + " \r\n")
 
-// :IRCHub 331 YourNickname #ChannelName :No topic is set
+// :localhost 331 YourNickname #ChannelName :No topic is set
 #define RPL_NOTOPIC(client, channel, datetime) (": 333 " + client + " " + channel  + "setter_here" + datetime + " \r\n")
 
 // Broadcast Topic Change

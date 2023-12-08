@@ -40,9 +40,11 @@ class Channel
         bool        add_user(Client &client);
         void        promote(Client &client);
         void        unpromote(Client &client); // need to be added when client leave
-        bool        is_operator(Client &client);
+        void        unpromote(int client_fd); // need to be added when client leave
         bool        set_topic(Client &client, std::string &new_topic);
         std::string get_topic() const;
+        bool        is_operator(Client &client);
+        bool        is_operator(std::string &client_name);
 
 
         void        remove_user(Client &client);
