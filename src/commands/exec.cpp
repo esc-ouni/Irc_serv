@@ -14,7 +14,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     }
     else if (command.substr(0, 4) == "NICK" && client.hasPassword() == true)
     {
-        nick(command, client, clients);
+        nick(command, client, clients, channels);
     }
     else if (command.substr(0, 4) == "USER" && client.hasPassword() == true && client.hasNickname() == true)
     {

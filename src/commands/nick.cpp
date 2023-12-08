@@ -31,7 +31,7 @@ bool client_already_exist(std::string nickname, std::map<int, Client> clients)
     return (false);
 }
 
-void nick(std::string command, Client &client, std::map<int, Client> clients)
+void nick(std::string command, Client &client, std::map<int, Client> clients, std::map<std::string, Channel> &channels)
 {
     std::string nickname = filteredString(command.substr(5, command.length() - 5));
 
@@ -82,7 +82,18 @@ void nick(std::string command, Client &client, std::map<int, Client> clients)
         {
             std::string old_nick = client.get_nickname();
             client.set_nickname(nickname);
-            // send(client.get_fd(), RPL_NICK(old_nick, client.get_username(), nickname).c_str(), RPL_NICK(old_nick, client.get_username(), nickname).length(), 0);
+//
+            std::map<std::string, Channel>::iterator it = channels.begin();
+            std::string reply = RPL_NICKCHANGED(old_nick, nickname);
+
+            sendMessage(client.get_fd(), reply);
+            while (it != channels.end()){
+                if (channels[it->first].is_member(client)){
+                    channels[it->first].broadcast_message_exp(client, reply);
+                }
+                it++;
+            }
+//
             return;
         }
     }

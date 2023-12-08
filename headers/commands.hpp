@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/03 18:42:19 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/08 14:58:42 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@
 
 
 
-
+// :OldNick!UserHost NICK NewNick
+#define RPL_NICKCHANGED(Oldnick, Newnick) (":" + Oldnick + "!" + "client_host"+ " NICK " + Newnick + "\r\n");
 
 #define ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " " + channel + " :No such channel\r\n")
 
@@ -156,7 +157,7 @@ Client &get_client_by_nickname(std::string &nick, std::map<int, Client> &clients
  * @return The filtered string.
  */
 std::string filteredString(std::string str);
-void nick(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> clients);
+// void nick(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> clients);
 void user(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> clients);
 bool pass(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
 bool is_multipe_words(std::string message);
@@ -186,6 +187,6 @@ void mode(std::string command, Client &client, std::map<std::string, Channel> &c
 
 std::string filteredString(std::string str);
 bool pass(std::string command, Client &client);
-void nick(std::string command, Client &client, std::map<int, Client> clients);
+void nick(std::string command, Client &client, std::map<int, Client> clients, std::map<std::string, Channel> &channels);
 void user(std::string command, Client &client);
 
