@@ -120,4 +120,8 @@ void user(std::string command, Client &client)
 
         }
     }
+    else if (client.is_authenticated() == true)
+    {
+        send(client.get_fd(), ERR_ALREADYREGISTERED(client.get_nickname()).c_str(), ERR_ALREADYREGISTERED(client.get_nickname()).length(), 0);
+    }
 }
