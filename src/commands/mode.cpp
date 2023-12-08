@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/08 15:53:47 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/08 16:05:36 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,41 @@
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
+void mode(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
+    std::vector<std::string> args = parser(command, ' ');
+    if (args.at(0) != "MODE")
+        return ;
+    int argc = args.size();
+
+    std::string channel_name;
+    std::string mode;
+    std::string last_param;    
+    
+    if (argc == 1)
+        mode_one_param(client);
+    else if (argc == 2){
+        channel_name = args[1];
+        mode_two_params(channels, client, channel_name);
+    }
+    else if (argc == 3){
+        channel_name = args[1];
+        mode         = args[2];
+        mode_three_params(channels, client, channel_name, mode);
+    }
+    else if (argc == 4){
+        channel_name = args[1];
+        mode         = args[2];      
+        last_param   = args[3];      
+        mode_four_params(channels, client, channel_name, mode, last_param, clients);
+    }
+    else{
+        send_message(client.get_fd(), ERR_UNKNOWNMODE(client.get_nickname(), channel_name, mode));
+        std::cout << "ERR_UNKNOWNMODE" << std::endl;
+    }
+};
 
 void mode_one_param(Client &excuter){
     std::cout << "Reply(650): MODE <target> [[(+|-)]<modes> [<mode-parameters>]]" << std::endl;
-    // Reply(650): MODE <target> [[(+|-)]<modes> [<mode-parameters>]]
     send_message(excuter.get_fd(), RPL("MODE <target> [[(+|-)]<modes> [<mode-parameters>]]", excuter.get_nickname()));
 };
 
@@ -32,7 +63,6 @@ void send_mode_info(Client &excuter, Channel &channel){
         std::cout << "SHOW AVAILABLE MODS ON THIS CHANNEL !" << std::endl;
         std::cout << "CHANNEL mode : " << channel.show_mode() << std::endl;
 };
-
 
 void mode_two_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name){
   std::string notice;
@@ -191,45 +221,5 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
             channels[channel_name].promote(clients[channels[channel_name].is_member(last_param)]);         
             return ;
         }
-    }
-};
-
-//IMPLEMENT MODE COMMAND
-void mode(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
-    std::vector<std::string> args = parser(command, ' ');
-    if (args.at(0) != "MODE")
-        return ;
-    int argc = args.size();
-
-    std::string channel_name;
-    std::string mode;
-    std::string last_param;    
-
-    // std::cout << "size     : <" << argc << "> " << std::endl;
-    // std::cout << "cmd      : <" << args[0] << "> " << std::endl;
-    // std::cout << "channel  : <" << channel_name << "> " << std::endl;
-    // std::cout << "mode     : <" << mode << "> " << std::endl;
-    // std::cout << "params   : <" << last_param << "> " << std::endl;
-    
-    if (argc == 1)
-        mode_one_param(client);
-    else if (argc == 2){
-        channel_name = args[1];
-        mode_two_params(channels, client, channel_name);
-    }
-    else if (argc == 3){
-        channel_name = args[1];
-        mode         = args[2];
-        mode_three_params(channels, client, channel_name, mode);
-    }
-    else if (argc == 4){
-        channel_name = args[1];
-        mode         = args[2];      
-        last_param   = args[3];      
-        mode_four_params(channels, client, channel_name, mode, last_param, clients);
-    }
-    else{
-        send_message(client.get_fd(), ERR_UNKNOWNMODE(client.get_nickname(), channel_name, mode));
-        std::cout << "ERR_UNKNOWNMODE" << std::endl;
     }
 };
