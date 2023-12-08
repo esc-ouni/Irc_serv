@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 13:24:57 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/07 18:34:39 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/08 15:15:24 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,54 +88,46 @@ void user(std::string command, Client &client)
         }
         else
         {
-            std::string address = "IRCHub";
+            std::string address = "localhost";
             std::stringstream ss;
             ss << ":" << client.get_fd() << "!" << username << "@" << address;
 
             std::string result = ss.str();
 
             std::string datetime = getCurrentTime();
-            client.set_username(username);
+            std::string user = filteredString(username);
+            client.set_username(user);
             client.set_authenticated(true);
             send(client.get_fd(), RPL_WELCOME(result, client.get_nickname()).c_str(), RPL_WELCOME(result, client.get_nickname()).length(), 0);
-            send(client.get_fd(), RPL_YOURHOST(client.get_nickname(), "1337Hub").c_str(), RPL_YOURHOST(client.get_nickname(), "1337Hub").length(), 0);
+            send(client.get_fd(), RPL_YOURHOST(client.get_nickname(), "the best irc server").c_str(), RPL_YOURHOST(client.get_nickname(), "the best irc server").length(), 0);
             send(client.get_fd(), RPL_CREATED(client.get_nickname(), datetime).c_str(), RPL_CREATED(client.get_nickname(), datetime).length(), 0);
+            send(client.get_fd(), RPL_MYINFO(client.get_nickname(), "the best irc server", "version 2.0", "user_modes", "chan_modes", "chan_param_modes").c_str(), RPL_MYINFO(client.get_nickname(), "the best irc server", "version 2.0", "user_modes", "chan_modes", "chan_param_modes").length(), 0);
+            send(client.get_fd(), RPL_ISUPPORT(client.get_nickname(), "PASS NICK USER PRIVMSG DOWNLOAD JOIN KICK INVITE TOPIC MODE (+-itkol)").c_str(), RPL_ISUPPORT(client.get_nickname(), "PASS NICK USER PRIVMSG DOWNLOAD JOIN KICK INVITE TOPIC MODE (+-itkol)").length(), 0);
             
-            result = "    ____________________  __     __  ";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
-            result = "   <  /__  /__  /__  / / / /_ __/ /_ ";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
-            result = "   / / /_ < /_ <  / / /_/ / / / / __ \\";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
-            result = "  / /___/ /__/ / / / __  / /_/ / /_/ /";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
-            result = " /_//___/____/ /_/_/ /_/\\___/____/ ";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+
+            // # define RPL_MYINFO(client, servername, version, user_modes, chan_modes, chan_param_modes) (":localhost 004 " + client + " " + servername + " " + version + " " + user_modes + " " + chan_modes + " " + chan_param_modes + "\r\n")
+            // # define RPL_ISUPPORT(client, tokens) (":localhost 005 " + client + " " + tokens " :are supported by this server\r\n")
 
 
-                                                                                      
-            result = "***********************************************************";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
-    
-
-            result = "                          Welcome to 1337Hub                     ";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            result = "*************************************************************";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "                                                                                                 ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "                              Welcome to the best Irc server                     ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             result = "                                                                                                  ";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
-            result = " Connect with the world. Chat, share, and have a great DAY   ";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "           Connect with the world. Chat, share, and have a great    ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             result = "                                                                                                 ";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
-            result = "                Enjoy your stay and happy chatting!                      ";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "                    Enjoy your stay and happy chatting!                      ";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             result = "                                                                                                 ";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
-            result = "***********************************************************";
-            send_message(client.get_fd(), RPL(result, client.get_nickname()));
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
+            result = "*************************************************************";
+            send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
 
-
-            // send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-            // send(client.get_fd(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).c_str(), RPL_NICK(client.get_nickname(), client.get_username(), client.get_nickname()).length(), 0);
         }
     }
 }
