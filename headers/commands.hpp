@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/09 12:59:22 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/09 13:02:52 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 #define RPL_WELCOME(user_forma, nickname) (": 001 " + nickname + " :Welcome " + nickname + " to the Internet Relay Chat " + user_forma + "\r\n")
 #define RPL_YOURHOST(client, localhost) (": 002 " + client + " :Your host is " + localhost + "\r\n")
 #define RPL_CREATED(client, datetime) (": 003 " + client + " :This server was created " + datetime + "\r\n")
-# define RPL_MYINFO(client, servername, version, user_modes, chan_modes, chan_param_modes) (":localhost 004 " + client + " " + servername + " " + version + " " + user_modes + " " + chan_modes + " " + chan_param_modes + "\r\n")
 # define RPL_ISUPPORT(client, tokens) (":localhost 005 " + client + " " + tokens " :are supported by this server\r\n")
 
 
@@ -47,7 +46,7 @@
 #define ERR_PASSWDMISMATCH(client) (":localhost 464 " + client + " :Password incorrect.\r\n")//
 // #define ERR_PASSWDMISMATCH(client) (":localhost 464 " client " :Password incorrect.\r\n")
 
-#define RPL_MYINFO(client, localhost, version, user_modes, chan_modes, chan_param_modes) (":localhost 004 " + client + " " + localhost + " " + version + " " + user_modes + " " + chan_modes + " " + chan_param_modes + "\r\n")
+#define RPL_MYINFO(client, servername, version, user_modes, chan_modes, chan_param_modes) (":localhost 004 " + client + " " + servername + " " + version + " " + user_modes + " " + chan_modes + " " + chan_param_modes + "\r\n")
 
 // privmsg
 #define ERR_NORECIPIENT(client) ("411 " + client + " :No recipient given PRIVMSG\r\n")

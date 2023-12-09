@@ -88,7 +88,7 @@ void nick(std::string command, Client &client, std::map<int, Client> clients, st
             std::map<std::string, Channel>::iterator it = channels.begin();
             std::string reply = RPL_NICKCHANGED(old_nick, nickname);
 
-            sendMessage(client.get_fd(), reply);
+            send_message(client.get_fd(), reply);
                 while (it != channels.end()){
                 if (channels[it->first].is_member(client)){
                     channels[it->first].broadcast_message_exp(client, reply);
