@@ -1,8 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   user.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/07 13:24:57 by idouni            #+#    #+#             */
+/*   Updated: 2023/12/08 15:15:24 by idouni           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../headers/Irc.hpp"
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
-
-void sendMessage(int clientSocket, const std::string& message);
 
 // splite username
 bool splitusername(const std::string& input) {

@@ -11,8 +11,14 @@ all: $(EXEC)
 
 $(EXEC): $(OBJS) $(H_FILES)
 	@$(CC) $(FLAGS) $(OBJS) -o $(EXEC)
+<<<<<<< HEAD
 	@clear
 	# ./ircserv 6667 pass
+=======
+	#@clear
+	./ircserv 6667 pass
+
+>>>>>>> fmaster
 
 %.o: %.cpp $(H_FILES)
 	$(CC) $(FLAGS) -c $< -o $@ 

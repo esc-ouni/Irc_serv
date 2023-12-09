@@ -31,6 +31,8 @@
 #define BUFFER_SIZE 20
 #define MAX_CLIENTS 100
 
+#define CHANNEL_LIMIT 100
+
 #include "Client.hpp"
 #include "Channel.hpp"
 
@@ -146,23 +148,39 @@ public:
 
 void        *dccFileTransfer(void *arg);
 
-time_t      time_teller();
-std::string timeToString(time_t timeVal);
-bool        channel_name_is_valid(std::string &channel_name);
-bool        valid_sp_character(int c);
-bool        is_valid_topic(std::string &new_topic);
-std::string trim(std::string &str, const std::string& charsToTrim);
-std::string extractChannelName(const std::string& command);
-bool        channel_exist(std::map<std::string, Channel>& channels, std::string &needle);
-void        Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
-void        set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
-void        handleJoinCommand(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
-std::string extract_topic(std::string& command);
-void        channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
-void        sendMessage(int clientSocket, const std::string& message);
-void        send_names_list(Client &client, Channel &channel);
-void        leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels);
-void        quit_server(Client &client, std::map<int, Client> &clients, std::map<std::string, Channel>& channels);
-void        kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
-std::string extract_target(std::string& command);
-std::string extract_reason(std::string& command);
+time_t                   time_teller();
+std::string              time_to_string(time_t timeVal);
+bool                     channel_name_is_valid(std::string &channel_name);
+bool                     valid_sp_character(int c);
+bool                     is_valid_topic(std::string &new_topic);
+std::string              trim(std::string &str, std::string charstotrim);
+std::string              extract_channel_name(std::string& command);
+bool                     channel_exist(std::map<std::string, Channel>& channels, std::string &needle);
+bool                     Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
+void                     set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
+void                     handle_Join(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
+std::string              extract_topic(std::string& command);
+bool                     channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
+
+// bool                     channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients, std::string password);
+
+void                     send_message(int clientSocket, std::string message);
+void                     send_names_list(Client &client, Channel &channel);
+void                     leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels);
+void                     quit_server(Client &client, std::map<int, Client> &clients, std::map<std::string, Channel>& channels);
+void                     kick_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
+void                     invite_user(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
+void                     mode(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
+std::string              extract_target(std::string& command);
+std::string              extract_reason(std::string& command);
+bool                     is_valid_password(std::string pass);
+bool                     valid_option(std::string &option);
+std::vector<std::string> parser(std::string &full_command, char dilimeter);
+long int                 contains_only_nums(std::string string);
+void                     mode(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
+void                     mode_one_param(Client &excuter);
+void                     mode_two_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name);
+void                     mode_three_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode);
+void                     mode_four_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::string &last_param, std::map<int, Client> &clients);
+void                     send_mode_info(Client &excuter, Channel &channel);
+int                      get_client_fd(std::string &client_name, std::map<int, Client> &clients);

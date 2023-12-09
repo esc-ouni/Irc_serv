@@ -6,104 +6,80 @@
 // #include "Client.hpp"
 #include <map>
 
+typedef struct mode_options{
+    bool         i;
+    bool         t;
+    bool         k;
+    bool         l;
+    unsigned int limit;
+}   t_mode_options;
+
+
 class Client;
 
 class Channel
 {
     private:
-        std::string                 _name;
-        std::string                 _topic;
-        std::string                 _topic_setter;
-        std::string                 _topic_date;
-        std::map<int, Client>       _clients;
-        std::map<int, Client>       _operators;
+        std::string                   _name;
+        std::string                   _topic;
+        std::string                   _topic_setter;
+        std::string                   _topic_date;
+        std::string                   _creation_date;
+        std::map<int, std::string>    _clients;   //client to string  
+        std::map<int, std::string>    _operators; //
+        std::map<int, std::string>    _invitees;
+        t_mode_options                _modes;
+        unsigned int                  _total_clients;
+  
+        std::string                   _password;
+        bool                          _locked;
 
-
-        std::map<char, char>        _modes;
-        std::vector<std::string>    _invitees;
-        std::string                 _key;
-        int                         _limit;
     public:
-        void        add_user(Client &client);
+        Channel();
+        ~Channel();
+        bool        add_user(Client &client);
         void        promote(Client &client);
         void        unpromote(Client &client); // need to be added when client leave
-        bool        is_operator(Client &client);
+        void        unpromote(int client_fd); // need to be added when client leave
         bool        set_topic(Client &client, std::string &new_topic);
         std::string get_topic() const;
+        bool        is_operator(Client &client);
+        bool        is_operator(std::string &client_name);
 
 
         void        remove_user(Client &client);
         bool        is_member(Client &client);
+        int         is_member(std::string &client_name);
         void        set_name(std::string &new_name);
         std::string get_name() const;
         std::string get_topic_setter() const;
         std::string get_topic_date() const;
-        void        broadcast_message(std::string &message);
-        void        broadcast_message_exp(Client &client, std::string &message);
-
+        void        broadcast_message(std::string message);
+        void        broadcast_message_exp(Client &client, std::string message);
+        std::string get_creation_date() const;
         std::string get_all_users();
 
+        std::string get_password() const;
+        bool        set_password(std::string password);
+
+        int         get_limit() const;
+        bool        set_limit(int limit);
+
+        bool        get_option_l() const;
+        bool        get_option_k() const;
+        bool        get_option_t() const;
+        bool        get_option_i() const;
+
+        bool        set_option_l(bool bit);
+        bool        set_option_k(bool bit);
+        bool        set_option_t(bool bit);
+        bool        set_option_i(bool bit);
+        void        lock();
+        void        unlock();
+        std::string show_mode();    
         
-
-    std::map<int, Client> &get_clients()
-    {
-        return _clients;
-    }
-
-    const std::map<int, Client>& getClients() const {
-        return _clients;
-    }
-
-    void setClients(const std::map<int, Client>& clients) {
-        _clients = clients;
-    }
-
-    std::string getTopic() const {
-        return _topic;
-    }
-
-    void setTopic(const std::string& topic) {
-        _topic = topic;
-    }
-
-    const std::map<char, char>& getModes() const {
-        return _modes;
-    }
-
-    void setModes(const std::map<char, char>& modes) {
-        _modes = modes;
-    }
-
-    const std::map<int, Client>& getOperators() const {
-        return _operators;
-    }
-
-    void setOperators(const std::map<int, Client>& operators) {
-        _operators = operators;
-    }
-
-    const std::vector<std::string>& getInvitees() const {
-        return _invitees;
-    }
-
-    void setInvitees(const std::vector<std::string>& invitees) {
-        _invitees = invitees;
-    }
-
-    std::string getKey() const {
-        return _key;
-    }
-
-    void setKey(const std::string& key) {
-        _key = key;
-    }
-
-    int getLimit() const {
-        return _limit;
-    }
-
-    void setLimit(int limit) {
-        _limit = limit;
-    }
+        bool        add_to_invitee(Client &client);
+        bool        is_invited(Client &client);
+        void        remove_from_invite_list(Client &client);
 
 };
