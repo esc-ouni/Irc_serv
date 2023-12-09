@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/08 17:24:51 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/09 11:22:31 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void   Channel::unlock(){
 };
 
 bool is_valid_password(std::string pass){
-    if (pass.empty() || (pass.length() > 20))
+    if (pass.empty() || pass.length() > 20 || pass.length() < 8)
         return(false);
     for (int i = 0; i < pass.length(); i++){
         if ((!std::isalnum(pass.c_str()[i]) && !valid_sp_character(pass.c_str()[i])) || std::isspace(pass.c_str()[i]))
@@ -147,7 +147,7 @@ bool Channel::set_limit(int limit) {
 
 void Channel::broadcast_message(std::string message){
     
-    std::map<int, Client>::iterator it = this->_clients.begin();
+    std::map<int, std::string>::iterator it = this->_clients.begin();
 
     while (it != this->_clients.end()){
         send_message(it->first, message);
@@ -156,14 +156,14 @@ void Channel::broadcast_message(std::string message){
 };
 
 std::string Channel::get_all_users(){
-    std::string                     ALL_USERS = "";
-    std::map<int, Client>::iterator it = this->_clients.begin();
+    std::string                          ALL_USERS = "";
+    std::map<int, std::string>::iterator it = this->_clients.begin();
     
     while (it != this->_clients.end()) {
-        if (it->second.is_operator((*this)))
-            ALL_USERS += "@" + it->second.get_nickname() + " ";
+        if (is_operator(it->second))
+            ALL_USERS += "@" + it->second + " ";
         else
-            ALL_USERS += it->second.get_nickname() + " ";
+            ALL_USERS += it->second + " ";
         it++;
     }
     return ALL_USERS;
@@ -172,7 +172,7 @@ std::string Channel::get_all_users(){
 
 void Channel::broadcast_message_exp(Client &client, std::string message){
     
-    std::map<int, Client>::iterator it = this->_clients.begin();
+    std::map<int, std::string>::iterator it = this->_clients.begin();
 
     while (it != this->_clients.end()){
         if (it->first != client.get_fd())
@@ -208,7 +208,7 @@ bool Channel::add_user(Client &client) {
     if (this->_clients.size() >= this->_modes.limit){
         return false;
     }
-    this->_clients[client.get_fd()] = client;
+    this->_clients[client.get_fd()] = client.get_nickname();
     this->_total_clients++;
     return true;
 };
@@ -222,10 +222,10 @@ void Channel::set_name(std::string &new_name){ // IMADD
 };
 
 int  Channel::is_member(std::string &client_name){
-    std::map<int, Client>::iterator it = _clients.begin();
+    std::map<int, std::string>::iterator it = _clients.begin();
 
     while (it != _clients.end()){
-        if (it->second.get_nickname() == client_name){
+        if (it->second == client_name){
             return (it->first);
         }
         it++;
@@ -234,7 +234,7 @@ int  Channel::is_member(std::string &client_name){
 };
 
 bool Channel::is_member(Client &client){
-    std::map<int, Client>::iterator it = _clients.begin();
+    std::map<int, std::string>::iterator it = _clients.begin();
 
     while (it != _clients.end()){
         if (it->first == client.get_fd()){
@@ -246,7 +246,7 @@ bool Channel::is_member(Client &client){
 };
 
 bool Channel::is_operator(Client &client){
-    std::map<int, Client>::iterator it = _operators.begin();
+    std::map<int, std::string>::iterator it = _operators.begin();
 
     while (it != _operators.end()){
         if (it->first == client.get_fd()){
@@ -258,10 +258,10 @@ bool Channel::is_operator(Client &client){
 };
 
 bool Channel::is_operator(std::string &client_name){
-    std::map<int, Client>::iterator it = _operators.begin();
+    std::map<int, std::string>::iterator it = _operators.begin();
 
     while (it != _operators.end()){
-        if (it->second.get_nickname() == client_name){
+        if (it->second == client_name){
             return (true);
         }
         it++;
@@ -270,7 +270,7 @@ bool Channel::is_operator(std::string &client_name){
 };
 
 void Channel::promote(Client &client){
-    this->_operators[client.get_fd()] = client;
+    this->_operators[client.get_fd()] = client.get_nickname();
 };
 
 

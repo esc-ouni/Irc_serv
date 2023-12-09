@@ -20,19 +20,19 @@ class Client;
 class Channel
 {
     private:
-        std::string                 _name;
-        std::string                 _topic;
-        std::string                 _topic_setter;
-        std::string                 _topic_date;
-        std::string                 _creation_date;
-        std::map<int, Client>       _clients;   //client to string  
-        std::map<int, Client>       _operators; //
-        std::map<int, std::string>  _invitees;
-        t_mode_options              _modes;
-        unsigned int                _total_clients;
-
-        std::string                 _password;
-        bool                        _locked;
+        std::string                   _name;
+        std::string                   _topic;
+        std::string                   _topic_setter;
+        std::string                   _topic_date;
+        std::string                   _creation_date;
+        std::map<int, std::string>    _clients;   //client to string  
+        std::map<int, std::string>    _operators; //
+        std::map<int, std::string>    _invitees;
+        t_mode_options                _modes;
+        unsigned int                  _total_clients;
+  
+        std::string                   _password;
+        bool                          _locked;
 
     public:
         Channel();

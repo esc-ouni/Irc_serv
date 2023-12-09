@@ -163,6 +163,9 @@ void                     set_topic(std::string command, Client &client, std::map
 void                     handle_Join(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
 std::string              extract_topic(std::string& command);
 bool                     channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
+
+// bool                     channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients, std::string password);
+
 void                     send_message(int clientSocket, std::string message);
 void                     send_names_list(Client &client, Channel &channel);
 void                     leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels);
