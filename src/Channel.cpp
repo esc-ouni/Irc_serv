@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/09 12:02:24 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/09 12:14:57 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,7 +285,7 @@ void Channel::unpromote(int client_fd){
 };
 
 bool  Channel::set_topic(Client &client, std::string &new_topic){    
-    if (is_operator(client) && this->_topic.compare(new_topic) && is_valid_topic(new_topic)){
+    if (this->_topic.compare(new_topic) && is_valid_topic(new_topic)){
         this->_topic        = new_topic;
         this->_topic_setter = client.get_nickname();
         this->_topic_date   = time_to_string(time_teller());

@@ -9,12 +9,30 @@ bool is_valid_topic(std::string &new_topic){
 }
 
 void set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
-    std::string topic = extract_topic(command);
-    std::string channel_name = extract_channel_name(command);
+    std::vector<std::string> args = parser(command, ' ');
+    int argc = args.size();
+
+    std::string              channel_name;
+    std::string              topic = "";
+
+    if (argc >= 2){
+        if (argc >= 3)
+            topic = extract_topic(command);
+        channel_name = args[1];
 
     if(!channel_exist(channels, channel_name)){
         send_message(client.get_fd(), ERR_NOSUCHCHANNEL(client.get_nickname(), channel_name));
         return ;
+    }
+    if (!channels[channel_name].is_member(client)){
+        send_message(client.get_fd(), ERR_NOTONCHANNEL(client.get_nickname(), channel_name));
+        return ;
+    }
+    if (channels[channel_name].get_option_t()){
+        if (!channels[channel_name].is_operator(client)){
+            send_message(client.get_fd(), ERR_CHANOPRIVSNEEDED(client.get_nickname(), channel_name));
+            return ;
+        }
     }
     if (!topic.empty()){
         if (client.set_topic(channels[channel_name], topic)){
@@ -29,5 +47,6 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
         else if (channels[channel_name].get_topic().empty()){
             send_message(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
         }
+    }
     }
 };
