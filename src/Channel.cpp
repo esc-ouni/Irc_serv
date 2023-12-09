@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/09 12:14:57 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/09 12:51:38 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,16 +198,25 @@ void Channel::remove_user(Client &client) {
     if (this->is_member(client)){
         if (client.is_operator((*this)))
             this->unpromote(client);
+        if (this->is_invited(client))
+            this->remove_from_invite_list(client);
         this->_clients.erase(client.get_fd());
     }
 };
 
 bool Channel::add_user(Client &client) {
+    if (this->get_option_i() && !this->is_invited(client)){
+        send_message(client.get_fd(), ERR_INVITEONLYCHAN(client.get_nickname(), this->get_name()));
+        return false;
+    }
     if (this->_clients.size() >= this->_modes.limit){
+        send_message(client.get_fd(), ERR_CHANNELISFULL(client.get_nickname(), this->get_name()));
         return false;
     }
     this->_clients[client.get_fd()] = client.get_nickname();
     this->_total_clients++;
+    if (this->is_invited(client))
+        this->remove_from_invite_list(client);
     return true;
 };
 

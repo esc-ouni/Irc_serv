@@ -6,17 +6,15 @@ void leave_channel(std::string command, Client &client, std::map<std::string, Ch
     std::string channel_name = extract_channel_name(command);
 
     if(!channel_exist(channels, channel_name)){
+        send_message(client.get_fd(), ERR_NOSUCHCHANNEL(client.get_nickname(), channel_name));
         return ; 
     }
     if (!channels[channel_name].is_member(client)){
+        send_message(client.get_fd(), ERR_NOTONCHANNEL(client.get_nickname(), channel_name));
         return ; 
     }
-    // departure notify 
     channels[channel_name].broadcast_message(RPL_NOTIFYPART(client.get_nickname(), channel_name));
-    
-    // remove client from channel
-    channels[channel_name].remove_user(client);
-    
+    channels[channel_name].remove_user(client);    
 };
 
 
