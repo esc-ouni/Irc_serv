@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/09 11:20:17 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/09 11:38:30 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,39 +50,37 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
     std::vector<std::string> args = parser(command, ' ');
     int argc = args.size();
 
-    std::string         channel_list;
-    std::string         channel_name;
-    std::string         password = "";
-    std::string         reply = "";
+    std::vector<std::string> channel_list;
+    std::string              password = "";
+    std::string              reply = "";
 
-if (argc == 3 || argc == 2){
-    if (argc == 3)
-        password = args[2];
-    channel_list = args[1];
-    std::istringstream  stream(channel_list);
+    if (argc == 3 || argc == 2){
+        if (argc == 3)
+            password = args[2];
+        channel_list = parser(args[1], ',');
+        std::cout << args[1] << std::endl;
 
-    while (std::getline(stream, channel_name, ',')) {
-        if (!channel_name.empty() && channel_name_is_valid(channel_name)){
-            if (!channel_exist(channels, channel_name)){
-                if(!Create_channel_join(client, channels, channel_name, clients))
-                    return ;
-            }
-            else if (channel_exist(channels, channel_name)){
-                if(!channel_join(client, channels, channel_name, clients, password)){
-                    return ;
+        for (int i = 0; i < channel_list.size(); i++){
+            std::cout << " <"<< channel_list.at(i) << "> " << std::endl;
+            if (!channel_list.at(i).empty() && channel_name_is_valid(channel_list.at(i))){
+                if (!channel_exist(channels, channel_list.at(i))){
+                    if(!Create_channel_join(client, channels, channel_list.at(i), clients))
+                        return ;
                 }
+                else if (channel_exist(channels, channel_list.at(i))){
+                    if(!channel_join(client, channels, channel_list.at(i), clients, password)){
+                        return ;
+                    }
+                }
+                reply = RPL_NOTIFYJOIN(client.get_nickname(), channel_list.at(i));
+                channels[channel_list.at(i)].broadcast_message(reply);
+                if (!channels[channel_list.at(i)].get_topic().empty()){
+                    send_message(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_list.at(i), channels[channel_list.at(i)].get_topic()));
+                    send_message(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_list.at(i) , channels[channel_list.at(i)].get_topic_setter(), time_to_string(time_teller())));
+                }
+                send_names_list(client, channels[channel_list.at(i)]);
             }
-            reply = RPL_NOTIFYJOIN(client.get_nickname(), channel_name);
-            channels[channel_name].broadcast_message(reply);
-            if (!channels[channel_name].get_topic().empty()){
-                send_message(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
-                send_message(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_name , channels[channel_name].get_topic_setter(), time_to_string(time_teller())));
-            }
-            send_names_list(client, channels[channel_name]);
         }
     }
-    
-  return ;  
-}
-
+    return ;  
 };
