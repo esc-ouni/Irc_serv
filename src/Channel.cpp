@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/09 12:51:38 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/09 12:56:35 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,9 @@ Channel::Channel(){
     this->_modes.t = false;
     this->_modes.l = false;
     this->_total_clients = 0;
-    std::cout << "\t\t=> DEBUG::CONSTRUCTOR_CALLED !" << std::endl; 
 };
 
 Channel::~Channel(){
-    std::cout << "\t\t=> DEBUG::DESSTRUCTOR_CALLED !" << std::endl; 
 };
 
 void   Channel::lock(){

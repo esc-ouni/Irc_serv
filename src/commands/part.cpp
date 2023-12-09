@@ -20,18 +20,13 @@ void leave_channel(std::string command, Client &client, std::map<std::string, Ch
 
 void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::string, Channel>& channels){
     std::map<std::string, Channel>::iterator it = channels.begin();
-    std::string quit_message = RPL_NOTIFYQUIT(client.get_nickname(), "SEE YALL");
-
-    
     
     // quit notify 
     while (it != channels.end()){
         if (channels[it->first].is_member(client)){
-            channels[it->first].broadcast_message_exp(client, quit_message);
+            channels[it->first].broadcast_message_exp(client, RPL_NOTIFYQUIT(client.get_nickname(), "SEE YALL"));
             channels[it->first].remove_user(client);
         }
         it++;
     }
-    // quit
-    // clients.erase(client.get_fd());
 };
