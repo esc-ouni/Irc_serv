@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/09 11:38:30 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/09 12:00:26 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ bool Create_channel_join(Client &client, std::map<std::string, Channel>& channel
     if (!channels[new_channel_name].add_user(client))
         return (false);
     channels[new_channel_name].set_name(new_channel_name);
-    
-    // promotes the user to be an operator
     channels[new_channel_name].promote(client);
     return (true);
 };
@@ -28,13 +26,11 @@ bool channel_join(Client &client, std::map<std::string, Channel>& channels, std:
     if (channels[channel_name].get_option_k()){
         if (channels[channel_name].get_password() != password){
             send_message(client.get_fd(), ERR_PASSWDMISMATCH(client.get_nickname()));
-            std::cout << "WORNG_PASS" << std::endl;
             return (false);
         }
     }
     if (!channels[channel_name].add_user(client)){
         send_message(client.get_fd(), ERR_CHANNELISFULL(client.get_nickname(), channel_name));
-        std::cout << "ERR_CHANNELISFULL" << std::endl;
         return (false);
     }
     return (true);
@@ -58,10 +54,7 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
         if (argc == 3)
             password = args[2];
         channel_list = parser(args[1], ',');
-        std::cout << args[1] << std::endl;
-
         for (int i = 0; i < channel_list.size(); i++){
-            std::cout << " <"<< channel_list.at(i) << "> " << std::endl;
             if (!channel_list.at(i).empty() && channel_name_is_valid(channel_list.at(i))){
                 if (!channel_exist(channels, channel_list.at(i))){
                     if(!Create_channel_join(client, channels, channel_list.at(i), clients))

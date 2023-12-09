@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/09 11:22:31 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/09 12:02:24 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int Channel::get_limit() const{
 }
 
 bool Channel::set_limit(int limit) {
-    if (limit > 0 && limit <= 1000){
+    if (limit > 0 && limit <= CHANNEL_LIMIT){
         if (this->_modes.limit != limit){
             this->_modes.limit = limit;
             return (true);
@@ -169,7 +169,6 @@ std::string Channel::get_all_users(){
     return ALL_USERS;
 }
 
-
 void Channel::broadcast_message_exp(Client &client, std::string message){
     
     std::map<int, std::string>::iterator it = this->_clients.begin();
@@ -180,7 +179,6 @@ void Channel::broadcast_message_exp(Client &client, std::string message){
         it++;
     }
 };
-
 
 std::string Channel::get_topic_setter() const{
     return (this->_topic_setter);
@@ -276,14 +274,12 @@ void Channel::promote(Client &client){
 
 void Channel::unpromote(Client &client){
     if (is_operator(client)){
-        std::cout << "unpromote" << std::endl;
         this->_operators.erase(client.get_fd());
     };
 };
 
 void Channel::unpromote(int client_fd){
     if (is_operator(_operators.at(client_fd))){
-        std::cout << "unpromote" << std::endl;
         this->_operators.erase(client_fd);
     };
 };

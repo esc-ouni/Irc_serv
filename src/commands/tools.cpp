@@ -61,7 +61,6 @@ std::vector<std::string> parser(std::string &full_command, char dilimeter){
     if (!token.empty()){
         args.push_back(token);
     }
-    std::cout << "Total arg count : " << args.size() << std::endl;
     return args;
 };
 
