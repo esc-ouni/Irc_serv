@@ -19,7 +19,7 @@
 
 // #define user_forma(nickname, username) (":" + nickname + "!" + username + "@localhost")
 #define ERR(command) (": 421 !" + command + "\r\n")//
-#define ERR_NONICKNAMEGIVEN ": 431 :There is no nickname.\r\n"
+#define ERR_NONICKNAMEGIVEN (":localhost 431 ! :There is no nickname.\r\n")
 #define ERR_ERRONEUSNICKNAME(nickname) (": 432 ! " + nickname + " :Erroneous nickname\r\n")
 // #define RPL_NICK(oclient, uclient, client) (":localhost " + oclient + "!" + uclient + "@localhost NICK " + client + "\r\n")
 #define RPL_NICK(oclient, uclient, client) (":" + oclient + "!" + uclient + "@localhost NICK " + client + "\r\n")

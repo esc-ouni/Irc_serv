@@ -31,6 +31,9 @@ bool client_already_exist(std::string nickname, std::map<int, Client> clients)
     return (false);
 }
 
+std::string remove_two_pts(std::string str);
+
+
 void nick(std::string command, Client &client, std::map<int, Client> clients, std::map<std::string, Channel> &channels)
 {
     std::string nickname = filteredString(command.substr(5, command.length() - 5));
@@ -39,8 +42,8 @@ void nick(std::string command, Client &client, std::map<int, Client> clients, st
 
     if (client.hasNickname() == false)
     {
-        if (nickname.empty())
-        {
+        if (remove_two_pts(nickname).empty())
+        {    
             send(client.get_fd(), ERR_NONICKNAMEGIVEN , sizeof(ERR_NONICKNAMEGIVEN), 0);
             return;
         }
@@ -65,14 +68,14 @@ void nick(std::string command, Client &client, std::map<int, Client> clients, st
     // if authenticated client want to change his nickname
     else
     {
-        if (client_already_exist(nickname, clients))
-        {
-            send(client.get_fd(), ERR_NICKNAMEINUSE(client.get_nickname(), nickname).c_str(), ERR_NICKNAMEINUSE(client.get_nickname(), nickname).length(), 0);
-            return;
-        }
-        else if (nickname.empty())
+        if (remove_two_pts(nickname).empty())
         {
             send(client.get_fd(), ERR_NONICKNAMEGIVEN , sizeof(ERR_NONICKNAMEGIVEN), 0);
+            return;
+        }
+        else if (client_already_exist(nickname, clients))
+        {
+            send(client.get_fd(), ERR_NICKNAMEINUSE(client.get_nickname(), nickname).c_str(), ERR_NICKNAMEINUSE(client.get_nickname(), nickname).length(), 0);
             return;
         }
         else if (hasInvalidChar(nickname))
@@ -84,7 +87,8 @@ void nick(std::string command, Client &client, std::map<int, Client> clients, st
         {
             std::string old_nick = client.get_nickname();
             client.set_nickname(nickname);
-//
+            
+            //
             std::map<std::string, Channel>::iterator it = channels.begin();
             std::string reply = RPL_NICKCHANGED(old_nick, nickname);
 
@@ -95,7 +99,8 @@ void nick(std::string command, Client &client, std::map<int, Client> clients, st
                 }
                 it++;
             }
-//
+            //
+
             return;
         }
     }
