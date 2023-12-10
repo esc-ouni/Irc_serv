@@ -184,3 +184,4 @@ void                     mode_three_params(std::map<std::string, Channel>& chann
 void                     mode_four_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::string &last_param, std::map<int, Client> &clients);
 void                     send_mode_info(Client &excuter, Channel &channel);
 int                      get_client_fd(std::string &client_name, std::map<int, Client> &clients);
+void                     monitoring(std::map<std::string, Channel> &channels, std::map<int, Client> &clients);

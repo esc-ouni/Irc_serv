@@ -54,6 +54,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     {
         Irc::handleBot(client, command);
     }
+    monitoring(channels,clients);
 
 };
 

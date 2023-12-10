@@ -76,20 +76,6 @@ void Irc::runServer()
     }
 }
 
-Client::Client(int fd)
-{
-    _fd = fd;
-    _is_authenticated = false;
-
-    _nickname = "";
-    _username = "";
-    _buffer = "";
-
-    struct timeval time;
-    gettimeofday(&time, NULL);
-    _start = time.tv_sec;
-}
-
 void Irc::handleLogTime(Client &client)
 {
     struct timeval time;

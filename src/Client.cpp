@@ -3,7 +3,31 @@
 #include "../headers/Client.hpp"
 
 Client::Client(void){
+    _fd = 0;
+    _is_authenticated = false;
+
+    _nickname = "";
+    _username = "";
+    _buffer = "";
+
+    struct timeval time;
+    gettimeofday(&time, NULL);
+    _start = time.tv_sec;
 };
+
+Client::Client(int fd)
+{
+    _fd = fd;
+    _is_authenticated = false;
+
+    _nickname = "";
+    _username = "";
+    _buffer = "";
+
+    struct timeval time;
+    gettimeofday(&time, NULL);
+    _start = time.tv_sec;
+}
 
 bool Client::is_operator(Channel &channel){
     return (channel.is_operator((*this)));
