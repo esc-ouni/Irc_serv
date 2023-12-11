@@ -16,10 +16,6 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
         {
             send(client.get_fd(), ERR(std::string(" wrong password")).c_str(), ERR(std::string(" wrong password")).length(), 0);
         }
-        if (pass(command, client) == true)
-        {
-            send(client.get_fd(), ERR_ALREADYREGISTERED(client.get_nickname()).c_str(), ERR_ALREADYREGISTERED(client.get_nickname()).length(), 0);
-        }
     }
     else if (command.substr(0, 4) == "NICK" && client.hasPassword() == false)
     {
@@ -29,6 +25,15 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 5) == "NICK " && client.hasPassword() == true)
     {
         nick(command, client, clients, channels);
+    }
+    else if (command.substr(0, 5) == "USER\n" && client.is_authenticated() == true)
+    {
+        std::string msg = ":localhost 462 ! :You may not reregister.\r\n";
+        send(client.get_fd(), msg.c_str(), msg.length(), 0);
+    }
+    else if (command.substr(0, 5) == "USER\n" && client.is_authenticated() == false)
+    {
+        send(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").c_str(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").length(), 0);
     }
     else if (command.substr(0, 5) == "USER " && client.hasPassword() == true && client.hasNickname() == true)
     {

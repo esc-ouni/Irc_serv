@@ -26,9 +26,14 @@ bool pass( std::string command, Client &client)
     {
         return false;
     }
+    else if (client.get_pass() == pass && client.hasPassword() == true)
+    {
+        send(client.get_fd(), ERR_ALREADYREGISTERED(client.get_nickname()).c_str(), ERR_ALREADYREGISTERED(client.get_nickname()).length(), 0);
+        return true;
+    }
     else
     {
         client.setHasPassword(true);
-         return true;
+        return true;
     } 
 }
