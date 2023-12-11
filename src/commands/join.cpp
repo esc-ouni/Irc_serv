@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 15:01:42 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 16:54:35 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,12 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
                 }
                 reply = RPL_NOTIFYJOIN(client.get_nickname(), channel_list.at(i));
                 channels[channel_list.at(i)].broadcast_message(reply);
-                if (!channels[channel_list.at(i)].get_topic().empty()){
+                if (!channels[channel_list.at(i)].get_topic_date().empty()){
                     send_message(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_list.at(i), channels[channel_list.at(i)].get_topic()));
-                    send_message(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_list.at(i) , channels[channel_list.at(i)].get_topic_setter(), time_to_string(time_teller())));
+                    send_message(client.get_fd(), RPL_TOPICWHOTIME(client.get_nickname(), channel_list.at(i) , channels[channel_list.at(i)].get_topic_setter(), channels[channel_list.at(i)].get_topic_date()));
                 }
+                else
+                    send_message(client.get_fd(), RPL_NOTOPIC(client.get_nickname(), channel_list.at(i)));
                 send_names_list(client, channels[channel_list.at(i)]);
             }
         }

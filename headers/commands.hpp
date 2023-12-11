@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 15:05:43 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 16:43:21 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@
 #define RPL_TOPICWHOTIME(client, channel, setter, datetime) (": 333 " + client + " " + channel + " "  + setter + " " + datetime + " \r\n")
 
 // :localhost 331 YourNickname #ChannelName :No topic is set
-#define RPL_NOTOPIC(client, channel, datetime) (": 333 " + client + " " + channel  + "setter_here" + datetime + " \r\n")
+#define RPL_NOTOPIC(client, channel) (": 331 " + client + " " + channel  + " :No topic is set.\r\n")
 
 // Broadcast Topic Change
 #define RPL_TOPICCHANGE(client, channel, topic) (":" + client + "!"+ "UserHost" + " TOPIC " + channel_name + " :" +  topic + " \r\n")
