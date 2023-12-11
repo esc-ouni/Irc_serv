@@ -64,6 +64,17 @@ std::vector<std::string> parser(std::string &full_command, char dilimeter){
     return args;
 };
 
+bool valid_full_option(std::string &option){
+    if (option.length() != 2)
+        return (false);        
+    if ((option.at(0) != '+' && option.at(0) != '-'))
+        return (false);
+    for (int i = 0; i < option.size(); i++){
+        if (std::isalpha(option.at(i)))
+            return (false);    
+    }
+    return (true);    
+};
 
 bool    valid_option(std::string &option){
     if (option.length() != 2)
@@ -79,4 +90,4 @@ std::string time_to_string(time_t timeVal) {
     std::stringstream convert;
     convert << timeVal;
     return (convert.str());
-}
+};
