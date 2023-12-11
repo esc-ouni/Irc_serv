@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/09 13:02:52 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 14:15:03 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@
 #define RPL_NICKCHANGED(Oldnick, Newnick) (":" + Oldnick + "!" + "client_host"+ " NICK " + Newnick + "\r\n");
 
 ///IMPT
+
+//OPER
+#define ERR_NOOPERHOST(client) (":localhost 491 " + client + " :No O-lines for your host\r\n")
+#define RPL_YOUREOPER(client) (":localhost 381 " + client + " :You are now an IRC operator\r\n")
+
+
 
 // to the excuter :ServerName 341 InviterNick InvitedNick #Channel
 #define  RPL_INVITESEND(client, nick, channel) (":localhost 341 " + client + " " + nick + " " + channel + "\r\n")

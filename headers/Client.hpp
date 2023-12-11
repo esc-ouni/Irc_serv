@@ -17,6 +17,7 @@ private:
     bool             _is_authenticated;
     bool             _has_password;
     bool             _has_nickname;
+    bool             _IRC_op;
     unsigned long    _start;
 
 public:
@@ -31,7 +32,8 @@ public:
     bool        is_operator(Channel &channel);
     bool        set_topic(Channel &channel, std::string &topic);
     std::string get_topic(Channel &channel);
-
+    void        promote_IRC_op();
+    bool        is_IRC_op();
     
     int get_socket_fd();
     int leave_channel(Channel &channel);

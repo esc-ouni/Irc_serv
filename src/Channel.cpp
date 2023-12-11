@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 13:37:22 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 14:33:52 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ Channel::Channel(){
     this->_modes.t = false;
     this->_modes.l = false;
     this->_total_clients = 0;
+    this->_locked = false;
 };
 
 Channel::~Channel(){

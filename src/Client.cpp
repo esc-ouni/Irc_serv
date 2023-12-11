@@ -9,6 +9,7 @@ Client::Client(void){
     _nickname = "";
     _username = "";
     _buffer = "";
+    _IRC_op = false;
 
     struct timeval time;
     gettimeofday(&time, NULL);
@@ -23,6 +24,7 @@ Client::Client(int fd)
     _nickname = "";
     _username = "";
     _buffer = "";
+    _IRC_op = false;
 
     struct timeval time;
     gettimeofday(&time, NULL);
@@ -40,6 +42,14 @@ std::string Client::get_topic(Channel &channel){
 
 bool   Client::set_topic(Channel &channel, std::string &topic){
     return (channel.set_topic((*this), topic));
+};
+
+void    Client::promote_IRC_op(){
+    this->_IRC_op = true;
+};
+
+bool    Client::is_IRC_op(){
+    return (this->_IRC_op);
 };
 
 

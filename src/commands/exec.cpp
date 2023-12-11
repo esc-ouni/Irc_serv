@@ -54,6 +54,9 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     {
         Irc::handleBot(client, command);
     }
+    else if (command.substr(0, 5) == "OPER " && client.is_authenticated()){
+        oper(command, client);
+    }
     monitoring(channels,clients);
 
 };
