@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 15:04:54 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 19:29:45 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,20 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
 
     std::string channel_name;
     std::string mode;
-    std::string last_param;    
+    std::string last_param;   
     
     if (argc == 1)
         mode_one_param(client);
     else if (argc == 2){
-        channel_name = args[1];
+        channel_name   = args[1];
         mode_two_params(channels, client, channel_name);
     }
-    else if (argc == 3){
-        channel_name = args[1];
-        mode         = args[2];
-        mode_three_params(channels, client, channel_name, mode);
-    }
-    else if (argc == 4){
-        channel_name = args[1];
-        mode         = args[2];      
-        last_param   = args[3];      
-        mode_four_params(channels, client, channel_name, mode, last_param, clients);
+    else if (argc == 3 || argc == 4){
+        channel_name   = args[1];
+        mode           = args[2];
+        if (argc == 4)
+            last_param = args[3];
+        mode_with_params(channels, client, channel_name, mode, clients, last_param);
     }
     else{
         send_message(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "MODE"));
@@ -51,17 +47,13 @@ void mode_one_param(Client &excuter){
 };
 
 void send_mode_info(Client &excuter, Channel &channel){
-  std::string notice;
-        if (!channel.show_mode().empty()){
-            notice = RPL_CHANNELMODEIS(excuter.get_nickname(), channel.get_name(), channel.show_mode());
-            send_message(excuter.get_fd(), notice);
-        }
-        notice = RPL_CREATIONTIME(excuter.get_nickname(), channel.get_name(), channel.get_creation_date());
-        send_message(excuter.get_fd(), notice);
+    if (!channel.show_mode().empty()){
+        send_message(excuter.get_fd(), RPL_CHANNELMODEIS(excuter.get_nickname(), channel.get_name(), channel.show_mode()));
+    }
+    send_message(excuter.get_fd(), RPL_CREATIONTIME(excuter.get_nickname(), channel.get_name(), channel.get_creation_date()));
 };
 
 void mode_two_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name){
-  std::string notice;
     if (!channel_exist(channels, channel_name)){
         send_message(excuter.get_fd(), ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name));
         return ;
@@ -76,25 +68,52 @@ void mode_two_params(std::map<std::string, Channel>& channels, Client &excuter, 
     }
 };
 
-void mode_three_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode){
-  std::string notice;
+void mode_with_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::map<int, Client> &clients, std::string &last_param){
+    std::vector<std::string> param;
+    std::string              s_mode;
+    std::string              s_param;
+    int                      param_c = 0;
+    
     if (!channel_exist(channels, channel_name)){
-        notice = ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name);
-        send_message(excuter.get_fd(), notice);
+            send_message(excuter.get_fd(), ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name));
         return ;   
     }
-    if (!excuter.is_operator(channels[channel_name])){
+    if (!excuter.is_operator(channels[channel_name]) && !excuter.is_IRC_op()){
         send_message(excuter.get_fd(), ERR_CHANOPRIVSNEEDED(excuter.get_nickname(), channel_name));
         return ;
-    }    
-    if (!valid_option(mode)){
-        send_message(excuter.get_fd(), ERR_UMODEUNKNOWNFLAG(excuter.get_nickname(), channel_name));
-        return ;
     }
-    if (mode.at(1) == 'k' || mode.at(1) == 'o' || (mode.at(1) == 'l' && mode.at(0) == '+')){
-        send_message(excuter.get_fd(), ERR_INVALIDMODEPARAM(excuter.get_nickname(), channel_name, mode));
-        return ;
+    if (!valid_full_option(mode)){
+        send_message(excuter.get_fd(), ERR_INVALIDMODEPARAM(excuter.get_nickname(), channel_name, "MODE"));
     }
+
+    param  = mode_parser(last_param, ',');
+    param_c = param.size();
+    // for (int i = 0; i < param_c; i++){
+    //     std::cout << " <" << param.at(i) << "> " << std::endl;
+    // }
+    
+    for (int i = 1; i < mode.size(); i++){
+        if (i <= param_c)
+            s_param = param.at(i - 1);
+        else
+            s_param = "";
+        
+        s_mode += mode.at(0);
+        s_mode += mode.at(i);
+        // std::cout << std::endl << "mode : <" << s_mode << "> , param : <" << s_param << "> " << std::endl;
+        if (!valid_option(s_mode)){
+            send_message(excuter.get_fd(), ERR_UMODEUNKNOWNFLAG(excuter.get_nickname(), channel_name, s_mode.at(1)));
+        }
+        else
+            execute_mode(channels, excuter, channel_name, s_mode, clients, s_param);
+        s_mode.clear();
+        s_param.clear();
+    }
+};
+
+
+void execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::map<int, Client> &clients, std::string &last_param){
+
     if (mode.at(1) == 'i'){
         if (mode.at(0) == '+' && !channels[channel_name].get_option_i()){
             channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+i", ""));
@@ -127,25 +146,7 @@ void mode_three_params(std::map<std::string, Channel>& channels, Client &excuter
         channels[channel_name].set_option_l(false);
         return ;
     }
-};
-
-void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::string &last_param, std::map<int, Client> &clients){
-    if (!channel_exist(channels, channel_name)){
-            send_message(excuter.get_fd(), ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name));
-        return ;   
-    }
-    if (!excuter.is_operator(channels[channel_name]) && !excuter.is_IRC_op()){
-        send_message(excuter.get_fd(), ERR_CHANOPRIVSNEEDED(excuter.get_nickname(), channel_name));
-        return ;
-    }    
-    if (!valid_option(mode)){
-        send_message(excuter.get_fd(), ERR_UMODEUNKNOWNFLAG(excuter.get_nickname(), channel_name));
-        return ;
-    }
-    if (mode.at(1) == 'i' || mode.at(1) == 't'){
-        send_message(excuter.get_fd(), ERR_INVALIDMODEPARAM(excuter.get_nickname(), channel_name, mode));
-        return ;
-    }
+    
     if (mode.at(1) == 'k'){
         if (mode.at(0) == '+' && !channels[channel_name].get_option_k()){
             if (!is_valid_password(last_param)){

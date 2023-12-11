@@ -161,9 +161,6 @@ void                     set_topic(std::string command, Client &client, std::map
 void                     handle_Join(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
 std::string              extract_topic(std::string& command);
 bool                     channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
-
-// bool                     channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients, std::string password);
-
 void                     send_message(int clientSocket, std::string message);
 void                     send_names_list(Client &client, Channel &channel);
 void                     leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels);
@@ -180,9 +177,11 @@ long int                 contains_only_nums(std::string string);
 void                     mode(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients);
 void                     mode_one_param(Client &excuter);
 void                     mode_two_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name);
-void                     mode_three_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode);
-void                     mode_four_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::string &last_param, std::map<int, Client> &clients);
+void                     mode_with_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::map<int, Client> &clients, std::string &last_param);
 void                     send_mode_info(Client &excuter, Channel &channel);
 int                      get_client_fd(std::string &client_name, std::map<int, Client> &clients);
 void                     monitoring(std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
 void                     oper(std::string command, Client &client);
+bool                     valid_full_option(std::string &option);
+void                     execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::map<int, Client> &clients, std::string &last_param);
+std::vector<std::string> mode_parser(std::string &full_command, char dilimeter);
