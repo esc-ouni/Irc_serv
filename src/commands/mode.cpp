@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 19:20:13 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 19:29:45 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,9 @@ void mode_with_params(std::map<std::string, Channel>& channels, Client &excuter,
 
     param  = mode_parser(last_param, ',');
     param_c = param.size();
-    for (int i = 0; i < param_c; i++){
-        std::cout << " <" << param.at(i) << "> " << std::endl;
-    }
+    // for (int i = 0; i < param_c; i++){
+    //     std::cout << " <" << param.at(i) << "> " << std::endl;
+    // }
     
     for (int i = 1; i < mode.size(); i++){
         if (i <= param_c)
@@ -100,7 +100,7 @@ void mode_with_params(std::map<std::string, Channel>& channels, Client &excuter,
         
         s_mode += mode.at(0);
         s_mode += mode.at(i);
-        std::cout << std::endl << "mode : <" << s_mode << "> , param : <" << s_param << "> " << std::endl;
+        // std::cout << std::endl << "mode : <" << s_mode << "> , param : <" << s_param << "> " << std::endl;
         if (!valid_option(s_mode)){
             send_message(excuter.get_fd(), ERR_UMODEUNKNOWNFLAG(excuter.get_nickname(), channel_name, s_mode.at(1)));
         }
