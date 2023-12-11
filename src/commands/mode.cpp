@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 14:50:23 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 15:04:54 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
     if (mode.at(1) == 'k'){
         if (mode.at(0) == '+' && !channels[channel_name].get_option_k()){
             if (!is_valid_password(last_param)){
-                send_message(excuter.get_fd(), ERR_INVALIDKEY(excuter.get_nickname(), channel_name));
+                send_message(excuter.get_fd(), ERR_PASSINVALID(excuter.get_nickname()));
                 return ;
             }
             if (channels[channel_name].set_password(last_param)){
@@ -165,6 +165,8 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
                 channels[channel_name].set_option_k(false);
                 channels[channel_name].unlock();
             }
+            else
+                send_message(excuter.get_fd(), ERR_PASSWDMISMATCH(excuter.get_nickname()));
             return ;
         }
         return ;

@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 14:46:02 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 15:01:42 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool Create_channel_join(Client &client, std::map<std::string, Channel>& channel
 bool channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients, std::string& password){
     if (channels[channel_name].get_option_k()){
         if (channels[channel_name].get_password() != password){
-            send_message(client.get_fd(), ERR_PASSWDMISMATCH(client.get_nickname()));
+            send_message(client.get_fd(), ERR_INVALIDKEY(client.get_nickname(), channel_name));
             return (false);
         }
     }
