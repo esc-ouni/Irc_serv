@@ -49,4 +49,8 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
         }
     }
     }
+    else
+        send_message(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "TOPIC"));
+    return ;
+
 };

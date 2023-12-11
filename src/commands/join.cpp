@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/09 12:49:32 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 14:46:02 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,7 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
             }
         }
     }
+    else
+        send_message(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "JOIN"));
     return ;  
 };

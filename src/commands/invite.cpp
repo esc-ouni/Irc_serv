@@ -70,8 +70,8 @@ void invite_user(std::string command, Client &excuter, std::map<std::string, Cha
             send_message(get_client_fd(user, clients), RPL_INVITENOTIFY(excuter.get_nickname(), user, channel_name));
         };
     }
-    else 
-        // BAD ARGS
+    else
+        send_message(excuter.get_fd(), ERR_NEEDMOREPARAMS(excuter.get_nickname(), "INVITE"));
     return ;
 }
 

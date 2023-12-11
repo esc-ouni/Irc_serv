@@ -41,5 +41,7 @@ void kick_user(std::string command, Client &client, std::map<std::string, Channe
         channels[channel_name].broadcast_message(kick_message);            
         channels[channel_name].remove_user(clients[target_fd]);
     }
+    else
+        send_message(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "KICK"));
 };
 

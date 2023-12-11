@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 14:26:51 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/11 14:50:23 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
         mode_four_params(channels, client, channel_name, mode, last_param, clients);
     }
     else{
-        send_message(client.get_fd(), ERR_UNKNOWNMODE(client.get_nickname(), channel_name, mode));
+        send_message(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "MODE"));
     }
 };
 
@@ -134,7 +134,7 @@ void mode_four_params(std::map<std::string, Channel>& channels, Client &excuter,
             send_message(excuter.get_fd(), ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name));
         return ;   
     }
-    if (!excuter.is_operator(channels[channel_name]) || !excuter.is_IRC_op()){
+    if (!excuter.is_operator(channels[channel_name]) && !excuter.is_IRC_op()){
         send_message(excuter.get_fd(), ERR_CHANOPRIVSNEEDED(excuter.get_nickname(), channel_name));
         return ;
     }    
