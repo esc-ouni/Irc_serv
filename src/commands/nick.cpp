@@ -38,8 +38,6 @@ void nick(std::string command, Client &client, std::map<int, Client> clients, st
 {
     std::string nickname = filteredString(command.substr(5, command.length() - 5));
 
-    std::cout << "nickname : '" << nickname << "'" << std::endl;
-
     if (client.hasNickname() == false)
     {
         if (remove_two_pts(nickname).empty())

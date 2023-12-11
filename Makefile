@@ -12,7 +12,7 @@ all: $(EXEC)
 $(EXEC): $(OBJS) $(H_FILES)
 	@$(CC) $(FLAGS) $(OBJS) -o $(EXEC)
 	@clear
-	# ./ircserv 6667 pass
+	./ircserv 6667 pass
 
 %.o: %.cpp $(H_FILES)
 	$(CC) $(FLAGS) -c $< -o $@ 

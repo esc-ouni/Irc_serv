@@ -5,12 +5,26 @@
 
 void excute_command(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients)
 {
+    if (command.substr(0, 5) == "PASS\n")
+    { 
+        std::string msg = ":localhost 431 ! :There is no password.\r\n";
+        send(client.get_fd(), msg.c_str() , msg.length(), 0);
+    }
     if (command.substr(0, 5) == "PASS ")
     { 
         if (pass(command, client) == false)
         {
             send(client.get_fd(), ERR(std::string(" wrong password")).c_str(), ERR(std::string(" wrong password")).length(), 0);
         }
+        if (pass(command, client) == true)
+        {
+            send(client.get_fd(), ERR_ALREADYREGISTERED(client.get_nickname()).c_str(), ERR_ALREADYREGISTERED(client.get_nickname()).length(), 0);
+        }
+    }
+    else if (command.substr(0, 4) == "NICK" && client.hasPassword() == false)
+    {
+        std::string msg = ":localhost 431 ! :There is no nickname | no password.\r\n";
+        send(client.get_fd(), msg.c_str() , msg.length(), 0);
     }
     else if (command.substr(0, 5) == "NICK " && client.hasPassword() == true)
     {
