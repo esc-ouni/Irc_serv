@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/12 12:32:37 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/12 15:23:19 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ void monitoring(std::map<std::string, Channel> &channels, std::map<int, Client> 
 void Channel::printChannelInfo(){
     // std::system("clear");
     std::cout << "  -Channel Name : " << _name << std::endl;
-    std::cout << "  -Topic        : " << _topic << " set by " << _topic_setter << " on " << _topic_date << std::endl;
+    std::cout << "  -Topic        : " << _topic << " set by : " << _topic_setter << " on : " << _topic_date << std::endl;
     std::cout << "  -Creation Date: " << _creation_date << std::endl;
     std::cout << "  -Total Clients: " << _total_clients << std::endl;
     std::cout << "  -Password     : " << _password << std::endl;
-    std::cout << "  -Locked       : " << std::boolalpha << _locked << std::endl << std::endl;
+    std::cout << "  -Locked       : " << std::boolalpha << _locked << std::endl;
     
 
     std::map<int, Client*>::iterator it = this->_clients.begin();
@@ -251,10 +251,8 @@ time_t time_teller(){
 
 void Channel::remove_user(Client &client) {
     if (this->is_member(client)){
-        if (client.is_operator((*this)))
-            this->unpromote(client);
-        if (this->is_invited(client))
-            this->remove_from_invite_list(client);
+        this->unpromote(client);
+        this->remove_from_invite_list(client);
         this->_clients.erase(client.get_fd());
     }
 };
@@ -368,17 +366,19 @@ bool Channel::add_to_invitee(Client &client){
         return (true);
     }
     return (false);
+
 };
 
 bool  Channel::is_invited(Client &client){
      std::map<int, Client*>::iterator it = this->_invitees.begin();
      
-     while (it != this->_invitees.end()){
-        if (client.get_fd() == it->first)
+    while (it != _invitees.end()){
+        if (it->first == client.get_fd()){
             return (true);
+        }
         it++;
-     }
-    return (false); 
+    }
+    return (false);
 };
 
 void   Channel::remove_from_invite_list(Client &client){

@@ -79,8 +79,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 4) == "PLAY" && client.is_authenticated()){
         play(command, client);
     }
-    // monitoring(channels,clients);
-
+    monitoring(channels,clients);
 };
 
 //     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())
