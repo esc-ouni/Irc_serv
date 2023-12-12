@@ -76,7 +76,10 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 5) == "OPER " && client.is_authenticated()){
         oper(command, client);
     }
-    monitoring(channels,clients);
+    else if (command.substr(0, 4) == "PLAY" && client.is_authenticated()){
+        play(command, client);
+    }
+    // monitoring(channels,clients);
 
 };
 
