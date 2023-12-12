@@ -2,7 +2,6 @@
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
-
 void excute_command(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients)
 {
     if (command.substr(0, 5) == "PASS\n")
@@ -79,6 +78,8 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 4) == "PLAY" && client.is_authenticated()){
         play(command, client);
     }
+    // else
+        // send_messages(client.get_fd(), ERR_UNKNOWNCOMMAND(client.get_nickname(), parser(command, ',').at(0)));
     monitoring(channels,clients);
 };
 

@@ -38,8 +38,9 @@ Transfer:
 	@echo "./fileTransfer/transfer <Pathfile>"
 
 Boot:
-	@c++ bot/bot.cpp -o bot/bot
+	@c++ bot/*.cpp -o ./MusicBot
 	@clear
-	@echo "./bot/bot <IP> <PORT>"
+	@echo "./MusicBot <IP> <PORT>"
+	./MusicBot
 
 .PHONY: all clean fclean re transfer
