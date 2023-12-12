@@ -10,7 +10,17 @@ void send_message(int client_socket, std::string message) {
 
 
 int main() {
-    int client_socket;
+    // int             client_socket;
+    // struct sockaddr address;
+
+    // address.
+
+    // client_socket = socket(AF_LOCAL ,PF_INET, SOCK_DGRAM);
+
+    // if (connect(client_socket, &address, sizeof(address)) == -1){
+    //     std::cerr << "Err: failed connecting the socket ..." << std::endl;
+    //     return ;
+    // }
 
 
     // Connect to the IRC server
