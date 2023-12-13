@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 16:54:35 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/13 19:57:08 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ bool channel_join(Client &client, std::map<std::string, Channel>& channels, std:
             send_message(client.get_fd(), ERR_INVALIDKEY(client.get_nickname(), channel_name));
             return (false);
         }
+    }
+    if (channels[channel_name].is_member(client)){
+        send_message(client.get_fd(), ERR_USERONCHANNEL(client.get_nickname(), client.get_nickname(), channel_name));
+        return (false); 
     }
     if (!channels[channel_name].add_user(client)){
         return (false);
