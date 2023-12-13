@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   MusicBot.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
+/*   Updated: 2023/12/13 19:31:39 by idouni           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/Irc.hpp"
 #include "../headers/Channel.hpp"
 #include "../headers/commands.hpp"
@@ -31,7 +43,8 @@ int main(int argc, char *argv[]) {
 
     struct pollfd pfd;
 
-    char buff[512];
+    std::string play;
+    char        buff[512];
 
 
     bzero(&addr, sizeof(addr));
@@ -53,21 +66,47 @@ int main(int argc, char *argv[]) {
 
     int ready_fd;
 
+    int read_bytes = 0;
     send_message(socket_end, "PASS pass\r\n");
     send_message(socket_end, "NICK MusicBot\r\n");
     send_message(socket_end, "USER 1 0 *\r\n");
     send_message(socket_end, "JOIN #music\r\n");
-    send_message(socket_end, "MODE #music +k password1\r\n");
-    send_message(socket_end, "TOPIC #music :Use <!Bot dance> Command For The Music Of The Day\r\n");
+    send_message(socket_end, "TOPIC #music :Use <!Bot 'dance'> Command For The Music Of The Day\r\n");
 
-    
-    while (1){
-        if ((ready_fd = poll(&pfd, 1, 100)) > 0){
-            recv(socket_end, buff, 512, MSG_OOB);
-            buff[511] = '\0';
-            std::cout << buff << std::endl; 
+    while (true){
+        ready_fd = poll(&pfd, 1, -1);
+        if (pfd.revents == POLLIN){
+            read_bytes = recv(socket_end, buff, 512, 0);
+            if (read_bytes > 0){
+                // std::cout << "PING" << std::endl;
+                buff[read_bytes] = '\0';
+                // std::cout << buff << std::endl;
+                play = buff;
+                if (play.find("!Bot dance") != std::string::npos){
+                    play = "/usr/bin/afplay b_tmp/m.mp3 &";
+                    std::system(play.c_str());
+                    send_message(socket_end, "PRIVMSG #music : Now playing sba7 lkheir \r\n");
+                }
+            }
+            else if (!read_bytes){
+                std::cout << "SOCKET CLOSED !" << std::endl; 
+                break ;
+            }
+            else if (read_bytes == -1){
+                std::cout << "RECV FAILED !" << std::endl; 
+                break ; 
+            }
+        }
+        else if (pfd.revents == 17){
+            std::cout << "CONNECTION CLOSED !" << std::endl; 
+            break;
+        }
+        else if (pfd.revents == -1){
+            std::cout << "POLL FAILED !" << std::endl; 
+            break;
         }
         bzero(buff, sizeof(buff));
+        play.clear();
     }
 
     return (0);
@@ -118,22 +157,3 @@ int main(int argc, char *argv[]) {
 
 
 
-
-
-
-
-
-
-    // // IRC protocol handshake
-    // send_message(sock, "PASS pass\r\n");
-    // send_message(sock, "NICK MusicBot\r\n");
-    // send_message(sock, "USER 1 0 * \r\n");
-    // send_message(sock, "JOIN #music\r\n");
-    //         play = buffer;
-    //         if (play.find("!Bot dance") != std::string::npos){
-    //             play = "/usr/bin/afplay b_tmp/m.mp3 &";
-    //             std::system(play.c_str());
-    //             send_message(sock, "PRIVMSG #music : Now playing sba7 lkheir \r\n");
-    //         }
-    //         play.clear();
-    //         bzero(buffer, sizeof(buffer));
