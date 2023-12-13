@@ -2,7 +2,7 @@
 EXEC    = ircserv
 CC      = c++
 RM      = rm -rf
-# FLAGS   = -fsanitize=address,undefined -g
+FLAGS   = -fsanitize=address,undefined -g
 H_FILES = ${shell ls headers/*.hpp}
 C_FILES = ${shell ls src/*/*.cpp} ${shell ls src/*.cpp}
 OBJS    = $(C_FILES:.cpp=.o)
@@ -38,8 +38,9 @@ Transfer:
 	@echo "./fileTransfer/transfer <Pathfile>"
 
 Boot:
-	@c++ bot/bot.cpp -o bot/bot
+	@c++ bot/*.cpp -o ./MusicBot
 	@clear
-	@echo "./bot/bot <IP> <PORT>"
+	@echo "./MusicBot <IP> <PORT>"
+	./MusicBot
 
 .PHONY: all clean fclean re transfer
