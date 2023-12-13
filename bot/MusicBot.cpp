@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/13 19:31:39 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/13 19:51:05 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,14 @@ int main(int argc, char *argv[]) {
     send_message(socket_end, "NICK MusicBot\r\n");
     send_message(socket_end, "USER 1 0 *\r\n");
     send_message(socket_end, "JOIN #music\r\n");
-    send_message(socket_end, "TOPIC #music :Use <!Bot 'dance'> Command For The Music Of The Day\r\n");
+    send_message(socket_end, "TOPIC #music :Use <!Bot  dance> Command For The Music Of The Day\r\n");
 
     while (true){
         ready_fd = poll(&pfd, 1, -1);
         if (pfd.revents == POLLIN){
             read_bytes = recv(socket_end, buff, 512, 0);
             if (read_bytes > 0){
-                // std::cout << "PING" << std::endl;
+                std::cout << "PING" << std::endl;
                 buff[read_bytes] = '\0';
                 // std::cout << buff << std::endl;
                 play = buff;

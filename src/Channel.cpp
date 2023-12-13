@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/12 17:38:11 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/13 19:45:15 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 
 void monitoring(std::map<std::string, Channel> &channels, std::map<int, Client> &clients){
-    // std::map<std::string, Channel>::iterator it;
-    // for (it = channels.begin() ; it != channels.end() ; it++){
-    //     it->second.printChannelInfo();
-    // }
+    std::map<std::string, Channel>::iterator it;
+    for (it = channels.begin() ; it != channels.end() ; it++){
+        it->second.printChannelInfo();
+    }
 
     std::map<int, Client>::iterator it2 = clients.begin();
 
