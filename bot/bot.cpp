@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/14 17:59:17 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/14 18:25:13 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,12 @@ int main(int argc, char *argv[]) {
         std::cerr << "Usage: <Ip> <port>!" << std::endl;
         return 0;    
     }
-    struct sockaddr_in addr;
-    std::string message;
-
+    struct sockaddr_in       addr;
+    std::string              message;
     std::vector<std::string> args;
-
-    struct pollfd pfd;
-
-    std::string play;
-    char        buff[512];
+    std::string              play;
+    char                     buff[512];
+    int                      read_bytes = 0;
 
 
     bzero(&addr, sizeof(addr));
@@ -88,57 +85,53 @@ int main(int argc, char *argv[]) {
         std::cerr << "Err: failling to connect socket!" << std::endl;
         return 0;
     }
-    std::cout << "SOCKET CONNECTED SUCCESSFULLY !" << std::endl;
-    
-    pfd.fd     = socket_end;
-    pfd.events = POLLIN;
+    std::cout << "BOT CONNECTED TO TE SERVER SUCCESSFULLY !" << std::endl;    
 
-    int ready_fd;
-
-    int read_bytes = 0;
     send_message(socket_end, "PASS pass\r\n");
     send_message(socket_end, "NICK Emet\r\n");
     send_message(socket_end, "USER 1 0 *\r\n");
+    read_bytes = recv(socket_end, buff, 512, 0);
+    buff[read_bytes] = '\0';
+    play = buff;
+    if (play.find("001 Emet :Welcome Emet") != std::string::npos)
+        std::cout << "BOT LOGED TO THE SERVER SUCCESSFULLY !" << std::endl;
+    else{
+        std::cout << "PROBLEM LOGING TO THE SERVER  !" << std::endl;
+        close(socket_end);
+        return (1);
+    }
 
     while (true){
-        ready_fd = poll(&pfd, 1, -1);
-        if (pfd.revents == POLLIN){
-            read_bytes = recv(socket_end, buff, 512, 0);
-            if (read_bytes > 0){
-                std::cout << "PING" << std::endl;
-                buff[read_bytes] = '\0';
-                // std::cout << buff << std::endl;
-                play = buff;
-                if (play.find("MSG_TO_SD") != std::string::npos){
-                    play.erase(0, play.find("MSG_TO_SD"));
-                    args = parser(play, ' ');
-                    
-                    if (args.size() >= 1){
-                        message = "PRIVMSG " + args[1] + " :You have been pinged, you are to noisy a zamel \r\n";
-                        send_message(socket_end, message);
-                    }
+        read_bytes = recv(socket_end, buff, 512, 0);
+        if (read_bytes > 0){
+            std::cout << "PING" << std::endl;
+            buff[read_bytes] = '\0';
+            // std::cout << buff << std::endl;
+            play = buff;
+            if (play.find("MSG_TO_SD") != std::string::npos){
+                play.erase(0, play.find("MSG_TO_SD"));
+                args = parser(play, ' ');
+                if (args.size() > 1){
+                    message = "PRIVMSG " + args[1] + " :You have been pinged, you are to noisy a zamel \r\n";
+                    send_message(socket_end, message);
                 }
             }
-            else if (!read_bytes){
-                std::cout << "SOCKET CLOSED !" << std::endl; 
-                break ;
-            }
-            else if (read_bytes == -1){
-                std::cout << "RECV FAILED !" << std::endl; 
-                break ; 
-            }
         }
-        else if (pfd.revents == 17){
-            std::cout << "CONNECTION CLOSED !" << std::endl; 
-            break;
+        else if (!read_bytes){
+            std::cout << "SOCKET CLOSED !" << std::endl;
+            close(socket_end);
+            break ;
         }
-        else if (pfd.revents == -1){
-            std::cout << "POLL FAILED !" << std::endl; 
-            break;
+        else if (read_bytes == -1){
+            std::cout << "RECV FAILED !" << std::endl; 
+            close(socket_end);
+            break ; 
         }
         bzero(buff, sizeof(buff));
         play.clear();
+        message.clear();
     }
+    
 
     return (0);
 }
