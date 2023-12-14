@@ -80,7 +80,7 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     }
     // else
         // send_messages(client.get_fd(), ERR_UNKNOWNCOMMAND(client.get_nickname(), parser(command, ',').at(0)));
-    monitoring(channels,clients);
+    // monitoring(channels,clients);
 };
 
 //     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())

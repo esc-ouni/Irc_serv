@@ -88,7 +88,7 @@ void nick(std::string command, Client &client, std::map<int, Client> clients, st
             
             //
             std::map<std::string, Channel>::iterator it = channels.begin();
-            std::string reply = RPL_NICKCHANGED(old_nick, nickname);
+            std::string reply = RPL_NICKCHANGED(old_nick, client.get_client_host(), nickname);
 
             send_message(client.get_fd(), reply);
                 while (it != channels.end()){

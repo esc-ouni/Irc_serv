@@ -95,7 +95,10 @@ void Irc::handleLogTime(Client &client)
 
 void Irc::addClient()
 {
-    _newSocket = accept(_serverSocket, NULL, NULL);
+    struct sockaddr_in client_addr;
+    socklen_t       addr_size = sizeof(client_addr);
+
+    _newSocket = accept(_serverSocket, (sockaddr *)&client_addr, &addr_size);
     if (_newSocket < 0)
         printc("Error accepting client connection", RED, 1);
 
@@ -104,14 +107,10 @@ void Irc::addClient()
     new_client.set_pass(_passWord);
     new_client.setHasPassword(false);
     new_client.setHasNickname(false);
+    new_client.set_client_host(inet_ntoa(client_addr.sin_addr));
     pollfd client_pollfd = {_newSocket, POLLIN, 0};
     _pollfds.push_back(client_pollfd);
     _clients.insert(std::pair<int, Client>(_newSocket, new_client));
-    
-    ////
-    // send(new_client.get_fd(), "CAP * LS :\r\n", 13, 0);
-    // send(new_client.get_fd(), "001\r\n", 5, 0);
-    // send(new_client.get_fd(), "Welcome To A9WED Server\r\n", 26, 0);
 
     std::cout << GREEN << "[Server] Added client #" << _newSocket
               << " successfully" << RESET << std::endl;

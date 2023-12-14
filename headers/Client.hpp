@@ -14,6 +14,9 @@ private:
     std::string      _nickname;
     std::string      _password;
     std::string      _servername;
+    std::string      _client_host;
+
+
     bool             _is_authenticated;
     bool             _has_password;
     bool             _has_nickname;
@@ -34,6 +37,8 @@ public:
     std::string get_topic(Channel &channel);
     void        promote_IRC_op();
     bool        is_IRC_op();
+    std::string get_client_host() const;
+    void        set_client_host(std::string client_host);
     
     int get_socket_fd();
     int leave_channel(Channel &channel);

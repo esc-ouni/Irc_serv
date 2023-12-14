@@ -13,7 +13,7 @@ void leave_channel(std::string command, Client &client, std::map<std::string, Ch
         send_message(client.get_fd(), ERR_NOTONCHANNEL(client.get_nickname(), channel_name));
         return ; 
     }
-    channels[channel_name].broadcast_message(RPL_NOTIFYPART(client.get_nickname(), channel_name));
+    channels[channel_name].broadcast_message(RPL_NOTIFYPART(client.get_nickname(), client.get_client_host(), channel_name));
     channels[channel_name].remove_user(client);    
 };
 
@@ -23,7 +23,7 @@ void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::s
     
     while (it != channels.end()){
         if (it->second.is_member(client)){
-            it->second.broadcast_message_exp(client, RPL_NOTIFYQUIT(client.get_nickname(), "SEE YALL"));
+            it->second.broadcast_message_exp(client, RPL_NOTIFYQUIT(client.get_nickname(), client.get_client_host(), "SEE YALL"));
             it->second.remove_user(client);
         }
         else if (it->second.is_invited(client))
