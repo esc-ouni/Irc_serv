@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/14 18:25:13 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/14 20:05:46 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@
 #include <netdb.h>
 
 std::string trim(std::string &str, std::string charstotrim) {
-    size_t endpos = str.find_last_not_of(charstotrim);
-
-    if (std::string::npos != endpos) {
-        str = str.substr(0, endpos + 1);
+    while (!str.empty() && (str.back() == '\r' || str.back() == '\n')) {
+        str.pop_back();
     }
     return (str);
 };

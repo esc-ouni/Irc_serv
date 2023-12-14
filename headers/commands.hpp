@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/14 14:32:45 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/14 19:55:10 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@
 
 #define  RPL_CHANNELMODEIS(client, channel, mode) (":localhost 324 " + client + " " + channel + " " + mode + "\r\n")
 #define  RPL_CREATIONTIME(client, channel, datetime) (":localhost 329 " + client + " " + channel + " " + datetime + "\r\n") 
-#define  MODE_CHANGED(client, channel, mode, last_param) (":" + client + "!UserHost MODE " + channel + " " + mode + " " + last_param + "\r\n")
+#define  MODE_CHANGED(client, client_host, channel, mode, last_param) (":" + client + "!" + client_host + " MODE " + channel + " " + mode + " " + last_param + "\r\n")
 #define  ERR_CHANOPRIVSNEEDED(client, channel) (":localhost 482 " + client + " " + channel + " :You're not channel operator.\r\n")
 
 #define  ERR_UMODEUNKNOWNFLAG(client, channel, flag) (":localhost 501 " + client + " :Unknown MODE " + flag + "\r\n")
@@ -104,7 +104,7 @@
 #define  ERR_USERONCHANNEL(client, nick, channel) (":localhost 443 " + client + " " + nick + " " + channel + " is already on channel\r\n")
 // KICK
 // :KickerNick!KickerUser@KickerHost KICK <channel> <user> :[reason]
-#define RPL_KICK(client, channel, kicked, reason) (":" + client + "!" + "Kicker@KickerHost KICK " + channel + " " + kicked + " :" + reason + "\r\n");
+#define RPL_KICK(client, client_host, channel, kicked, reason) (":" + client + "!" + "Kicker@" + client_host + " KICK " + channel + " " + kicked + " :" + reason + "\r\n");
 
 // QUIT
 // :Nickname!Username@Host QUIT :Quit Message
@@ -142,7 +142,7 @@
 #define RPL_NOTOPIC(client, channel) (": 331 " + client + " " + channel  + " :No topic is set.\r\n")
 
 // Broadcast Topic Change
-#define RPL_TOPICCHANGE(client, channel, topic) (":" + client + "!"+ "UserHost" + " TOPIC " + channel_name + " :" +  topic + " \r\n")
+#define RPL_TOPICCHANGE(client, client_host, channel, topic) (":" + client + "!"+ client_host + " TOPIC " + channel_name + " :" +  topic + " \r\n")
 
 
 

@@ -35,7 +35,7 @@ void kick_user(std::string command, Client &client, std::map<std::string, Channe
             return ; 
         }
 
-        std::string kick_message = RPL_KICK(client.get_nickname(), channel_name, clients[target_fd].get_nickname() , reason);
+        std::string kick_message = RPL_KICK(client.get_nickname(), client.get_client_host(), channel_name, clients[target_fd].get_nickname() , reason);
         
         // // kick the user
         channels[channel_name].broadcast_message(kick_message);            

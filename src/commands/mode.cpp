@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 19:29:45 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/14 20:13:21 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,14 @@ void mode_with_params(std::map<std::string, Channel>& channels, Client &excuter,
     }
     if (!valid_full_option(mode)){
         send_message(excuter.get_fd(), ERR_INVALIDMODEPARAM(excuter.get_nickname(), channel_name, "MODE"));
+        return ;
     }
 
     param  = mode_parser(last_param, ',');
     param_c = param.size();
-    // for (int i = 0; i < param_c; i++){
-    //     std::cout << " <" << param.at(i) << "> " << std::endl;
-    // }
+    for (int i = 0; i < param_c; i++){
+        // std::cout << " <" << param.at(i) << "> " << std::endl;
+    }
     
     for (int i = 1; i < mode.size(); i++){
         if (i <= param_c)
@@ -116,12 +117,12 @@ void execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std
 
     if (mode.at(1) == 'i'){
         if (mode.at(0) == '+' && !channels[channel_name].get_option_i()){
-            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+i", ""));
+            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "+i", ""));
             channels[channel_name].set_option_i(true);
             return ;
         }
         if (mode.at(0) == '-' && channels[channel_name].get_option_i()){
-            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-i", ""));
+            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "-i", ""));
             channels[channel_name].set_option_i(false);
             return ;
         }
@@ -129,12 +130,12 @@ void execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std
     }
     else if (mode.at(1) == 't'){
         if (mode.at(0) == '+' && !channels[channel_name].get_option_t()){
-            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+t", ""));
+            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "+t", ""));
             channels[channel_name].set_option_t(true);
             return ;
         }
         else if (mode.at(0) == '-' && channels[channel_name].get_option_t()){
-            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-t", ""));
+            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "-t", ""));
             channels[channel_name].set_option_t(false);
             return ;
         }
@@ -142,7 +143,7 @@ void execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std
     }
     if (mode.at(1) == 'l' && mode.at(0) == '-' && channels[channel_name].get_option_l()){
         channels[channel_name].set_limit(CHANNEL_LIMIT);
-        channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-l", ""));
+        channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "-l", ""));
         channels[channel_name].set_option_l(false);
         return ;
     }
@@ -154,7 +155,7 @@ void execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std
                 return ;
             }
             if (channels[channel_name].set_password(last_param)){
-                channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+k", ""));
+                channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "+k", ""));
                 channels[channel_name].set_option_k(true);                
                 channels[channel_name].lock();
             }
@@ -162,7 +163,7 @@ void execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std
         }
         else if (mode.at(0) == '-' && channels[channel_name].get_option_k()){
             if (last_param == channels[channel_name].get_password()){
-                channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-k", ""));
+                channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "-k", ""));
                 channels[channel_name].set_option_k(false);
                 channels[channel_name].unlock();
             }
@@ -176,7 +177,7 @@ void execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std
         if (mode.at(0) == '+' && contains_only_nums(last_param) != channels[channel_name].get_limit()){
             if (contains_only_nums(last_param) != -1){
                 if (channels[channel_name].set_limit(contains_only_nums(last_param))){
-                    channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+l", last_param));
+                    channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "+l", last_param));
                     channels[channel_name].set_option_l(true);
                 }
             }
@@ -189,12 +190,12 @@ void execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std
             return ;
         }
         if (mode.at(0) == '-' && channels[channel_name].is_operator(last_param)){
-            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "-o", last_param));
+            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "-o", last_param));
             channels[channel_name].unpromote(channels[channel_name].is_member(last_param));         
             return ;
         }
         if (mode.at(0) == '+' && !channels[channel_name].is_operator(last_param)){
-            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), channel_name, "+o", last_param));
+            channels[channel_name].broadcast_message(MODE_CHANGED(excuter.get_nickname(), excuter.get_client_host(), channel_name, "+o", last_param));
             channels[channel_name].promote(clients[channels[channel_name].is_member(last_param)]);         
             return ;
         }

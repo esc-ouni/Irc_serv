@@ -36,7 +36,7 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
     }
     if (!topic.empty()){
         if (client.set_topic(channels[channel_name], topic)){
-            channels[channel_name].broadcast_message(RPL_TOPICCHANGE(client.get_nickname(), channel_name, channels[channel_name].get_topic()));
+            channels[channel_name].broadcast_message(RPL_TOPICCHANGE(client.get_nickname(), client.get_client_host(), channel_name, channels[channel_name].get_topic()));
         }
     }
     else{
