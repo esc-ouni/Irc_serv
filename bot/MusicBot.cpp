@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/13 19:51:05 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/14 17:23:05 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,32 @@
 #include "../headers/Channel.hpp"
 #include "../headers/commands.hpp"
 #include <netdb.h>
+
+std::string trim(std::string &str, std::string charstotrim) {
+    size_t endpos = str.find_last_not_of(charstotrim);
+
+    if (std::string::npos != endpos) {
+        str = str.substr(0, endpos + 1);
+    }
+    return (str);
+};
+
+std::vector<std::string> parser(std::string &full_command, char dilimeter){
+    std::vector<std::string> args;
+    std::stringstream        stream(trim(full_command, "\r\n"));
+    std::string              token;
+    
+    if (full_command.empty())
+        return args;
+    while (!std::getline(stream , token,  dilimeter).eof()){
+        if (!token.empty())
+            args.push_back(token);
+    }
+    if (!token.empty()){
+        args.push_back(token);
+    }
+    return args;
+};
 
 long int contains_only_nums(std::string string){
     if (string.empty())
@@ -40,6 +66,9 @@ int main(int argc, char *argv[]) {
         return 0;    
     }
     struct sockaddr_in addr;
+    std::string message;
+
+    std::vector<std::string> args;
 
     struct pollfd pfd;
 
@@ -70,8 +99,8 @@ int main(int argc, char *argv[]) {
     send_message(socket_end, "PASS pass\r\n");
     send_message(socket_end, "NICK MusicBot\r\n");
     send_message(socket_end, "USER 1 0 *\r\n");
-    send_message(socket_end, "JOIN #music\r\n");
-    send_message(socket_end, "TOPIC #music :Use <!Bot  dance> Command For The Music Of The Day\r\n");
+    send_message(socket_end, "JOIN #random\r\n");
+    send_message(socket_end, "TOPIC #random : Have Fun Guys !\r\n");
 
     while (true){
         ready_fd = poll(&pfd, 1, -1);
@@ -82,10 +111,17 @@ int main(int argc, char *argv[]) {
                 buff[read_bytes] = '\0';
                 // std::cout << buff << std::endl;
                 play = buff;
-                if (play.find("!Bot dance") != std::string::npos){
-                    play = "/usr/bin/afplay b_tmp/m.mp3 &";
-                    std::system(play.c_str());
-                    send_message(socket_end, "PRIVMSG #music : Now playing sba7 lkheir \r\n");
+                if (play.find("MSG_TO_SD") != std::string::npos){
+                    play += play.find("MSG_TO_SD");
+                    args = parser(play, ' ');
+                    for (int i = 0; i < args.size(); i++){
+                        std::cout << i << "<"<< args[i] << ">"<< std::endl;
+                    }
+                     
+                    if (args.size() >= 1){
+                        message = "PRIVMSG " + args[1] + "     :You have been pinged, you are to noisy a zamel \r\n";
+                        send_message(socket_end, message);
+                    }
                 }
             }
             else if (!read_bytes){

@@ -25,16 +25,6 @@ void send_message(int clientSocket, std::string message) {
         std::cerr << "Err: failling sending message to the client !" << std::endl;
 };
 
-std::string trim(std::string &str, std::string charstotrim) {
-    size_t endpos = str.find_last_not_of(charstotrim);
-
-    if (std::string::npos != endpos) {
-        str = str.substr(0, endpos + 1);
-    }
-    return (str);
-};
-
-
 long int contains_only_nums(std::string string){
     if (string.empty())
         return (-1);
@@ -45,6 +35,15 @@ long int contains_only_nums(std::string string){
             return (-1);
     }
     return (std::atol(string.c_str()));
+};
+
+std::string trim(std::string &str, std::string charstotrim) {
+    size_t endpos = str.find_last_not_of(charstotrim);
+
+    if (std::string::npos != endpos) {
+        str = str.substr(0, endpos + 1);
+    }
+    return (str);
 };
 
 std::vector<std::string> parser(std::string &full_command, char dilimeter){

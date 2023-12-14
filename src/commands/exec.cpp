@@ -75,8 +75,8 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 5) == "OPER " && client.is_authenticated()){
         oper(command, client);
     }
-    else if (command.substr(0, 4) == "PLAY" && client.is_authenticated()){
-        play(command, client);
+    else if (command.substr(0, 11) == "STOPTALKING" && client.is_authenticated()){
+        bot_call(command, client, clients);
     }
     // else
         // send_messages(client.get_fd(), ERR_UNKNOWNCOMMAND(client.get_nickname(), parser(command, ',').at(0)));

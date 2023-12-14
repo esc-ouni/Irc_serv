@@ -185,4 +185,4 @@ void                     oper(std::string command, Client &client);
 bool                     valid_full_option(std::string &option);
 void                     execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::map<int, Client> &clients, std::string &last_param);
 std::vector<std::string> mode_parser(std::string &full_command, char dilimeter);
-void                     play(std::string command, Client &client);
+void                     bot_call(std::string command, Client &client, std::__1::map<int, Client> &clients);
