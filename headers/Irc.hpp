@@ -29,7 +29,7 @@
 #define PURPLE "\033[0;35m"
 
 #define BUFFER_SIZE 20
-#define MAX_CLIENTS 100
+#define MAX_CLIENTS 100 // maximum length of the queue of pending connections
 
 #define CHANNEL_LIMIT 100
 
