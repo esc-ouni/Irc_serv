@@ -6,13 +6,26 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 14:36:16 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:06:46 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Irc.hpp"
 #include "../headers/Channel.hpp"
 #include "../headers/commands.hpp"
+
+time_t time_teller(){
+    time_t      current_time = time(NULL);
+    return (current_time);
+};
+
+void	ft_usleep(time_t time)
+{
+	time += time_teller();
+	while (time_teller() < time){
+        continue;
+	}
+};
 
 std::string trim(std::string &str, std::string charstotrim) {
     while (!str.empty() && (str.back() == '\r' || str.back() == '\n')) {
@@ -53,7 +66,7 @@ long int contains_only_nums(std::string string){
 void send_message(int client_socket, std::string message) {
     if (send(client_socket, message.c_str(), message.length(), 0) == -1)
         std::cerr << "Err: failling sending message to the client !" << std::endl;
-    // usleep(300);
+    ft_usleep(1);
 };
 
 

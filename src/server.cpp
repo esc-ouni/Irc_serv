@@ -2,6 +2,8 @@
 #include "../headers/Channel.hpp"
 #include "../headers/commands.hpp"
 
+#include <netinet/tcp.h>
+
 Irc::Irc(int port, char *password)
 {
     _passWord = password;
@@ -36,6 +38,9 @@ void Irc::settingsockopt()
     int opt = 1;
     if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
         printc("ERROR : setsockopt", RED, 1);
+    if (setsockopt(_serverSocket, IPPROTO_TCP, TCP_NODELAY, &opt, sizeof(opt)) == -1) //ADDED
+        printc("ERROR : setsockopt", RED, 1);
+
 }
 
 void Irc::nonBlockFd()
