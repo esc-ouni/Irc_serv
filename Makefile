@@ -2,7 +2,7 @@
 EXEC    = ircserv
 CC      = c++
 RM      = rm -rf
-# FLAGS   = -fsanitize=address,undefined -g
+FLAGS   = -std=c++98 -Wall -Wextra -Werror
 H_FILES = ${shell ls headers/*.hpp}
 C_FILES = ${shell ls src/*/*.cpp} ${shell ls src/*.cpp}
 OBJS    = $(C_FILES:.cpp=.o)
@@ -39,7 +39,7 @@ Transfer:
 	@echo "./fileTransfer/transfer <Pathfile>"
 
 Boot:
-	@c++ bot/*.cpp -o ./Emet_v1
+	@c++ $(FLAGS) bot/*.cpp -o ./Emet_v1
 	@clear
 	@echo "./Emet_v1 <IP> <PORT>"
 

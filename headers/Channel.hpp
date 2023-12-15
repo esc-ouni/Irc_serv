@@ -57,7 +57,7 @@ class Channel
         std::string get_password() const;
         bool        set_password(std::string password);
         int         get_limit() const;
-        bool        set_limit(int limit);
+        bool        set_limit(unsigned int limit);
         bool        get_option_l() const;
         bool        get_option_k() const;
         bool        get_option_t() const;

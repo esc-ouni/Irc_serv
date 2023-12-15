@@ -44,16 +44,16 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
         send(client.get_fd(), auth.c_str(), auth.length(), 0);
     }
     else if (command.substr(0, 5) == "JOIN " && client.is_authenticated()){
-        handle_Join(command, client, channels, clients);
+        handle_Join(command, client, channels);
     }
     else if (command.substr(0, 6) == "TOPIC " && client.is_authenticated()){
-        set_topic(command, client, channels, clients);
+        set_topic(command, client, channels);
     }
     else if (command.substr(0, 5) == "PART " && client.is_authenticated()){
         leave_channel(command, client, channels);
     }
     else if (command.substr(0, 5) == "QUIT " && client.is_authenticated()){
-        quit_server(client, clients, channels);
+        quit_server(client, channels);
     }
     else if (command.substr(0, 5) == "KICK " && client.is_authenticated()){
         kick_user(command, client, channels, clients);

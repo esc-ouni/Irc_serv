@@ -7,7 +7,7 @@ bool channel_name_is_valid(std::string &channel_name){
         return(false);
     if (channel_name.c_str()[0] != '#')
         return(false);
-    for (int i = 1; i < channel_name.length(); i++){
+    for (size_t i = 1; i < channel_name.length(); i++){
         if ((!std::isalnum(channel_name.c_str()[i]) && !valid_sp_character(channel_name.c_str()[i])) || std::isspace(channel_name.c_str()[i]))
             return(false);
     }
@@ -37,7 +37,7 @@ long int contains_only_nums(std::string string){
     return (std::atol(string.c_str()));
 };
 
-std::string trim(std::string &str, std::string charstotrim) {
+std::string trim(std::string &str) {
     while (!str.empty() && (str.back() == '\r' || str.back() == '\n')) {
         str.pop_back();
     }
@@ -46,7 +46,7 @@ std::string trim(std::string &str, std::string charstotrim) {
 
 std::vector<std::string> parser(std::string &full_command, char dilimeter){
     std::vector<std::string> args;
-    std::stringstream        stream(trim(full_command, "\r\n"));
+    std::stringstream        stream(trim(full_command));
     std::string              token;
     
     if (full_command.empty())
@@ -64,7 +64,7 @@ std::vector<std::string> parser(std::string &full_command, char dilimeter){
 bool valid_full_option(std::string &option){   
     if ((option.at(0) != '+' && option.at(0) != '-'))
         return (false);
-    for (int i = 1; i < option.size(); i++){
+    for (size_t i = 1; i < option.size(); i++){
         if (!std::isalpha(option.at(i)))
             return (false);    
     }

@@ -8,7 +8,7 @@ bool is_valid_topic(std::string &new_topic){
     return (true);
 }
 
-void set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients){
+void set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels){
     std::vector<std::string> args = parser(command, ' ');
     int argc = args.size();
 

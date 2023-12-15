@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 16:06:46 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:21:27 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_usleep(time_t time)
 	}
 };
 
-std::string trim(std::string &str, std::string charstotrim) {
+std::string trim(std::string &str) {
     while (!str.empty() && (str.back() == '\r' || str.back() == '\n')) {
         str.pop_back();
     }
@@ -36,7 +36,7 @@ std::string trim(std::string &str, std::string charstotrim) {
 
 std::vector<std::string> parser(std::string &full_command, char dilimeter){
     std::vector<std::string> args;
-    std::stringstream        stream(trim(full_command, "\r\n"));
+    std::stringstream        stream(trim(full_command));
     std::string              token;
     
     if (full_command.empty())

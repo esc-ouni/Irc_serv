@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/14 14:35:27 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:18:57 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
-bool Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients) {
+bool Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name) {
     if (!channels[new_channel_name].add_user(client))
         return (false);
     channels[new_channel_name].set_name(new_channel_name);
@@ -22,7 +22,7 @@ bool Create_channel_join(Client &client, std::map<std::string, Channel>& channel
     return (true);
 };
 
-bool channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::map<int, Client> &clients, std::string& password){
+bool channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& channel_name, std::string& password){
     if (channels[channel_name].get_option_k()){
         if (channels[channel_name].get_password() != password){
             send_message(client.get_fd(), ERR_INVALIDKEY(client.get_nickname(), channel_name));
@@ -45,7 +45,7 @@ void send_names_list(Client &client, Channel &channel){
 }
 
 
-void handle_Join(std::string command, Client &client, std::map<std::string, Channel>& channels, std::map<int, Client> &clients) {
+void handle_Join(std::string command, Client &client, std::map<std::string, Channel>& channels) {
     std::vector<std::string> args = parser(command, ' ');
     int argc = args.size();
 
@@ -57,14 +57,14 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
         if (argc == 3)
             password = args[2];
         channel_list = parser(args[1], ',');
-        for (int i = 0; i < channel_list.size(); i++){
+        for (size_t i = 0; i < channel_list.size(); i++){
             if (!channel_list.at(i).empty() && channel_name_is_valid(channel_list.at(i))){
                 if (!channel_exist(channels, channel_list.at(i))){
-                    if(!Create_channel_join(client, channels, channel_list.at(i), clients))
+                    if(!Create_channel_join(client, channels, channel_list.at(i)))
                         return ;
                 }
                 else if (channel_exist(channels, channel_list.at(i))){
-                    if(!channel_join(client, channels, channel_list.at(i), clients, password)){
+                    if(!channel_join(client, channels, channel_list.at(i), password)){
                         return ;
                     }
                 }

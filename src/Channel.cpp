@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 14:45:10 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:24:01 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void   Channel::unlock(){
 bool is_valid_password(std::string pass){
     if (pass.empty() || pass.length() > 20 || pass.length() < 8)
         return(false);
-    for (int i = 0; i < pass.length(); i++){
+    for (size_t i = 0; i < pass.length(); i++){
         if ((!std::isalnum(pass.c_str()[i]) && !valid_sp_character(pass.c_str()[i])) || std::isspace(pass.c_str()[i]))
             return(false);
     }
@@ -189,7 +189,7 @@ int Channel::get_limit() const{
     return (this->_modes.limit);
 }
 
-bool Channel::set_limit(int limit) {
+bool Channel::set_limit(unsigned int limit) {
     if (limit > 0 && limit <= CHANNEL_LIMIT){
         if (this->_modes.limit != limit){
             this->_modes.limit = limit;
