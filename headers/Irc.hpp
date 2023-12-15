@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <vector>
+#include <netdb.h>
 #include <map>
 #include <poll.h>
 #include <unistd.h>

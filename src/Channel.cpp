@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/13 19:45:15 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 13:52:52 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void Channel::printChannelInfo(){
     std::cout << "  -Channel Name : " << _name << std::endl;
     std::cout << "  -Topic        : " << _topic << " set by : " << _topic_setter << " on : " << _topic_date << std::endl;
     std::cout << "  -Creation Date: " << _creation_date << std::endl;
-    std::cout << "  -Total Clients: " << _total_clients << std::endl;
     std::cout << "  -Password     : " << _password << std::endl;
     std::cout << "  -Locked       : " << std::boolalpha << _locked << std::endl;
     
@@ -94,7 +93,6 @@ Channel::Channel(){
     this->_modes.k = false;
     this->_modes.t = false;
     this->_modes.l = false;
-    this->_total_clients = 0;
     this->_locked = false;
 };
 
@@ -267,7 +265,6 @@ bool Channel::add_user(Client &client) {
         return false;
     }
     this->_clients[client.get_fd()] = &client;
-    this->_total_clients++;
     if (this->is_invited(client))
         this->remove_from_invite_list(client);
     return true;

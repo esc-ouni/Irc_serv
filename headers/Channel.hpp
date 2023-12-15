@@ -29,24 +29,20 @@ class Channel
         std::map<int, Client*>        _operators;
         std::map<int, Client*>        _invitees;
         t_mode_options                _modes;
-        unsigned int                  _total_clients;
-  
         std::string                   _password;
         bool                          _locked;
-
+  
     public:
         Channel();
         ~Channel();
         bool        add_user(Client &client);
         void        promote(Client &client);
-        void        unpromote(Client &client); // need to be added when client leave
-        void        unpromote(int client_fd); // need to be added when client leave
+        void        unpromote(Client &client);
+        void        unpromote(int client_fd);
         bool        set_topic(Client &client, std::string &new_topic);
         std::string get_topic() const;
         bool        is_operator(Client &client);
         bool        is_operator(std::string &client_name);
-
-
         void        remove_user(Client &client);
         bool        is_member(Client &client);
         int         is_member(std::string &client_name);
@@ -58,18 +54,14 @@ class Channel
         void        broadcast_message_exp(Client &client, std::string message);
         std::string get_creation_date() const;
         std::string get_all_users();
-
         std::string get_password() const;
         bool        set_password(std::string password);
-
         int         get_limit() const;
         bool        set_limit(int limit);
-
         bool        get_option_l() const;
         bool        get_option_k() const;
         bool        get_option_t() const;
         bool        get_option_i() const;
-
         bool        set_option_l(bool bit);
         bool        set_option_k(bool bit);
         bool        set_option_t(bool bit);
@@ -77,11 +69,9 @@ class Channel
         void        lock();
         void        unlock();
         std::string show_mode();    
-        
         bool        add_to_invitee(Client &client);
         bool        is_invited(Client &client);
         void        remove_from_invite_list(Client &client);
-
 
         void        printChannelInfo();
 };

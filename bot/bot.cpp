@@ -6,14 +6,13 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 13:20:31 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 14:02:33 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Irc.hpp"
 #include "../headers/Channel.hpp"
 #include "../headers/commands.hpp"
-#include <netdb.h>
 
 std::string trim(std::string &str, std::string charstotrim) {
     while (!str.empty() && (str.back() == '\r' || str.back() == '\n')) {
@@ -54,6 +53,7 @@ long int contains_only_nums(std::string string){
 void send_message(int client_socket, std::string message) {
     if (send(client_socket, message.c_str(), message.length(), 0) == -1)
         std::cerr << "Err: failling sending message to the client !" << std::endl;
+    usleep(300);
 };
 
 
@@ -104,13 +104,12 @@ int main(int argc, char *argv[]) {
         if (read_bytes > 0){
             std::cout << "PING" << std::endl;
             buff[read_bytes] = '\0';
-            // std::cout << buff << std::endl;
             play = buff;
             if (play.find("MSG_TO_SD") != std::string::npos){
                 play.erase(0, play.find("MSG_TO_SD"));
                 args = parser(play, ' ');
                 if (args.size() > 1){
-                    message = "PRIVMSG " + args[1] + " :You have been pinged, you are to noisy a zamel \r\n";
+                    message = "PRIVMSG " + args[1] + " :You have been pinged, you are too noisy a zamel \r\n";
                     send_message(socket_end, message);
                 }
             }

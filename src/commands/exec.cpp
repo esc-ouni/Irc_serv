@@ -78,8 +78,8 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 11) == "STOPTALKING" && client.is_authenticated()){
         trigbot(command, client, clients);
     }
-    // else
-        // send_messages(client.get_fd(), ERR_UNKNOWNCOMMAND(client.get_nickname(), parser(command, ',').at(0)));
+    else
+        send_message(client.get_fd(), ERR_UNKNOWNCOMMAND(client.get_nickname(), parser(command, ',').at(0)));
     // monitoring(channels,clients);
 };
 
