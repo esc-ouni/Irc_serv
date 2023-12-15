@@ -4,7 +4,6 @@
 void signal_handler(int signal)
 {
     (void)signal;
-    system("clear"); //TODO: remove this
     std::cout << RED << "\nBYE BYE" << RESET << std::endl;
     exit(EXIT_SUCCESS);
 }
