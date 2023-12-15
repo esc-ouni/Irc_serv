@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/11 16:56:49 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 14:45:10 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,55 +17,55 @@
 
 
 void monitoring(std::map<std::string, Channel> &channels, std::map<int, Client> &clients){
+    leak();
     std::map<std::string, Channel>::iterator it;
     for (it = channels.begin() ; it != channels.end() ; it++){
         it->second.printChannelInfo();
     }
 
-   std::map<int, Client>::iterator it2 = clients.begin();
+    std::map<int, Client>::iterator it2 = clients.begin();
 
     std::cout << std::endl << "ALL Clients  :" << std::endl;
     while (it2 != clients.end()){
-        std::cout << "  ID: " << it2->first << ", Name: " << it2->second.get_nickname() << std::endl;
+        std::cout << "  -ID: " << it2->first << ", Name: " << it2->second.get_nickname() << std::endl;
         it2++;
     }
 };
 
 void Channel::printChannelInfo(){
     // std::system("clear");
-    std::cout << "Channel Name : " << _name << std::endl;
-    std::cout << "Topic        : " << _topic << " set by " << _topic_setter << " on " << _topic_date << std::endl;
-    std::cout << "Creation Date: " << _creation_date << std::endl;
-    std::cout << "Total Clients: " << _total_clients << std::endl;
-    std::cout << "Password     : " << _password << std::endl;
-    std::cout << "Locked       : " << std::boolalpha << _locked << std::endl << std::endl;
+    std::cout << "  -Channel Name : " << _name << std::endl;
+    std::cout << "  -Topic        : " << _topic << " set by : " << _topic_setter << " on : " << _topic_date << std::endl;
+    std::cout << "  -Creation Date: " << _creation_date << std::endl;
+    std::cout << "  -Password     : " << _password << std::endl;
+    std::cout << "  -Locked       : " << std::boolalpha << _locked << std::endl;
     
 
     std::map<int, Client*>::iterator it = this->_clients.begin();
 
     std::cout << std::endl << "Clients  :" << std::endl;
     while (it != this->_clients.end()){
-        std::cout << "  ID: " << it->first << ", Name: " << it->second->get_nickname() << std::endl;
+        std::cout << "  -ID: " << it->first << ", Name: " << it->second->get_nickname() << std::endl;
         it++;
     }
     std::cout << std::endl << "Operators:" << std::endl;
     it = this->_operators.begin();
     while (it != this->_operators.end()){
-        std::cout << "  ID: " << it->first << ", Name: " << it->second->get_nickname() << std::endl;
+        std::cout << "  -ID: " << it->first << ", Name: " << it->second->get_nickname() << std::endl;
         it++;
     }
     std::cout << std::endl << "Invitees :" << std::endl;
     it = this->_invitees.begin();
     while (it != this->_invitees.end()){
-        std::cout << "  ID: " << it->first << ", Name: " << it->second->get_nickname() << std::endl;
+        std::cout << "  -ID: " << it->first << ", Name: " << it->second->get_nickname() << std::endl;
         it++;
     }
     std::cout << std::endl << "Modes    :" << std::endl;
-    std::cout << "limit:" << this->_modes.limit << std::endl;
-    std::cout << "flag i :" << std::boolalpha << this->_modes.i << std::endl;
-    std::cout << "flag t :" << std::boolalpha << this->_modes.t << std::endl;
-    std::cout << "flag k :" << std::boolalpha << this->_modes.k << std::endl;
-    std::cout << "flag l :" << std::boolalpha << this->_modes.l << std::endl << std::endl;
+    std::cout << "  -limit:" << this->_modes.limit << std::endl;
+    std::cout << "  -flag i :" << std::boolalpha << this->_modes.i << std::endl;
+    std::cout << "  -flag t :" << std::boolalpha << this->_modes.t << std::endl;
+    std::cout << "  -flag k :" << std::boolalpha << this->_modes.k << std::endl;
+    std::cout << "  -flag l :" << std::boolalpha << this->_modes.l << std::endl << std::endl;
 };
 
 
@@ -94,7 +94,6 @@ Channel::Channel(){
     this->_modes.k = false;
     this->_modes.t = false;
     this->_modes.l = false;
-    this->_total_clients = 0;
     this->_locked = false;
 };
 
@@ -251,10 +250,8 @@ time_t time_teller(){
 
 void Channel::remove_user(Client &client) {
     if (this->is_member(client)){
-        if (client.is_operator((*this)))
-            this->unpromote(client);
-        if (this->is_invited(client))
-            this->remove_from_invite_list(client);
+        this->unpromote(client);
+        this->remove_from_invite_list(client);
         this->_clients.erase(client.get_fd());
     }
 };
@@ -269,7 +266,6 @@ bool Channel::add_user(Client &client) {
         return false;
     }
     this->_clients[client.get_fd()] = &client;
-    this->_total_clients++;
     if (this->is_invited(client))
         this->remove_from_invite_list(client);
     return true;
@@ -368,17 +364,19 @@ bool Channel::add_to_invitee(Client &client){
         return (true);
     }
     return (false);
+
 };
 
 bool  Channel::is_invited(Client &client){
      std::map<int, Client*>::iterator it = this->_invitees.begin();
      
-     while (it != this->_invitees.end()){
-        if (client.get_fd() == it->first)
+    while (it != _invitees.end()){
+        if (it->first == client.get_fd()){
             return (true);
+        }
         it++;
-     }
-    return (false); 
+    }
+    return (false);
 };
 
 void   Channel::remove_from_invite_list(Client &client){

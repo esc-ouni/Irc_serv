@@ -2,7 +2,6 @@
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
-
 void excute_command(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients)
 {
     if (command.substr(0, 5) == "PASS\n")
@@ -76,8 +75,12 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 5) == "OPER " && client.is_authenticated()){
         oper(command, client);
     }
+    else if (command.substr(0, 11) == "STOPTALKING" && client.is_authenticated()){
+        trigbot(command, client, clients);
+    }
+    else
+        send_message(client.get_fd(), ERR_UNKNOWNCOMMAND(client.get_nickname(), parser(command, ',').at(0)));
     // monitoring(channels,clients);
-
 };
 
 //     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())

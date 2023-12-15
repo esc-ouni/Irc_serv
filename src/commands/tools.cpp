@@ -25,16 +25,6 @@ void send_message(int clientSocket, std::string message) {
         std::cerr << "Err: failling sending message to the client !" << std::endl;
 };
 
-std::string trim(std::string &str, std::string charstotrim) {
-    size_t endpos = str.find_last_not_of(charstotrim);
-
-    if (std::string::npos != endpos) {
-        str = str.substr(0, endpos + 1);
-    }
-    return (str);
-};
-
-
 long int contains_only_nums(std::string string){
     if (string.empty())
         return (-1);
@@ -45,6 +35,13 @@ long int contains_only_nums(std::string string){
             return (-1);
     }
     return (std::atol(string.c_str()));
+};
+
+std::string trim(std::string &str, std::string charstotrim) {
+    while (!str.empty() && (str.back() == '\r' || str.back() == '\n')) {
+        str.pop_back();
+    }
+    return (str);
 };
 
 std::vector<std::string> parser(std::string &full_command, char dilimeter){
@@ -64,13 +61,11 @@ std::vector<std::string> parser(std::string &full_command, char dilimeter){
     return args;
 };
 
-bool valid_full_option(std::string &option){
-    if (option.length() != 2)
-        return (false);        
+bool valid_full_option(std::string &option){   
     if ((option.at(0) != '+' && option.at(0) != '-'))
         return (false);
-    for (int i = 0; i < option.size(); i++){
-        if (std::isalpha(option.at(i)))
+    for (int i = 1; i < option.size(); i++){
+        if (!std::isalpha(option.at(i)))
             return (false);    
     }
     return (true);    

@@ -52,6 +52,14 @@ bool    Client::is_IRC_op(){
     return (this->_IRC_op);
 };
 
+std::string  Client::get_client_host() const{
+    return (this->_client_host);
+};
+
+void  Client::set_client_host(std::string client_host){
+    this->_client_host = client_host;
+};
+
 
 
 std::string Client::get_nickname()

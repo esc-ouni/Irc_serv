@@ -27,6 +27,7 @@ fclean: clean
 	$(RM) ./fileTransfer/transfer
 	$(RM) .vscode
 	$(RM) *.dSYM
+	$(RM) Emet_v1
 	@clear && echo "==All_created_files_deleted=="
 
 re: fclean all
@@ -38,8 +39,8 @@ Transfer:
 	@echo "./fileTransfer/transfer <Pathfile>"
 
 Boot:
-	@c++ bot/bot.cpp -o bot/bot
+	@c++ bot/*.cpp -o ./Emet_v1
 	@clear
-	@echo "./bot/bot <IP> <PORT>"
+	@echo "./Emet_v1 <IP> <PORT>"
 
 .PHONY: all clean fclean re transfer

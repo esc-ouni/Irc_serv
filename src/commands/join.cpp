@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/13 19:57:08 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:11:38 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
                         return ;
                     }
                 }
-                reply = RPL_NOTIFYJOIN(client.get_nickname(), channel_list.at(i));
+                reply = RPL_NOTIFYJOIN(client.get_nickname(), client.get_client_host(), channel_list.at(i));
                 channels[channel_list.at(i)].broadcast_message(reply);
                 if (!channels[channel_list.at(i)].get_topic_date().empty()){
                     send_message(client.get_fd(), RPL_TOPIC(client.get_nickname(), channel_list.at(i), channels[channel_list.at(i)].get_topic()));
