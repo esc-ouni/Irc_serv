@@ -58,7 +58,6 @@ std::string remove_two_pts_and_space(std::string str) {
     return (result);
 }
 
-
 std::string extract_msg_to_send(std::string message)
 {
     std::istringstream stream(message);
@@ -85,16 +84,12 @@ std::string receivername(std::string message)
     return (receiver);
 }
 
-std::string chanel_name(const std::string receiver)
+int chanel_name(const std::string receiver)
 {
     if (!receiver.empty() && receiver[0] == '#')
-    {
-        return receiver.substr(1);
-    }
+        return 1;
     else
-    {
-        return std::string();
-    }
+        return 0;
 }
 
 bool checkIfTheChennelExists(std::map<std::string, Channel> &channels,std::string channel)
@@ -128,7 +123,7 @@ bool chechIfClientIsInChannel(std::map<std::string, Channel> &channels, Client &
 
 void broadcast_to_channel(std::string msg_to_send, Client &client, std::map<std::string, Channel> &channels,std::string channel)
 {
-    std::string cha = "#" + channel;
+    std::string cha = channel;
 
     if (!checkIfTheChennelExists(channels, cha))
     {
@@ -153,17 +148,17 @@ void privmsg(std::string message, Client &client, std::map<int, Client> &clients
 {
     std::string receiver = receivername(message);
     std::string msg_to_send = extract_msg_to_send(message);
-    std::string chanel = chanel_name(receiver);
+    int chanel = chanel_name(receiver);
     
 
     if (receiver.empty())
         send(client.get_fd(), ERR_NORECIPIENT(client.get_nickname()).c_str(), ERR_NORECIPIENT(client.get_nickname()).length(), 0);
-    else if (!receiver.empty() && chanel.empty())
+    else if (!receiver.empty() && chanel == 0)
     {
         privmsg_user(msg_to_send, client, clients, receiver);
     }
-    else if (!chanel.empty())
+    else if (chanel == 1)
     {
-        broadcast_to_channel(msg_to_send, client, channels, chanel);
+        broadcast_to_channel(msg_to_send, client, channels, receiver);
     }
 }
