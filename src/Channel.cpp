@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 13:52:52 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 14:45:10 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 
 void monitoring(std::map<std::string, Channel> &channels, std::map<int, Client> &clients){
+    leak();
     std::map<std::string, Channel>::iterator it;
     for (it = channels.begin() ; it != channels.end() ; it++){
         it->second.printChannelInfo();

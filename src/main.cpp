@@ -21,8 +21,10 @@ static int IsDigit(char *argv)
 
 std::string filteredString(std::string str);
 
+
 int main(int ac, char *argv[])
 {
+    std::atexit(leak);
     if (ac != 3 || IsDigit(argv[1]) || argv[2] == NULL || !strlen(argv[2]))
     {
         std::cerr << RED << "try ./ircserv [port] [password]" << RESET << std::endl;

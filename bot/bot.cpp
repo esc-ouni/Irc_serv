@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 14:02:33 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 14:36:16 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ long int contains_only_nums(std::string string){
 void send_message(int client_socket, std::string message) {
     if (send(client_socket, message.c_str(), message.length(), 0) == -1)
         std::cerr << "Err: failling sending message to the client !" << std::endl;
-    usleep(300);
+    // usleep(300);
 };
 
 
@@ -82,7 +82,6 @@ int main(int argc, char *argv[]) {
         std::cerr << "Err: failling to connect socket!" << std::endl;
         return 0;
     }
-    std::cout << socket_end << std::endl;    
     std::cout << "BOT CONNECTED TO TE SERVER SUCCESSFULLY !" << std::endl;    
 
     send_message(socket_end, "PASS pass\r\n");
@@ -128,7 +127,5 @@ int main(int argc, char *argv[]) {
         play.clear();
         message.clear();
     }
-    
-
     return (0);
 }

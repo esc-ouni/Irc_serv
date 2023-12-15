@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 16:31:54 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/14 17:58:55 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 15:02:19 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,11 @@
 
 void trigbot(std::string command, Client &client, std::__1::map<int, Client> &clients){
     std::vector<std::string> args = parser(command, ' ');
-    std::string msg;
-    std::string bot_name = "Emet";
+    std::string              msg;
+    std::string              bot_name = "Emet";
+    int                      argc = args.size();
+    int                      bot_fd = 0;
 
-    int bot_fd;
-
-    int argc = args.size();
 
     if (argc == 2){
         if (args[0] == "STOPTALKING"){
@@ -40,8 +39,10 @@ void trigbot(std::string command, Client &client, std::__1::map<int, Client> &cl
                 return ;
             }
         }
-        send_message(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "STOPTALKING"));
+        send_message(client.get_fd(), RPL("STOPTALKING <noisy_client>", client.get_nickname()));
         return ;
     }
+    else
+        send_message(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "STOPTALKING"));
 };
 
