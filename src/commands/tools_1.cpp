@@ -2,7 +2,6 @@
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
-void leak(){std::cout<<std::endl;std::system("leaks ircserv | grep \" leaks \" | awk '{ print $3\" \"$4 }'");std::cout << std::endl;}
 
 std::string extract_channel_name(std::string& command) {
     size_t n = command.find('#');

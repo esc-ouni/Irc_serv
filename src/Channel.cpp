@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 10:20:22 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 16:24:01 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:49:24 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 
 void monitoring(std::map<std::string, Channel> &channels, std::map<int, Client> &clients){
-    leak();
+
     std::map<std::string, Channel>::iterator it;
     for (it = channels.begin() ; it != channels.end() ; it++){
         it->second.printChannelInfo();
@@ -30,6 +30,7 @@ void monitoring(std::map<std::string, Channel> &channels, std::map<int, Client> 
         std::cout << "  -ID: " << it2->first << ", Name: " << it2->second.get_nickname() << std::endl;
         it2++;
     }
+    std::cout<<std::endl;std::system("leaks ircserv | grep \" leaks \" | awk '{ print $3\" \"$4 }'");std::cout << std::endl;
 };
 
 void Channel::printChannelInfo(){
