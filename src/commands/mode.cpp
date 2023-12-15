@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 13:36:45 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:19:29 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void mode_with_params(std::map<std::string, Channel>& channels, Client &excuter,
     std::vector<std::string> param;
     std::string              s_mode;
     std::string              s_param;
-    int                      param_c = 0;
+    size_t                   param_c = 0;
     
     if (!channel_exist(channels, channel_name)){
         send_message(excuter.get_fd(), ERR_NOSUCHCHANNEL(excuter.get_nickname(), channel_name));
@@ -90,7 +90,7 @@ void mode_with_params(std::map<std::string, Channel>& channels, Client &excuter,
     param  = mode_parser(last_param, ',');
     param_c = param.size();
     
-    for (int i = 1; i < mode.size(); i++){
+    for (size_t i = 1; i < mode.size(); i++){
         if (i <= param_c)
             s_param = param.at(i - 1);
         else

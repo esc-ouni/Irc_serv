@@ -15,7 +15,7 @@ std::string extract_channel_name(std::string& command) {
             ch_name = ch_name.substr(0, n);
         }
     }
-    return (trim(ch_name, "\r\n"));
+    return (trim(ch_name));
 };
 
 bool channel_exist(std::map<std::string, Channel>& channels, std::string &needle){
@@ -42,7 +42,7 @@ std::string extract_topic(std::string& command) {
             }
         }
     }
-    return (trim(topic, "\r\n"));
+    return (trim(topic));
 }
 
 std::string extract_target(std::string& command) {
@@ -61,7 +61,7 @@ std::string extract_target(std::string& command) {
             }
         }
     }
-    return (trim(target, "\r\n"));
+    return (trim(target));
 };
 
 std::string extract_reason(std::string& command) {
@@ -81,12 +81,12 @@ std::string extract_reason(std::string& command) {
             }
         }
     }
-    return (trim(reason, "\r\n"));
+    return (trim(reason));
 };
 
 std::vector<std::string> mode_parser(std::string &full_command, char dilimeter){
     std::vector<std::string> args;
-    std::stringstream        stream(trim(full_command, "\r\n"));
+    std::stringstream        stream(trim(full_command));
     std::string              token;
     
     if (full_command.empty())

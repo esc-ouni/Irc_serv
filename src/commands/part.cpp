@@ -18,7 +18,7 @@ void leave_channel(std::string command, Client &client, std::map<std::string, Ch
 };
 
 
-void quit_server(Client &client, std::map<int, Client> &clients, std::map<std::string, Channel>& channels){
+void quit_server(Client &client, std::map<std::string, Channel>& channels){
     std::map<std::string, Channel>::iterator it = channels.begin();
     
     while (it != channels.end()){
