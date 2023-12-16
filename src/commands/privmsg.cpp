@@ -153,6 +153,8 @@ void privmsg(std::string message, Client &client, std::map<int, Client> &clients
 
     if (receiver.empty())
         send(client.get_fd(), ERR_NORECIPIENT(client.get_nickname()).c_str(), ERR_NORECIPIENT(client.get_nickname()).length(), 0);
+    if (msg_to_send.empty())
+        send(client.get_fd(), ERR_NOTEXTTOSEND(client.get_nickname()).c_str(), ERR_NOTEXTTOSEND(client.get_nickname()).length(), 0);
     else if (!receiver.empty() && chanel == 0)
     {
         privmsg_user(msg_to_send, client, clients, receiver);

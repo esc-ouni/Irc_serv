@@ -17,16 +17,16 @@ std::string filteredString(std::string str)
     return filteredstr;
 }
 
-
 bool pass( std::string command, Client &client)
 {
     std::string pass = filteredString(command.substr(5, command.length() - 5));
 
     if (client.get_pass() != pass)
     {
+        client.setHasPassword(false);
         return false;
     }
-    else if (client.get_pass() == pass && client.hasPassword() == true)
+    else if (client.get_pass() == pass && client.is_authenticated() == true)
     {
         send(client.get_fd(), ERR_ALREADYREGISTERED(client.get_nickname()).c_str(), ERR_ALREADYREGISTERED(client.get_nickname()).length(), 0);
         return true;
