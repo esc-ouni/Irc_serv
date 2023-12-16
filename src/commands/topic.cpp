@@ -15,6 +15,8 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
     std::string              channel_name;
     std::string              topic = "";
 
+    if (args.at(0) != "TOPIC")
+        return ;
     if (argc >= 2){
         if (argc >= 3)
             topic = extract_topic(command);

@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 16:21:27 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/16 12:07:15 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ void	ft_usleep(time_t time)
 };
 
 std::string trim(std::string &str) {
-    while (!str.empty() && (str.back() == '\r' || str.back() == '\n')) {
-        str.pop_back();
+    int l = str.length() - 1;
+    
+    while (!str.empty() && (str.at(l) == '\r' || str.at(l) == '\n')) {
+        str.erase(str.begin()+l);
+        l--;
     }
     return (str);
 };

@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 16:31:54 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 15:02:19 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/16 11:31:24 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
-void trigbot(std::string command, Client &client, std::__1::map<int, Client> &clients){
+void trigbot(std::string command, Client &client, std::map<int, Client> &clients){
     std::vector<std::string> args = parser(command, ' ');
     std::string              msg;
     std::string              bot_name = "Emet";

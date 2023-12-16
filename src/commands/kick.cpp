@@ -10,7 +10,8 @@ void kick_user(std::string command, Client &client, std::map<std::string, Channe
     std::string              channel_name;
     int                      target_fd = 0;
     std::string              reason;
-
+    if (args.at(0) != "KICK")
+        return ;
     if (argc >= 3){
         channel_name = args[1];
         user         = args[2];

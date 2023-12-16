@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 16:18:57 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/16 11:38:09 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
     std::string              password = "";
     std::string              reply = "";
 
+    if (args.at(0) != "JOIN")
+        return ;
     if (argc == 3 || argc == 2){
         if (argc == 3)
             password = args[2];
