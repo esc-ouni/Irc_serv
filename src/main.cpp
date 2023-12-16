@@ -1,10 +1,23 @@
 #include "../headers/Irc.hpp"
 #include <cstdlib>
 
-void signal_handler(int signal)
+std::string filteredString(std::string str);
+
+bool server_turn_off = false;
+
+void	signal_handler(int signal)
 {
-    (void)signal;
-    std::cout << RED << "\nBYE BYE" << RESET << std::endl;
+	(void)signal;
+	server_turn_off = true;
+    std::cout << RED << "server turned off" << RESET << std::endl;
+}
+
+void closePollfd(std::vector<pollfd>& pollfd) {
+
+    for (size_t i = 0; i < pollfd.size(); i++)
+    {
+        close(pollfd[i].fd);
+    }
     exit(EXIT_SUCCESS);
 }
 
@@ -17,9 +30,6 @@ static int IsDigit(char *argv)
     }
     return (0);
 }
-
-std::string filteredString(std::string str);
-
 
 int main(int ac, char *argv[])
 {
@@ -36,14 +46,18 @@ int main(int ac, char *argv[])
     }
 
     signal(SIGINT, signal_handler);
+    std::vector<pollfd> getPollfds;
 
     try
     {
         Irc irc(std::atoi(argv[1]), argv[2]);
         irc.runServer();
+        getPollfds = irc.getPollfds();
+        closePollfd(getPollfds);
     }
     catch (const std::exception &e)
     {
+        closePollfd(getPollfds);
         std::cerr << e.what() << '\n';
     }
 

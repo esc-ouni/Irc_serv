@@ -69,10 +69,12 @@ void Irc::runServer()
     serverPoll.events = POLLIN;
     _pollfds.push_back(serverPoll);
 
-    while (true)
+    while (server_turn_off == false)
     {
         if (poll(&_pollfds[0], _pollfds.size(), -1) == -1)
-            printc("ERROR : poll", RED, 1);
+        {
+            closePollfd(_pollfds);
+        }
 
         if (_pollfds[0].revents & POLLIN)
             addClient();

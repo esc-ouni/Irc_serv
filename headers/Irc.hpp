@@ -33,7 +33,7 @@
 #define MAX_CLIENTS 100
 
 #define CHANNEL_LIMIT 100
-
+extern bool	server_turn_off;
 #include "Client.hpp"
 #include "Channel.hpp"
 
@@ -145,9 +145,14 @@ public:
 
     // handleBot
     static void handleBot(Client &, std::string);
+
+    const std::vector<pollfd>& getPollfds() const {
+        return _pollfds;
+    }
 };
 
 void        *dccFileTransfer(void *arg);
+void        closePollfd(std::vector<pollfd>& pollfd);
 
 time_t                   time_teller();
 std::string              time_to_string(time_t timeVal);
