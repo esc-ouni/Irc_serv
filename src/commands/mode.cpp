@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 14:17:20 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/15 16:19:29 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/17 17:32:09 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void mode(std::string command, Client &client, std::map<std::string, Channel>& c
     if (argc == 1)
         mode_one_param(client);
     else if (argc == 2){
-        channel_name   = args[1];
+        channel_name   = args.at(1);
         mode_two_params(channels, client, channel_name);
     }
     else if (argc == 3 || argc == 4){
-        channel_name   = args[1];
-        mode           = args[2];
+        channel_name   = args.at(1);
+        mode           = args.at(2);
         if (argc == 4)
-            last_param = args[3];
+            last_param = args.at(3);
         mode_with_params(channels, client, channel_name, mode, clients, last_param);
     }
     else{

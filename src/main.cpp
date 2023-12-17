@@ -5,7 +5,15 @@ std::string filteredString(std::string str);
 
 bool server_turn_off = false;
 
-void	signal_handler(int signal)
+// void f_leak(){
+//     std::string msg = "lsof -p ";
+//     msg += std::to_string(getpid());
+//     system(msg.c_str());
+// }
+//     atexit(f_leak);
+
+
+void signal_handler(int signal)
 {
 	(void)signal;
 	server_turn_off = true;
