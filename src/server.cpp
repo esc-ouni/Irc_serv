@@ -57,7 +57,7 @@ void Irc::bindSocket()
 
 void Irc::listeningToClients()
 {
-    if (listen(_serverSocket, MAX_CLIENTS) < 0)
+    if (listen(_serverSocket, MAX_QUUED_CLIENTS) < 0)
         printc("ERROR : listen", RED, 1);
 }
 
