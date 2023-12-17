@@ -157,9 +157,7 @@ bool                     is_valid_topic(std::string &new_topic);
 std::string              trim(std::string &str);
 std::string              extract_channel_name(std::string& command);
 bool                     channel_exist(std::map<std::string, Channel>& channels, std::string &needle);
-
 bool                     Create_channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name);
-
 void                     set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels);
 void                     handle_Join(std::string command, Client &client, std::map<std::string, Channel>& channels);
 std::string              extract_topic(std::string& command);

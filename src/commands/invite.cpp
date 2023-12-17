@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 17:27:26 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/17 17:28:25 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/17 17:53:47 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int get_client_fd(std::string &client_name, std::map<int, Client> &clients){
     }
     return (0);
 }
-
 
 bool user_exist(std::string &client_name, std::map<int, Client> &clients){
     std::map<int, Client>::iterator it = clients.begin();
