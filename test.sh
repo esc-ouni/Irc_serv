@@ -15,6 +15,8 @@ do
     echo "USER ${i} 0 * "
     sleep 0.25
     echo "JOIN $CHANNEL"
+    sleep 0.25
+    echo "PRIVMSG $CHANNEL :salam"
     sleep 500
     ) | nc $SERVER $PORT &
     sleep 0.5

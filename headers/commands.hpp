@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   commands.hpp                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/02 19:34:15 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/16 15:58:32 by idouni           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #pragma once
 
@@ -71,74 +60,12 @@
 #define  RPL_TOPICCHANGE(client, client_host, channel, topic) (":" + client + "!"+ client_host + " TOPIC " + channel_name + " :" +  topic + " \r\n")
 # define ERR_NOTEXTTOSEND(client) ("412 " + client + " :No text to send\r\n")
 
-
-/**
- * @brief execute the command given by the client
- * @param command the command to execute
- * @param client the client who sent the command
- * @param channels the channels of the server
- * @return void
- */
-void excute_command(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
-void privmsg(std::string message, Client &client, std::map<int, Client> &clients, std::map<std::string, Channel> &channels);
-// void broadcastTochannel(Client client, std::string message, std::string channel, std::map<std::string, Channel> &channels);
-// void set_topic(std::string &command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
-/**
- * @brief join a channel
- * @param client the client who wants to join the channel
- * @param channels the channels of the server
- * @param channel_name the name of the channel to join
- * @param command the command received from the client
- * @return int 0 if success, 1 if error
- */
-
-int join(std::string command, Client &client, std::map<std::string, Channel> &channels);
-/**
- * Checks if a client with the given nickname already exists in the map of clients.
- * @param nickname The nickname to check for.
- * @param clients The map of clients to search in.
- * @return True if a client with the given nickname already exists in the map of clients, false otherwise.
- */
-bool client_already_exist(std::string nickname, std::map<int, Client> clients);
-
-Client &get_client_by_nickname(std::string &nick, std::map<int, Client> &clients);
-/**
- * @brief Filters a string by removing any unwanted characters.
- *
- * @param str The string to be filtered.
- * @return The filtered string.
- */
 std::string filteredString(std::string str);
-// void nick(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> clients);
-void user(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> clients);
-bool pass(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
-bool is_multipe_words(std::string message);
-
-/**
- * Kicks a client from a channel.
- *
- * @param command The kick command to execute.
- * @param client The client who executed the command.
- * @param channels The map of channels in the server.
- * @param clients The map of clients in the server.
- */
-void kick(std::string command, Client &client, std::map<std::string, Channel> &channels);
-
-/**
- * @brief Invites a client to a channel.
- *
- * @param command The command string.
- * @param client The client who executed the command.
- * @param channels The map of channels.
- * @param clients The map of clients.
- * @return int Returns 0 if the invite was successful, -1 otherwise.
- */
-// int invite(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
-
-// void mode(std::string command, Client &client, std::map<std::string, Channel> &channels);
-
-std::string filteredString(std::string str);
-bool pass(std::string command, Client &client);
-void nick(std::string command, Client &client, std::map<int, Client> clients, std::map<std::string, Channel> &channels);
-void user(std::string command, Client &client);
-
+void        excute_command(std::string command, Client &client, std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
+void        privmsg(std::string message, Client &client, std::map<int, Client> &clients, std::map<std::string, Channel> &channels);
+bool        client_already_exist(std::string nickname, std::map<int, Client> clients);
+bool        pass(std::string command, Client &client);
+void        nick(std::string command, Client &client, std::map<int, Client> clients, std::map<std::string, Channel> &channels);
+void        user(std::string command, Client &client);
+void        closePollfd(std::vector<pollfd>& pollfd);
+int         IsDigit(char *argv);

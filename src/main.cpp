@@ -1,23 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/17 18:17:27 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/17 18:17:28 by idouni           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../headers/Irc.hpp"
-
-// void f_leak(){
-//     std::string msg = "lsof -p ";
-//     msg += std::to_string(getpid());
-//     system(msg.c_str());
-// }
-//     atexit(f_leak);
+#include "../headers/commands.hpp"
 
 bool server_turn_off = false;
 
@@ -26,25 +9,6 @@ void signal_handler(int signal)
 	(void)signal;
 	server_turn_off = true;
     std::cout << RED << "server turned off" << RESET << std::endl;
-}
-
-void closePollfd(std::vector<pollfd>& pollfd) {
-
-    for (size_t i = 0; i < pollfd.size(); i++)
-    {
-        close(pollfd[i].fd);
-    }
-    exit(EXIT_SUCCESS);
-}
-
-static int IsDigit(char *argv)
-{
-    for (int i = 0; argv[i] != '\0'; i++)
-    {
-        if (!std::isdigit(argv[i]))
-            return (1);
-    }
-    return (0);
 }
 
 int main(int ac, char *argv[])

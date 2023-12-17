@@ -1,19 +1,7 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/12/17 17:50:24 by idouni            #+#    #+#              #
-#    Updated: 2023/12/17 17:57:27 by idouni           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 EXEC    = ircserv
 CC      = c++
 RM      = rm -rf
-FLAGS   = -fsanitize=address,undefined  -std=c++98 -Wall -Wextra -Werror
+FLAGS   = -std=c++98 -Wall -Wextra -Werror
 H_FILES = ${shell ls headers/*.hpp}
 C_FILES = ${shell ls src/*/*.cpp} ${shell ls src/*.cpp}
 OBJS    = $(C_FILES:.cpp=.o)

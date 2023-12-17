@@ -13,7 +13,8 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     { 
         if (pass(command, client) == false)
         {
-            send(client.get_fd(), ERR(std::string(" wrong password")).c_str(), ERR(std::string(" wrong password")).length(), 0);
+            send(client.get_fd(), ERR(std::string(" wrong password")).c_str(), \
+            ERR(std::string(" wrong password")).length(), 0);
         }
     }
     else if (command.substr(0, 4) == "NICK" && client.hasPassword() == false)
@@ -32,16 +33,12 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     }
     else if (command.substr(0, 5) == "USER\n" && client.is_authenticated() == false)
     {
-        send(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").c_str(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").length(), 0);
+        send(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").c_str(), \
+        ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").length(), 0);
     }
     else if (command.substr(0, 5) == "USER " && client.hasPassword() == true && client.hasNickname() == true)
     {
         user(command, client);
-    }
-    else if (command.substr(0, 5) == "AUTH ")
-    {
-        std::string auth = ":localhost 001 " + client.get_nickname() + " :You are now " + (client.is_authenticated() ? "authenticated" : "not authenticated") + "\r\n";
-        send(client.get_fd(), auth.c_str(), auth.length(), 0);
     }
     else if (command.substr(0, 5) == "JOIN " && client.is_authenticated()){
         handle_Join(command, client, channels);
@@ -68,38 +65,20 @@ void excute_command(std::string command, Client &client, std::map<std::string, C
     else if (command.substr(0, 4) == "MODE" && client.is_authenticated()){
         mode(command, client, channels, clients);
     }
-    else if (command.substr(0, 8) == "DOWNLOAD" && client.is_authenticated())
-    {
-        Irc::handleBot(client, command);
-    }
     else if (command.substr(0, 5) == "OPER " && client.is_authenticated()){
         oper(command, client);
     }
     else if (command.substr(0, 11) == "STOPTALKING" && client.is_authenticated()){
         trigbot(command, client, clients);
     }
+    // else if (command.substr(0, 5) == "AUTH ")
+    // {
+    //     std::string auth = ":localhost 001 " + client.get_nickname() + " :You are now " + (client.is_authenticated() ? "authenticated" : "not authenticated") + "\r\n";
+    //     send(client.get_fd(), auth.c_str(), auth.length(), 0);
+    // }
+    // else if (command.substr(0, 8) == "DOWNLOAD" && client.is_authenticated())
+    // {
+    //     Irc::handleBot(client, command);
+    // }
     // monitoring(channels,clients);
 };
-
-//     else if (filteredString(command) == "LOGTIME" && client.is_authenticated())
-//     {
-//         Irc::handleLogTime(client);
-//     }
-//     else if (filteredString(command) == "QUOTES" && client.is_authenticated())
-//     {
-//         Irc::handleQuotes(client);
-//     }
-
-
-//     else if (filteredString(command.substr(0, 4))!= "QUIT")
-//     {
-        
-//         send(client.get_fd(), ERR_UNKNOWNCOMMAND(command.substr(0, command.find(" "))).c_str(), ERR_UNKNOWNCOMMAND(command.substr(0, command.find(" "))).length(), 0);
-//     }
-
-
-//     if (client.is_authenticated() && !client.get_buff_to_send().empty())
-//     {
-//         send(client.get_fd(), client.get_buff_to_send().c_str(), client.get_buff_to_send().length(), 0);
-//         client.set_buff_to_send("");
-//     }
