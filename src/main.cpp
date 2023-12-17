@@ -1,9 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/17 18:17:27 by idouni            #+#    #+#             */
+/*   Updated: 2023/12/17 18:17:28 by idouni           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/Irc.hpp"
-#include <cstdlib>
-
-std::string filteredString(std::string str);
-
-bool server_turn_off = false;
 
 // void f_leak(){
 //     std::string msg = "lsof -p ";
@@ -12,6 +19,7 @@ bool server_turn_off = false;
 // }
 //     atexit(f_leak);
 
+bool server_turn_off = false;
 
 void signal_handler(int signal)
 {
