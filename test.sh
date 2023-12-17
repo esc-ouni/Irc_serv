@@ -9,15 +9,15 @@ do
     (
     NICKNAME="TestUser_${i}"
     echo "PASS $PASS"
-    sleep 1
+    sleep 0.5
     echo "NICK $NICKNAME"
-    sleep 1
+    sleep 0.5
     echo "USER ${i} 0 * "
-    sleep 1
+    sleep 0.5
     echo "JOIN $CHANNEL"
-    sleep 500
+    sleep 200
     ) | nc $SERVER $PORT &
-    sleep 3
+    sleep 2
 done
 wait 
 echo "Disconnected all clients from the server."

@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/17 13:38:30 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/17 17:36:19 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
                 play.erase(0, play.find("MSG_TO_SD"));
                 args = parser(play, ' ');
                 if (args.size() > 1){
-                    message = "PRIVMSG " + args[1] + " :You have been pinged, you are too noisy a zamel \r\n";
+                    message = "PRIVMSG " + args.at(1) + " :You have been pinged, you are too noisy a zamel \r\n";
                     send_message(socket_end, message);
                 }
             }

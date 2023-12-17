@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 10:55:41 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/16 11:38:09 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/17 17:29:30 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ void handle_Join(std::string command, Client &client, std::map<std::string, Chan
         return ;
     if (argc == 3 || argc == 2){
         if (argc == 3)
-            password = args[2];
-        channel_list = parser(args[1], ',');
+            password = args.at(2);
+        channel_list = parser(args.at(1), ',');
         for (size_t i = 0; i < channel_list.size(); i++){
             if (!channel_list.at(i).empty() && channel_name_is_valid(channel_list.at(i))){
                 if (!channel_exist(channels, channel_list.at(i))){

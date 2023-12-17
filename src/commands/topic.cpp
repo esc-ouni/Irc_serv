@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   topic.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/17 17:34:45 by idouni            #+#    #+#             */
+/*   Updated: 2023/12/17 17:37:04 by idouni           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../headers/Irc.hpp"
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
@@ -20,7 +32,7 @@ void set_topic(std::string command, Client &client, std::map<std::string, Channe
     if (argc >= 2){
         if (argc >= 3)
             topic = extract_topic(command);
-        channel_name = args[1];
+        channel_name = args.at(1);
 
     if(!channel_exist(channels, channel_name)){
         send_message(client.get_fd(), ERR_NOSUCHCHANNEL(client.get_nickname(), channel_name));
