@@ -1,6 +1,14 @@
 #include "../headers/Irc.hpp"
 #include <cstdlib>
 
+// void f_leak(){
+//     std::string msg = "lsof -p ";
+//     msg += std::to_string(getpid());
+//     system(msg.c_str());
+// }
+//     atexit(f_leak);
+
+
 void signal_handler(int signal)
 {
     (void)signal;
