@@ -6,74 +6,13 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/16 16:01:30 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/17 13:38:30 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/Irc.hpp"
 #include "../headers/Channel.hpp"
 #include "../headers/commands.hpp"
-
-time_t time_teller(){
-    time_t      current_time = time(NULL);
-    return (current_time);
-};
-
-void	ft_usleep(time_t time)
-{
-	time += time_teller();
-	while (time_teller() < time){
-        continue;
-	}
-};
-
-std::string trim(std::string &str) {
-    int l = str.length() - 1;
-    
-    while (!str.empty() && (str.at(l) == '\r' || str.at(l) == '\n')) {
-        str.erase(str.begin()+l);
-        l--;
-    }
-    return (str);
-};
-
-std::vector<std::string> parser(std::string &full_command, char dilimeter){
-    std::vector<std::string> args;
-    std::stringstream        stream(trim(full_command));
-    std::string              token;
-    
-    if (full_command.empty())
-        return (args);
-    while (!std::getline(stream , token,  dilimeter).eof()){
-        if (!token.empty())
-            args.push_back(token);
-    }
-    if (!token.empty()){
-        args.push_back(token);
-    }
-    return args;
-};
-
-
-
-long int contains_only_nums(std::string string){
-    if (string.empty())
-        return (-1);
-    for (size_t i = 0; i < string.length(); i++){
-        if (string.c_str()[0] == '+')
-            continue ;
-        if (!isdigit(string.c_str()[i]) || i == 10)
-            return (0);
-    }
-    return (std::atol(string.c_str()));
-};
-
-void send_message(int client_socket, std::string message) {
-    if (send(client_socket, message.c_str(), message.length(), 0) == -1)
-        std::cerr << "Err: failling sending message to the client !" << std::endl;
-    ft_usleep(1);
-};
-
 
 int main(int argc, char *argv[]) {
     if (argc != 3){
@@ -147,3 +86,63 @@ int main(int argc, char *argv[]) {
     }
     return (0);
 }
+
+time_t time_teller(){
+    time_t      current_time = time(NULL);
+    return (current_time);
+};
+
+void	ft_usleep(time_t time)
+{
+	time += time_teller();
+	while (time_teller() < time){
+        continue;
+	}
+};
+
+std::string trim(std::string &str) {
+    int l = str.length() - 1;
+    
+    while (!str.empty() && (str.at(l) == '\r' || str.at(l) == '\n')) {
+        str.erase(str.begin()+l);
+        l--;
+    }
+    return (str);
+};
+
+std::vector<std::string> parser(std::string &full_command, char dilimeter){
+    std::vector<std::string> args;
+    std::stringstream        stream(trim(full_command));
+    std::string              token;
+    
+    if (full_command.empty())
+        return (args);
+    while (!std::getline(stream , token,  dilimeter).eof()){
+        if (!token.empty())
+            args.push_back(token);
+    }
+    if (!token.empty()){
+        args.push_back(token);
+    }
+    return args;
+};
+
+
+
+long int contains_only_nums(std::string string){
+    if (string.empty())
+        return (-1);
+    for (size_t i = 0; i < string.length(); i++){
+        if (string.c_str()[0] == '+')
+            continue ;
+        if (!isdigit(string.c_str()[i]) || i == 10)
+            return (0);
+    }
+    return (std::atol(string.c_str()));
+};
+
+void send_message(int client_socket, std::string message) {
+    if (send(client_socket, message.c_str(), message.length(), 0) == -1)
+        std::cerr << "Err: failling sending message to the client !" << std::endl;
+    ft_usleep(1);
+};
