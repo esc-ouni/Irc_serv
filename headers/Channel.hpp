@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 13:39:59 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/17 13:40:01 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/18 09:52:41 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,4 @@ class Channel
         bool        add_to_invitee(Client &client);
         bool        is_invited(Client &client);
         void        remove_from_invite_list(Client &client);
-
-        void        printChannelInfo();
 };

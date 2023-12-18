@@ -10,7 +10,7 @@ all: $(EXEC)
 
 $(EXEC): $(OBJS) $(H_FILES)
 	@$(CC) $(FLAGS) $(OBJS) -o $(EXEC)
-	@clear
+	@clear && echo "==$(EXEC)_compiled==========="
 
 %.o: %.cpp $(H_FILES)
 	$(CC) $(FLAGS) -c $< -o $@
