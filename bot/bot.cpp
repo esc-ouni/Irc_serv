@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/18 10:15:22 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/18 10:20:47 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void signal_handler(int signal){
 	(void)signal;
     if (sock_fd)
         close(sock_fd);
+    exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char *argv[]) {
