@@ -36,9 +36,9 @@ Transfer:
 	@clear
 	@echo "./fileTransfer/transfer <Pathfile>"
 
-Boot:
+Bot:
 	@c++ $(FLAGS) bot/*.cpp -o ./Emet_v1
 	@clear
 	@echo "./Emet_v1 <IP> <PORT>"
 
-.PHONY: all clean fclean re transfer Boot
+.PHONY: all clean fclean re transfer Bot

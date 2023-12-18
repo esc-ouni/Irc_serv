@@ -21,4 +21,5 @@ do
     ) | nc $SERVER $PORT &
     sleep 0.5
 done
+wait
 echo "Disconnected all clients from the server."
