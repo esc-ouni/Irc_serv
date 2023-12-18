@@ -18,6 +18,7 @@
 #include <pthread.h>
 #include <string.h>
 #include <strings.h>
+#include <netinet/tcp.h>
 
 /* colors */
 #define RESET "\033[0m"
@@ -29,8 +30,8 @@
 #define BLUE "\033[0;34m"
 #define PURPLE "\033[0;35m"
 
-#define BUFFER_SIZE 20
-#define MAX_CLIENTS 100
+#define BUFFER_SIZE 1000
+#define MAX_QUUED_CLIENTS 100
 
 #define CHANNEL_LIMIT 100
 extern bool	server_turn_off;
@@ -54,19 +55,7 @@ private:
 public:
     std::map<std::string, Channel> _channels;
 
-    // Irc constructor
     Irc(int port, char *password);
-
-    void getClientIPAddress(int);
-
-    /**
-     * @brief socket() Create server socket and initialize it
-     *
-     * @param INADDR_ANY : the server listening on all available network interfaces
-     * @param AF_INET : the addr family for IPv4
-     * @param  htons : convert to network byte order (big-endian)
-=         * @return zero on success
-     */
     void createSocket();
 
     /**
@@ -131,29 +120,16 @@ public:
      */
     void Handle_activity();
 
-    // print using a color and % exit
     void printc(std::string, std::string, int);
-
-    // buffer the received message in the client message
     void recvClientsMsg(Client &, std::string);
-
-    // handleLogTime
-    static void handleLogTime(Client &);
-
-    // handleBot
-    static void handleQuotes(Client &);
-
-    // handleBot
-    static void handleBot(Client &, std::string);
-
+    void handleBot(Client &, std::string);
     const std::vector<pollfd>& getPollfds() const {
         return _pollfds;
     }
 };
-std::string filteredString(std::string str);
-void        *dccFileTransfer(void *arg);
-void        closePollfd(std::vector<pollfd>& pollfd);
 
+std::string filteredString(std::string str);
+void        closePollfd(std::vector<pollfd>& pollfd);
 time_t                   time_teller();
 std::string              time_to_string(time_t timeVal);
 bool                     channel_name_is_valid(std::string &channel_name);
@@ -166,7 +142,6 @@ bool                     Create_channel_join(Client &client, std::map<std::strin
 void                     set_topic(std::string command, Client &client, std::map<std::string, Channel>& channels);
 void                     handle_Join(std::string command, Client &client, std::map<std::string, Channel>& channels);
 std::string              extract_topic(std::string& command);
-bool                     channel_join(Client &client, std::map<std::string, Channel>& channels, std::string& new_channel_name, std::map<int, Client> &clients);
 void                     send_message(int clientSocket, std::string message);
 void                     send_names_list(Client &client, Channel &channel);
 void                     leave_channel(std::string command, Client &client, std::map<std::string, Channel>& channels);

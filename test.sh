@@ -15,9 +15,10 @@ do
     echo "USER ${i} 0 * "
     sleep 0.25
     echo "JOIN $CHANNEL"
+    sleep 0.25
+    echo "PRIVMSG $CHANNEL :salame ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i} ${i}"
     sleep 500
     ) | nc $SERVER $PORT &
     sleep 0.5
 done
-wait 
 echo "Disconnected all clients from the server."

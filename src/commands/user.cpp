@@ -1,21 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   user.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/07 13:24:57 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/08 15:15:24 by idouni           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../headers/Irc.hpp"
 #include "../../headers/Channel.hpp"
 #include "../../headers/commands.hpp"
 
-// splite username
-bool splitusername(const std::string& input) {
+bool splitusername(const std::string& input)
+{
     std::istringstream stream(input);
     std::string token;
 
@@ -58,7 +46,7 @@ bool splitusername(const std::string& input) {
 
 std::string getCurrentTime()
 {
-    static std::time_t currentTime;
+    long currentTime;
     std::time(&currentTime);
 
     struct tm* timeInfo = std::localtime(&currentTime);
@@ -72,7 +60,6 @@ std::string getCurrentTime()
     return (ss.str());
 }
 
-
 void user(std::string command, Client &client)
 {
     std::string username = command.substr(5, command.length() - 5);
@@ -80,10 +67,12 @@ void user(std::string command, Client &client)
     if (client.is_authenticated() == false)
     {
         if (username.empty())
-            send(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").c_str(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").length(), 0);
+            send(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").c_str(), \
+            ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").length(), 0);
         else if (splitusername(username) == false)
         {
-            send(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").c_str(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").length(), 0);
+            send(client.get_fd(), ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").c_str(), \
+            ERR_NEEDMOREPARAMS(client.get_nickname(), "USER").length(), 0);
             client.set_buffer("");
         }
         else
@@ -98,17 +87,20 @@ void user(std::string command, Client &client)
             std::string user = filteredString(username);
             client.set_username(user);
             client.set_authenticated(true);
-            send(client.get_fd(), RPL_WELCOME(result, client.get_nickname()).c_str(), RPL_WELCOME(result, client.get_nickname()).length(), 0);
-            send(client.get_fd(), RPL_YOURHOST(client.get_nickname(), "the best irc server").c_str(), RPL_YOURHOST(client.get_nickname(), "the best irc server").length(), 0);
-            send(client.get_fd(), RPL_CREATED(client.get_nickname(), datetime).c_str(), RPL_CREATED(client.get_nickname(), datetime).length(), 0);
-            send(client.get_fd(), RPL_MYINFO(client.get_nickname(), "the best irc server", "version 2.0", "user_modes", "chan_modes", "chan_param_modes").c_str(), RPL_MYINFO(client.get_nickname(), "the best irc server", "version 2.0", "user_modes", "chan_modes", "chan_param_modes").length(), 0);
-            send(client.get_fd(), RPL_ISUPPORT(client.get_nickname(), "PASS NICK USER PRIVMSG DOWNLOAD JOIN KICK INVITE TOPIC MODE (+-itkol)").c_str(), RPL_ISUPPORT(client.get_nickname(), "PASS NICK USER PRIVMSG DOWNLOAD JOIN KICK INVITE TOPIC MODE (+-itkol)").length(), 0);
+            send(client.get_fd(), RPL_WELCOME(result, client.get_nickname()).c_str(), \
+            RPL_WELCOME(result, client.get_nickname()).length(), 0);
+            send(client.get_fd(), RPL_YOURHOST(client.get_nickname(), "the best irc server").c_str(), \
+            RPL_YOURHOST(client.get_nickname(), "the best irc server").length(), 0);
+            send(client.get_fd(), RPL_CREATED(client.get_nickname(), datetime).c_str(), \
+            RPL_CREATED(client.get_nickname(), datetime).length(), 0);
+            send(client.get_fd(), RPL_MYINFO(client.get_nickname(), \
+            "the best irc server", "version 2.0", "user_modes", "chan_modes", "chan_param_modes").c_str(), \
+            RPL_MYINFO(client.get_nickname(), "the best irc server", "version 2.0", \
+            "user_modes", "chan_modes", "chan_param_modes").length(), 0);
+            send(client.get_fd(), RPL_ISUPPORT(client.get_nickname(), \
+            "PASS NICK USER PRIVMSG DOWNLOAD JOIN KICK INVITE TOPIC MODE (+-itkol)").c_str(),\
+             RPL_ISUPPORT(client.get_nickname(), "PASS NICK USER PRIVMSG DOWNLOAD JOIN KICK INVITE TOPIC MODE (+-itkol)").length(), 0);
             
-
-            // # define RPL_MYINFO(client, servername, version, user_modes, chan_modes, chan_param_modes) (":localhost 004 " + client + " " + servername + " " + version + " " + user_modes + " " + chan_modes + " " + chan_param_modes + "\r\n")
-            // # define RPL_ISUPPORT(client, tokens) (":localhost 005 " + client + " " + tokens " :are supported by this server\r\n")
-
-
             result = "*************************************************************";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             result = "                                                                                                 ";
@@ -127,7 +119,6 @@ void user(std::string command, Client &client)
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
             result = "*************************************************************";
             send(client.get_fd(), RPL(result, client.get_nickname()).c_str(), RPL(result, client.get_nickname()).length(), 0);
-
         }
     }
     else if (client.is_authenticated() == true)
