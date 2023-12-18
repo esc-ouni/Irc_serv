@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/17 17:36:19 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/18 09:39:19 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
     send_message(socket_end, "PASS pass\r\n");
     send_message(socket_end, "NICK Emet\r\n");
     send_message(socket_end, "USER 1 0 *\r\n");
-    read_bytes = recv(socket_end, buff, 512, 0);
+    read_bytes = recv(socket_end, buff, 511, 0);
     buff[read_bytes] = '\0';
     play = buff;
     if (play.find("001 Emet :Welcome Emet") != std::string::npos)
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
     }
 
     while (true){
-        read_bytes = recv(socket_end, buff, 512, 0);
+        read_bytes = recv(socket_end, buff, 511, 0);
         if (read_bytes > 0){
             std::cout << "PING" << std::endl;
             buff[read_bytes] = '\0';
