@@ -41,4 +41,4 @@ Boot:
 	@clear
 	@echo "./Emet_v1 <IP> <PORT>"
 
-.PHONY: all clean fclean re transfer
+.PHONY: all clean fclean re transfer Boot
