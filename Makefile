@@ -3,8 +3,8 @@ CC      = c++
 RM      = rm -rf
 FLAGS   = -std=c++98 -Wall -Wextra -Werror
 H_FILES = ${shell ls headers/*.hpp}
-C_FILES = ${shell ls src/*/*.cpp} ${shell ls src/*.cpp}
-OBJS    = $(C_FILES:.cpp=.o)
+CPP_FILES = ${shell ls src/*/*.cpp} ${shell ls src/*.cpp}
+OBJS    = $(CPP_FILES:.cpp=.o)
 
 all: $(EXEC)
 
@@ -13,7 +13,7 @@ $(EXEC): $(OBJS) $(H_FILES)
 	@clear
 
 %.o: %.cpp $(H_FILES)
-	$(CC) $(FLAGS) -c $< -o $@ 
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)
