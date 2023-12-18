@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/18 09:39:19 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/18 10:15:22 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,16 @@
 #include "../headers/Channel.hpp"
 #include "../headers/commands.hpp"
 
+static int sock_fd;
+
+void signal_handler(int signal){
+	(void)signal;
+    if (sock_fd)
+        close(sock_fd);
+}
+
 int main(int argc, char *argv[]) {
+    signal(SIGINT, signal_handler);
     if (argc != 3){
         std::cerr << "Usage: <Ip> <port>!" << std::endl;
         return 0;    
@@ -39,6 +48,7 @@ int main(int argc, char *argv[]) {
         std::cerr << "Err: failling to connect socket!" << std::endl;
         return 0;
     }
+    sock_fd = socket_end;
     std::cout << "BOT CONNECTED TO TE SERVER SUCCESSFULLY !" << std::endl;    
 
     send_message(socket_end, "PASS pass\r\n");
@@ -65,7 +75,7 @@ int main(int argc, char *argv[]) {
                 play.erase(0, play.find("MSG_TO_SD"));
                 args = parser(play, ' ');
                 if (args.size() > 1){
-                    message = "PRIVMSG " + args.at(1) + " :You have been pinged, you are too noisy a zamel \r\n";
+                    message = "PRIVMSG " + args.at(1) + " :You have been pinged, you are too noisy !\r\n";
                     send_message(socket_end, message);
                 }
             }
