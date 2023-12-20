@@ -30,7 +30,7 @@ int main(int ac, char *argv[])
 
     try
     {
-        Irc irc(std::atoi(argv[1]), argv[2]);
+        Irc irc(contains_only_nums(argv[1]), argv[2]);
         irc.runServer();
         getPollfds = irc.getPollfds();
         closePollfd(getPollfds);

@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 17:34:31 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/17 17:34:32 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/20 11:30:12 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ long int contains_only_nums(std::string string){
     for (size_t i = 0; i < string.length(); i++){
         if (string.c_str()[0] == '+')
             continue ;
-        if (!isdigit(string.c_str()[i]) || i == 10)
+        if (!isdigit(string.c_str()[i]) || i == 8)
             return (-1);
     }
     return (std::atol(string.c_str()));
