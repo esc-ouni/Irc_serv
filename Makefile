@@ -6,14 +6,14 @@
 #    By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/18 09:54:08 by idouni            #+#    #+#              #
-#    Updated: 2023/12/18 10:13:37 by idouni           ###   ########.fr        #
+#    Updated: 2023/12/21 16:46:45 by idouni           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 EXEC      = ircserv
 CC        = c++
 RM        = rm -rf
-FLAGS     =  -fsanitize=address,undefined -std=c++98 -Wall -Wextra -Werror
+FLAGS     = -std=c++98 -Wall -Wextra -Werror
 H_FILES   = ${shell ls headers/*.hpp}
 CPP_FILES = ${shell ls src/*/*.cpp} ${shell ls src/*.cpp}
 OBJS      = $(CPP_FILES:.cpp=.o)

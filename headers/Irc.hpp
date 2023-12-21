@@ -128,8 +128,8 @@ public:
     }
 };
 
-std::string filteredString(std::string str);
-void        closePollfd(std::vector<pollfd>& pollfd);
+std::string              filteredString(std::string str);
+void                     closePollfd(std::vector<pollfd>& pollfd);
 time_t                   time_teller();
 std::string              time_to_string(time_t timeVal);
 bool                     channel_name_is_valid(std::string &channel_name);
@@ -161,7 +161,7 @@ void                     mode_two_params(std::map<std::string, Channel>& channel
 void                     mode_with_params(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::map<int, Client> &clients, std::string &last_param);
 void                     send_mode_info(Client &excuter, Channel &channel);
 int                      get_client_fd(std::string &client_name, std::map<int, Client> &clients);
-void                     monitoring(std::map<std::string, Channel> &channels, std::map<int, Client> &clients);
+void                     signal_handler(int signal);
 void                     oper(std::string command, Client &client);
 bool                     valid_full_option(std::string &option);
 void                     execute_mode(std::map<std::string, Channel>& channels, Client &excuter, std::string &channel_name, std::string &mode, std::map<int, Client> &clients, std::string &last_param);
