@@ -6,7 +6,7 @@
 /*   By: idouni <idouni@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 19:07:04 by idouni            #+#    #+#             */
-/*   Updated: 2023/12/18 10:20:47 by idouni           ###   ########.fr       */
+/*   Updated: 2023/12/21 12:23:55 by idouni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,6 @@
 #include "../headers/commands.hpp"
 
 static int sock_fd;
-
-void signal_handler(int signal){
-	(void)signal;
-    if (sock_fd)
-        close(sock_fd);
-    exit(EXIT_SUCCESS);
-}
 
 int main(int argc, char *argv[]) {
     signal(SIGINT, signal_handler);
@@ -35,8 +28,6 @@ int main(int argc, char *argv[]) {
     std::string              play;
     char                     buff[512];
     int                      read_bytes = 0;
-
-
     bzero(&addr, sizeof(addr));
 
     addr.sin_family      = AF_INET;
@@ -138,7 +129,12 @@ std::vector<std::string> parser(std::string &full_command, char dilimeter){
     return args;
 };
 
-
+void signal_handler(int signal){
+	(void)signal;
+    if (sock_fd)
+        close(sock_fd);
+    exit(EXIT_SUCCESS);
+}
 
 long int contains_only_nums(std::string string){
     if (string.empty())
