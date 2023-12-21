@@ -140,10 +140,8 @@ void Irc::Handle_activity()
                     recvClientsMsg(it->second, message);
                 if (it->second.get_buffer().find('\n') != std::string::npos)
                 {
-                    if (it->second.get_buffer().length() >= 512)
-                    {
-                        std::string msg = ": 421 ! more than 512 characters\r\n";
-                        send(it->second.get_fd(), msg.c_str(), strlen(msg.c_str()), 0);
+                    if (it->second.get_buffer().length() >= 512){
+                        std::cerr << RED << "more than 512 characters !" << std::endl;
                         it->second.set_buffer("");
                         continue;
                     }

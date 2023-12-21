@@ -26,6 +26,7 @@ int main(int ac, char *argv[])
     }
 
     signal(SIGINT, signal_handler);
+    signal(SIGPIPE, SIG_IGN);
     std::vector<pollfd> getPollfds;
 
     try

@@ -30,8 +30,8 @@
 #define BLUE "\033[0;34m"
 #define PURPLE "\033[0;35m"
 
-#define BUFFER_SIZE 1000
 #define MAX_QUUED_CLIENTS 100
+#define BUFFER_SIZE 20
 
 #define CHANNEL_LIMIT 100
 extern bool	server_turn_off;
